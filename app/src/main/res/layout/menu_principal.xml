@@ -30,6 +30,13 @@
         android:layout_height="200dp"
         android:src="@drawable/levi"/>
 
+    <TextView
+        android:paddingLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:text="Animes recomendados"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
