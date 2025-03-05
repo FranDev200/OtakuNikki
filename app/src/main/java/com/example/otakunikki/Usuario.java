@@ -12,11 +12,12 @@ public class Usuario {
     private String region;
     List<Perfil> listaPerfiles;
 
-    public Usuario(String nombreCompleto, String userName, String email, String pwd, List<Perfil> listaPerfiles) {
+    public Usuario(String nombreCompleto, String userName, String email, String pwd, String region, List<Perfil> listaPerfiles) {
         setNombreCompleto(nombreCompleto);
         setUserName(userName);
         setEmail(email);
         setPwd(pwd);
+         setRegion(region);
         setListaPerfiles(listaPerfiles);
     }
 
