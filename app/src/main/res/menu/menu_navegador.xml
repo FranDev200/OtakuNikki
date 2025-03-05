@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item
+            android:id="@+id/mnu_home"
+            android:icon="@drawable/home"
+            android:title="Inicio"/>
+
+        <item
+            android:id="@+id/mnu_foro"
+            android:icon="@drawable/chat"
+            android:title="Foro"/>
+
+        <item
+            android:id="@+id/mnu_explorar"
+            android:icon="@drawable/menu"
+            android:title="Explorar"/>
+
+        <item
+            android:id="@+id/mnu_listas"
+            android:icon="@drawable/guardar"
+            android:title="Mis Listas"/>
+
+        <item
+            android:id="@+id/mnu_cuenta"
+            android:icon="@drawable/user"
+            android:title="Cuenta"/>
+    </menu>
