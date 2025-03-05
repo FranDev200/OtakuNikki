@@ -18,12 +18,27 @@ public class ActividadInicial extends AppCompatActivity {
         registro = findViewById(R.id.btnRegistrar);
         inicioSesion = findViewById(R.id.btnIniciarSesion);
 
-        registro.setOnClickListener(new View.OnClickListener() {
+        inicioSesion.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent actividadRegistro = new Intent(getApplicationContext(), ActividadRegistro.class);
-                startActivity(actividadRegistro);
+            public void onClick(View v) {
+                AbrirInicioSesion();
             }
         });
+
+        registro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               AbrirRegistro();
+            }
+        });
+    }
+
+    public void AbrirInicioSesion(){
+        Intent intent = new Intent(getApplicationContext(), InicioSesion.class);
+        startActivity(intent);
+    }
+    public void AbrirRegistro(){
+        Intent intent = new Intent(getApplicationContext(), ActividadRegistro.class);
+        startActivity(intent);
     }
 }

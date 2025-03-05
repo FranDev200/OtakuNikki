@@ -1,9 +1,11 @@
 package com.example.otakunikki;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -17,11 +19,13 @@ public class ActividadRegistro extends AppCompatActivity {
     private String[] paises = {"--Seleccion un pais--","España", "Estados Unidos", "Japón"};
     private Spinner spnRegion;
     private TextView tvPaisSeleccionado;
+    private Button btnConfirmar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actividad_registro);
         spnRegion = findViewById(R.id.spnRegion);
+        btnConfirmar = findViewById(R.id.btnConfirmar);
         tvPaisSeleccionado = findViewById(R.id.tvPaisSeleccionado);
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(getApplicationContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, paises);
@@ -48,5 +52,16 @@ public class ActividadRegistro extends AppCompatActivity {
 
             }
         });
+
+        btnConfirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirSeleccion();
+            }
+        });
+    }
+    public void abrirSeleccion(){
+        Intent intent = new Intent(getApplicationContext(), SeleccionPerfil.class);
+        startActivity(intent);
     }
 }
