@@ -14,11 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center"
     >
 
         <EditText
             android:id="@+id/etNombreUser"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:textAlignment="center"
@@ -26,13 +27,13 @@
             android:layout_margin="20dp"
             android:hint="@string/introduce_nombre"
             android:textColor="@color/black"
-            android:background="@color/verde_claro"
+            android:background="#C5BDE6BD"
             >
         </EditText>
 
         <EditText
             android:id="@+id/etContrasenya"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:textAlignment="center"
@@ -40,7 +41,7 @@
             android:layout_margin="20dp"
             android:hint="@string/introduce_contrasenya"
             android:textColor="@color/black"
-            android:background="@color/verde_claro"
+            android:background="#C5BDE6BD"
             >
         </EditText>
 
@@ -50,7 +51,10 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:layout_gravity="center"
-            android:text="Iniciar sesión"
+            android:text="INICIAR SESIÓN"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="15dp"
             android:padding="10dp"
             android:backgroundTint="@color/verde_claro"
             android:focusedSearchResultHighlightColor="@color/verde_seleccionado"
