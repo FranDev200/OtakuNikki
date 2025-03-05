@@ -1,6 +1,9 @@
 package com.example.otakunikki;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import androidx.activity.EdgeToEdge;
@@ -28,5 +31,17 @@ public class SeleccionPerfil extends AppCompatActivity {
 
         miListaPerfiles.add(new Perfil("https://i.blogs.es/0f7b87/solo-leveling/500_333.webp", "Mario", null));
         miAdaptadorPerfilesGridView.notifyDataSetChanged();
+
+        miGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AbrirMenuPrincipal();
+            }
+        });
+    }
+
+    public void AbrirMenuPrincipal(){
+        Intent intent = new Intent(getApplicationContext(), MenuPrincipal.class);
+        startActivity(intent);
     }
 }
