@@ -16,6 +16,12 @@
             android:name=".ActividadRegistro"
             android:exported="false" />
         <activity
+            android:name=".SeleccionPerfil"
+            android:exported="false" />
+        <activity
+            android:name=".InicioSesion"
+            android:exported="false" />
+        <activity
             android:name=".info_usuario"
             android:exported="false" />
         <activity
