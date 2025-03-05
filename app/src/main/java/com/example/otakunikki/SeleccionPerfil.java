@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SeleccionPerfil extends AppCompatActivity {
+    private ImageButton btnAnyadir;
     private GridView miGridView;
     private AdaptadorPerfilesGridView miAdaptadorPerfilesGridView;
     private List<Perfil> miListaPerfiles;
@@ -24,6 +27,7 @@ public class SeleccionPerfil extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seleccion_perfil);
 
+        btnAnyadir = findViewById(R.id.btnAnyadir);
         miGridView = findViewById(R.id.gvListaUsuarios);
         miListaPerfiles = new ArrayList<Perfil>();
         miAdaptadorPerfilesGridView = new AdaptadorPerfilesGridView(getApplicationContext(), R.layout.item_perfiles, miListaPerfiles );
@@ -38,10 +42,22 @@ public class SeleccionPerfil extends AppCompatActivity {
                 AbrirMenuPrincipal();
             }
         });
+
+        btnAnyadir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirAnyadirPerfil();
+            }
+        });
     }
 
     public void AbrirMenuPrincipal(){
         Intent intent = new Intent(getApplicationContext(), MenuPrincipal.class);
+        startActivity(intent);
+    }
+
+    public void abrirAnyadirPerfil(){
+        Intent intent = new Intent(getApplicationContext(), AnyadirPerfil.class);
         startActivity(intent);
     }
 }
