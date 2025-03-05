@@ -9,6 +9,7 @@ public class Usuario {
     private String userName;
     private String email;
     private String pwd;
+    private String region;
     List<Perfil> listaPerfiles;
 
     public Usuario(String nombreCompleto, String userName, String email, String pwd, List<Perfil> listaPerfiles) {
@@ -59,16 +60,20 @@ public class Usuario {
         this.listaPerfiles = listaPerfiles;
     }
 
+    public String getRegion() { return region; }
+
+    public void setRegion(String region) { this.region = region; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Usuario)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return Objects.equals(getUserName(), usuario.getUserName()) && Objects.equals(getEmail(), usuario.getEmail());
+        return Objects.equals(getNombreCompleto(), usuario.getNombreCompleto()) && Objects.equals(getUserName(), usuario.getUserName()) && Objects.equals(getEmail(), usuario.getEmail()) && Objects.equals(getPwd(), usuario.getPwd()) && Objects.equals(getRegion(), usuario.getRegion()) && Objects.equals(getListaPerfiles(), usuario.getListaPerfiles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUserName(), getEmail());
+        return Objects.hash(getNombreCompleto(), getUserName(), getEmail(), getPwd(), getRegion(), getListaPerfiles());
     }
 }
