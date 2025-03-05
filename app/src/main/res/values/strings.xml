@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OtakuNikki</string>
+    <string name="introduce_nombre"><u>Introduce tu nombre de usuario</u></string>
+    <string name="introduce_contrasenya"><u>Introduce tu contraseña</u></string>
 </resources>

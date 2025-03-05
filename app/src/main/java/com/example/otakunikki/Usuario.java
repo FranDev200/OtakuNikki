@@ -20,6 +20,14 @@ public class Usuario {
          setRegion(region);
         setListaPerfiles(listaPerfiles);
     }
+    public Usuario(String UserOrPwd, String pwd) {
+        if(UserOrPwd.contains("@"))
+            setEmail(UserOrPwd);
+        else
+            setUserName(UserOrPwd);
+
+        setPwd(pwd);
+    }
 
     public String getNombreCompleto() {
         return nombreCompleto;
