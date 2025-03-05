@@ -43,7 +43,7 @@
             android:layout_weight="0.5"
             android:layout_gravity="center"
             android:backgroundTint="@color/gris"
-            android:focusedSearchResultHighlightColor="@color/"
+            android:focusedSearchResultHighlightColor="@color/gris_seleccionado"
             android:scaleType="fitXY"
             android:src="@drawable/add">
         </ImageButton>
