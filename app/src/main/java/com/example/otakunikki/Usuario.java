@@ -17,7 +17,7 @@ public class Usuario {
         setUserName(userName);
         setEmail(email);
         setPwd(pwd);
-        setRegion(region);
+         setRegion(region);
         setListaPerfiles(listaPerfiles);
     }
 

@@ -12,7 +12,7 @@ public class Perfil {
     public Perfil(String imagenPerfil, String nombrePerfil, List<ListaAnime> listasAnimes) {
         setImagenPerfil(imagenPerfil);
         setNombrePerfil(nombrePerfil);
-        setListasAnimes(listasAnimes);
+         setListasAnimes(listasAnimes);
     }
 
     public String getNombrePerfil() {
