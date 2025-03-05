@@ -9,9 +9,10 @@ public class Perfil {
     private String nombrePerfil;
     private List<ListaAnime> listasAnimes;
 
-    public Perfil(String nombrePerfil, List<ListaAnime> listasAnimes) {
+    public Perfil(String imagenPerfil, String nombrePerfil, List<ListaAnime> listasAnimes) {
+        setImagenPerfil(imagenPerfil);
         setNombrePerfil(nombrePerfil);
-        setListasAnimes(listasAnimes);
+         setListasAnimes(listasAnimes);
     }
 
     public String getNombrePerfil() {
