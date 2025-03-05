@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">OtakuNikki</string>
+
+    <string name="pais_seleccionado"><u>  </u></string>
+
     <string name="usuarioSubrayado" ><u>Usuario</u></string>
     <string name="correoSubrayado" ><u>Correo</u></string>
     <string name="gestionPerfil" ><u>Gestión de Perfil</u></string>
+
 </resources>
