@@ -42,13 +42,13 @@ public class MenuPrincipal extends AppCompatActivity {
         listaAnimesRecomendados = new ArrayList<Anime>();
         adpatdorAnimeRecomendado = new AdaptadorLVHorAnimeRecomendaciones(getApplicationContext(), listaAnimesRecomendados);
         listViewHorizontal.setAdapter(adpatdorAnimeRecomendado);
-        listViewHorizontal.addItemDecoration(new RecyclerView.ItemDecoration() {
+        /*listViewHorizontal.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 // No establecer espaciado (es decir, 0 para todo)
-                outRect.set(0, 0, 0, 0);
+                outRect.set(0, 1, 0, 1);
             }
-        });
+        });*/
         CargarAnimesRecomendados();
 
     }
