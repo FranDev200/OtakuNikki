@@ -5,6 +5,7 @@ import java.util.Objects;
 
 public class Perfil {
 
+    private String imagenPerfil;
     private String nombrePerfil;
     private List<ListaAnime> listasAnimes;
 
@@ -29,16 +30,20 @@ public class Perfil {
         this.listasAnimes = listasAnimes;
     }
 
+    public String getImagenPerfil() { return imagenPerfil; }
+
+    public void setImagenPerfil(String imagenPerfil) { this.imagenPerfil = imagenPerfil; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Perfil)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Perfil perfil = (Perfil) o;
-        return Objects.equals(getNombrePerfil(), perfil.getNombrePerfil()) && Objects.equals(getListasAnimes(), perfil.getListasAnimes());
+        return Objects.equals(getImagenPerfil(), perfil.getImagenPerfil()) && Objects.equals(getNombrePerfil(), perfil.getNombrePerfil()) && Objects.equals(getListasAnimes(), perfil.getListasAnimes());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getNombrePerfil(), getListasAnimes());
+        return Objects.hash(getImagenPerfil(), getNombrePerfil(), getListasAnimes());
     }
 }
