@@ -1,6 +1,7 @@
 package com.example.otakunikki;
 
 import android.os.Bundle;
+import android.widget.GridView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,11 +9,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class SeleccionPerfil extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
 
+public class SeleccionPerfil extends AppCompatActivity {
+    private GridView miGridView;
+    private AdaptadorPerfilesGridView miAdaptadorPerfilesGridView;
+    private List<Perfil> miListaPerfiles;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seleccion_perfil);
+
+        miGridView = findViewById(R.id.gvListaUsuarios);
+        miListaPerfiles = new ArrayList<Perfil>();
+        miAdaptadorPerfilesGridView = new AdaptadorPerfilesGridView(getApplicationContext(), R.layout.item_perfiles, miListaPerfiles );
+        miGridView.setAdapter(miAdaptadorPerfilesGridView);
+
+        miListaPerfiles.add(new Perfil("https://i.blogs.es/0f7b87/solo-leveling/500_333.webp", "Mario", null));
+        miAdaptadorPerfilesGridView.notifyDataSetChanged();
     }
 }
