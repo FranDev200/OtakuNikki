@@ -1,12 +1,18 @@
 package com.example.otakunikki;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +22,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +39,7 @@ public class MenuPrincipal extends AppCompatActivity {
     private RequestQueue requestQueue;
     private StringRequest miStringRequest;
     private String urlRecomendados = "https://api.jikan.moe/v4/recommendations/anime";
-
+    private BottomNavigationView menu_navegador;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +50,44 @@ public class MenuPrincipal extends AppCompatActivity {
         listaAnimesRecomendados = new ArrayList<Anime>();
         adpatdorAnimeRecomendado = new AdaptadorLVHorAnimeRecomendaciones(getApplicationContext(), listaAnimesRecomendados);
         listViewHorizontal.setAdapter(adpatdorAnimeRecomendado);
+        menu_navegador = findViewById(R.id.menu_navegador);
+
+        menu_navegador.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId() == R.id.mnu_foro){
+                    abrirForo();
+                }else if(item.getItemId() == R.id.mnu_explorar){
+                    abrirExplorar();
+                }else if(item.getItemId() == R.id.mnu_listas){
+                    abrirListas();
+                }else if(item.getItemId() == R.id.mnu_cuenta){
+                    abrirCuenta();
+                }
+                return true;
+            }
+        });
 
         CargarAnimesRecomendados();
 
+
+    }
+
+    public void abrirCuenta(){
+        Intent intent = new Intent(getApplicationContext(), info_usuario.class);
+        startActivity(intent);
+    }
+    public void abrirForo(){
+        Intent intent = new Intent(getApplicationContext(), info_usuario.class);
+        startActivity(intent);
+    }
+    public void abrirExplorar(){
+        Intent intent = new Intent(getApplicationContext(), info_usuario.class);
+        startActivity(intent);
+    }
+    public void abrirListas(){
+        Intent intent = new Intent(getApplicationContext(), info_usuario.class);
+        startActivity(intent);
     }
 
     private void CargarAnimesRecomendados() {

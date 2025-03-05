@@ -9,7 +9,6 @@
     android:background="#D5D5D5"
     android:padding="5dp">
 
-    <!-- Barra de navegación anclada al final -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu_navegador"
         android:layout_width="match_parent"
@@ -18,7 +17,6 @@
         android:background="?android:attr/windowBackground"
         app:menu="@menu/menu_navegador"/>
 
-    <!-- Contenedor principal del contenido, ubicado por encima del BottomNavigationView -->
     <LinearLayout
         android:id="@+id/contenedor"
         android:orientation="vertical"
