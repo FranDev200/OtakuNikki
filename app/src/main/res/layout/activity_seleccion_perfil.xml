@@ -37,7 +37,7 @@
             android:numColumns="2">
         </GridView>
         <ImageButton
-            android:id="@+id/btnAñadir"
+            android:id="@+id/btnAnyadir"
             android:layout_width="75dp"
             android:layout_height="0dp"
             android:layout_weight="0.5"

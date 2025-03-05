@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/gris_oscuro"
+    tools:context=".AnyadirPerfil">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="87dp"
+        tools:layout_editor_absoluteY="-44dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:text="Añadir perfil"
+            android:textAlignment="center"
+            android:textSize="30dp"
+            android:textStyle="bold"></TextView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+
+            <ImageView
+                android:id="@+id/imagen_fondo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/fondoazul" />
+
+            <ImageView
+                android:id="@+id/imgIconoPerfil"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/user"/>
+
+            <ImageButton
+                android:id="@+id/imgAnyadirPerfil"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/add"
+                android:background="@null"
+                android:layout_below="@id/imgIconoPerfil"
+                android:layout_alignEnd="@id/imgIconoPerfil"
+                android:scaleType="fitXY"
+                android:layout_marginTop="-5dp"/>
+
+            <ImageButton
+                android:id="@+id/imgAnyadirFondo"
+                android:layout_width="38dp"
+                android:layout_height="39dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="350dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="195dp"
+                android:layout_marginEnd="23dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="27dp"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/add" />
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/etNombrePerfil"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.5"
+            android:hint="Nombre del perfil"
+            android:padding="10dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textColorHint="@color/white"
+            android:backgroundTint="@color/white"
+            android:textSize="20dp"></EditText>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.4"
+            android:hint="Este será el nombre de perfil que aparece"
+            android:padding="10dp"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/gris"></TextView>
+
+        <EditText
+            android:id="@+id/etNombreUser"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.5"
+            android:hint="Nombre del perfil"
+            android:padding="10dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textColorHint="@color/white"
+            android:backgroundTint="@color/white"
+            android:textSize="20dp"></EditText>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.4"
+            android:hint="Este será el nombre de usuario que utilizarás siempre"
+            android:padding="10dp"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/gris"></TextView>
+
+        <Button
+            android:id="@+id/BtnInicioSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:backgroundTint="@color/gris"
+            android:focusedSearchResultHighlightColor="@color/gris_seleccionado"
+            android:padding="10dp"
+            android:text="Confirmar"
+            android:textAlignment="center">
+
+        </Button>
+
+    </LinearLayout>
+
+</LinearLayout>
