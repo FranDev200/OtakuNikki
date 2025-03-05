@@ -13,7 +13,10 @@
         android:theme="@style/Theme.OtakuNikki"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ActividadRegistro"
+            android:exported="false" />
+        <activity
+            android:name=".ActividadInicial"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
