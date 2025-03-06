@@ -72,10 +72,6 @@ public class Explorar extends AppCompatActivity {
 
     }
 
-    public void abrirMenuPrincipal(){
-        Intent intent = new Intent(getApplicationContext(), FragmentInicio.class);
-        startActivity(intent);
-    }
     class AdaptadorFragment extends FragmentStateAdapter {
         public AdaptadorFragment(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
             super(fragmentManager, lifecycle);
