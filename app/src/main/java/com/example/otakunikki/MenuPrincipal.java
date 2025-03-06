@@ -56,7 +56,7 @@ public class MenuPrincipal extends AppCompatActivity {
                 }else if(item.getItemId() == R.id.mnu_explorar){
                     abrirExplorar();
                 }else if(item.getItemId() == R.id.mnu_listas){
-
+                    cargarFragment(new FragmentoListas());
                 }else if(item.getItemId() == R.id.mnu_cuenta){
                     cargarFragment(new FragmentInfoUsuario());
                 }
