@@ -14,12 +14,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class AdaptadorLVHorAnimeRecomendaciones extends RecyclerView.Adapter<AdaptadorLVHorAnimeRecomendaciones.ViewHolder>{
+public class AdaptadorLVHorAnimeMenuPrincipal extends RecyclerView.Adapter<AdaptadorLVHorAnimeMenuPrincipal.ViewHolder>{
     private Context context;
     private List<Anime> listaAnimes;
 
     // Constructor
-    public AdaptadorLVHorAnimeRecomendaciones(Context context, List<Anime> listaAnimes) {
+    public AdaptadorLVHorAnimeMenuPrincipal(Context context, List<Anime> listaAnimes) {
         this.context = context;
         this.listaAnimes = listaAnimes;
     }
