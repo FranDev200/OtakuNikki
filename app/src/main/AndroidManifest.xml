@@ -34,9 +34,6 @@
             android:name=".InicioSesion"
             android:exported="false" />
         <activity
-            android:name=".info_usuario"
-            android:exported="false" />
-        <activity
             android:name=".ActividadInicial"
             android:exported="true">
             <intent-filter>
