@@ -8,4 +8,6 @@
     <string name="usuarioSubrayado"><u>Usuario</u></string>
     <string name="correoSubrayado"><u>Correo</u></string>
     <string name="gestionPerfil"><u>Gestión de Perfil</u></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

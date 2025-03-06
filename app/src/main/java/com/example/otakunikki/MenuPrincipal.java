@@ -91,6 +91,7 @@ public class MenuPrincipal extends AppCompatActivity {
 
     }
 
+
     private void CargarAnimesTemporada() {
         rqAnimesTemporada = Volley.newRequestQueue(getApplicationContext());
 
@@ -143,6 +144,23 @@ public class MenuPrincipal extends AppCompatActivity {
         });
 
         rqAnimesTemporada.add(mrqAnimesTemporada);
+
+    public void abrirCuenta(){
+        Intent intent = new Intent(getApplicationContext(), info_usuario.class);
+        startActivity(intent);
+    }
+    public void abrirForo(){
+        Intent intent = new Intent(getApplicationContext(), info_usuario.class);
+        startActivity(intent);
+    }
+    public void abrirExplorar(){
+        Intent intent = new Intent(getApplicationContext(), Explorar.class);
+        startActivity(intent);
+    }
+    public void abrirListas(){
+        Intent intent = new Intent(getApplicationContext(), info_usuario.class);
+        startActivity(intent);
+
     }
 
 
@@ -215,21 +233,4 @@ public class MenuPrincipal extends AppCompatActivity {
         rqAnimesRecomendados.add(mrqAnimesRecomendados);
     }
 
-    //METODOS PARA NAVEGAR ENTRE ACTIVIDADES
-    public void abrirCuenta(){
-        Intent intent = new Intent(getApplicationContext(), info_usuario.class);
-        startActivity(intent);
-    }
-    public void abrirForo(){
-        //Intent intent = new Intent(getApplicationContext(), info_usuario.class);
-        //startActivity(intent);
-    }
-    public void abrirExplorar(){
-        //Intent intent = new Intent(getApplicationContext(), info_usuario.class);
-        //startActivity(intent);
-    }
-    public void abrirListas(){
-        //Intent intent = new Intent(getApplicationContext(), info_usuario.class);
-        //startActivity(intent);
-    }
 }
