@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class FragmentoTodoElAnime extends Fragment {
-    private static final String TAG = "Anime cargado: ";
+    private static final String TAG = "EXPLORAR (TODO)";
     private RequestQueue requestQueue;
     private StringRequest miStringRequest;
     private String url = "https://api.jikan.moe/v4/random/anime";
@@ -37,7 +37,7 @@ public class FragmentoTodoElAnime extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("FragmentoTodoElAnime", "onResume llamado");
-        cargarN_AnimesAleatorios(10);
+        cargarN_AnimesAleatorios(100);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class FragmentoTodoElAnime extends Fragment {
                             miAdaptador.notifyDataSetChanged();
                         }
 
-                        Log.i(TAG,  titulo);
+                        Log.i(TAG, "Anime cargado: " + titulo);
 
 
                     } catch (JSONException e) {

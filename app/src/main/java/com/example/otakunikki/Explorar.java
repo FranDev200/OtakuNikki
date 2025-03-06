@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -21,6 +22,7 @@ public class Explorar extends AppCompatActivity {
     private ImageButton imgRetroceso;
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
+    private boolean flag = false; //Lo hacemos para no cargar varios fragment si se pulsa varias veces
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,10 @@ public class Explorar extends AppCompatActivity {
         imgRetroceso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (!flag) {
+                    cargarFragment(new FragmentInicio());
+                    flag = true;
+                }
             }
         });
 
@@ -70,6 +75,14 @@ public class Explorar extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void cargarFragment(Fragment fragment) {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentLayout, fragment); // Usar replace en lugar de add
+        fragmentTransaction.commit();
     }
 
     class AdaptadorFragment extends FragmentStateAdapter {
