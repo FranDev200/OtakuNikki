@@ -82,7 +82,7 @@ public class MenuPrincipal extends AppCompatActivity {
         startActivity(intent);
     }
     public void abrirExplorar(){
-        Intent intent = new Intent(getApplicationContext(), info_usuario.class);
+        Intent intent = new Intent(getApplicationContext(), Explorar.class);
         startActivity(intent);
     }
     public void abrirListas(){
