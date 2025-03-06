@@ -49,6 +49,13 @@
         android:id="@+id/vpPaginador"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/> <!-- Permite que el ViewPager2 ocupe todo el espacio restante -->
+        android:layout_weight="1"/>
+
+    <FrameLayout
+        android:id="@+id/fragmentLayout"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 
 </LinearLayout>
