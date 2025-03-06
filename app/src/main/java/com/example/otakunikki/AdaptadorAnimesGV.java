@@ -17,9 +17,10 @@ public class AdaptadorAnimesGV  extends BaseAdapter {
     private ArrayList<Anime> listaAnimes;
     private Context context;
 
-    public AdaptadorAnimesGV(ArrayList<Anime> listaAnimes, Context context) {
-        this.listaAnimes = listaAnimes;
+    public AdaptadorAnimesGV(Context context, ArrayList<Anime> listaAnimes) {
         this.context = context;
+        this.listaAnimes = listaAnimes;
+
     }
 
     @Override

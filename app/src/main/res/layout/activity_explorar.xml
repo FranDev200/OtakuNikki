@@ -10,45 +10,45 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <ImageButton
+            android:id="@+id/imgRetroceso"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_gravity="center"
             android:src="@drawable/flechasalir"
             android:scaleType="centerCrop"
             android:backgroundTint="@null"
-        />
+            android:layout_gravity="start"
+            />
 
-        <!--Incorporamos un TabLayout, en cual contendrá una serie de TabItems -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Todo el anime"/>
+
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Generos"/>
+                android:text="Géneros"/>
+
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Últimas tendencias"/>
         </com.google.android.material.tabs.TabLayout>
 
-        <androidx.viewpager2.widget.ViewPager2
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/vpPaginador"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
     </LinearLayout>
 
-
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpPaginador"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/> <!-- Permite que el ViewPager2 ocupe todo el espacio restante -->
 
 </LinearLayout>

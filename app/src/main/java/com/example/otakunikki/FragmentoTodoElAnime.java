@@ -18,87 +18,90 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class FragmentoTodoElAnime extends Fragment {
-    private static final String TAG = "CONEXIÓN";
+    private static final String TAG = "Anime cargado: ";
     private RequestQueue requestQueue;
     private StringRequest miStringRequest;
-    private String url = "https://api.jikan.moe/v4/anime";
+    private String url = "https://api.jikan.moe/v4/random/anime";
     //--------------------------------------------------------------
     private GridView miGridView;
     private AdaptadorAnimesGV miAdaptador;
     private ArrayList<Anime> listaAnimes;
-    private ImageView imgFotoPrincipal;
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("FragmentoTodoElAnime", "onResume llamado");
+        cargarN_AnimesAleatorios(10);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("FragmentoTodoElAnime", "onCreateView llamado");
         // Inflate the layout for this fragment
         View vista = inflater.inflate(R.layout.fragmento_todo_el_anime, container, false);
 
         miGridView = vista.findViewById(R.id.gvTodosAnimes);
-        listaAnimes = new ArrayList<>();
+        listaAnimes = new ArrayList<Anime>();
 
-        miAdaptador = new AdaptadorAnimesGV(listaAnimes, getActivity().getApplicationContext());
+        miAdaptador = new AdaptadorAnimesGV(getActivity(), listaAnimes);
         miGridView.setAdapter(miAdaptador);
 
-        cargarInfo();
+        //cargarN_AnimesAleatorios(1);
 
         return vista;
     }
 
-    private void cargarInfo() {
+    private void cargarN_AnimesAleatorios(int numAnimes) {
+
         requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
-        miStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
 
-                    JSONObject jsonResponse = new JSONObject(response);
-                    JSONArray dataArray = jsonResponse.getJSONArray("data");
+        //Solo queremos mostar 100 random
+        for (int i = 0; i < numAnimes; i++) {
+            miStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject objeto = new JSONObject(response);
 
-                    if (dataArray.length() == 0) {
-                        Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
-                        return;
-                    }
+                        JSONObject animeObject = objeto.getJSONObject("data");
 
-                    for (int i = 0; i < dataArray.length(); i++) {
-                        JSONObject animeObject = dataArray.getJSONObject(i);
-                        int id = animeObject.getInt("mal_id");
-                        String titulo = animeObject.getString("title");
-                        String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").getString("large_image_url");
-                        String imagenPequenia =animeObject.getJSONObject("images").getJSONObject("jpg").getString("small_image_url");
+                        int id = animeObject.optInt("mal_id", 0);
+                        String titulo = animeObject.optString("title", "Sin titulo");
+                        String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Sin imagen");
+                        String imagenPequenya = animeObject.getJSONObject("images").getJSONObject("jpg").optString("small_image_url", "Sin imagen");
 
-                        Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", imagenPequenia, null);
+                        Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", imagenPequenya, null);
 
+                        // Evitar duplicados y agregarlo a la lista
                         if (!listaAnimes.contains(anime)) {
                             listaAnimes.add(anime);
+                            miAdaptador.notifyDataSetChanged();
                         }
+
+                        Log.i(TAG,  titulo);
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(requireContext(), "Error procesando el JSON", Toast.LENGTH_LONG).show();
                     }
-
-                    Log.i(TAG, response); // Ver la respuesta JSON
-                    // Notificar al adaptador después de agregar los datos
-                    miAdaptador.notifyDataSetChanged();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(requireContext(), "Error procesando el JSON de tods los animes", Toast.LENGTH_LONG).show();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("ERROR", "Error al obtener animes de temporada: " + error.getMessage());
-            }
-        });
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("ERROR", "Error al obtener anime aleatorio: " + error.getMessage());
+                }
+            });
 
-        requestQueue.add(miStringRequest);
-
+            requestQueue.add(miStringRequest);
+        }
     }
+
 }
