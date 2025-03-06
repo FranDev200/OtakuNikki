@@ -7,11 +7,21 @@ public class Episodio {
     private int idEpisodio;
     private String titulo;
     private String sinopsis;
+    private String imagen;
 
-    public Episodio(int idEpisodio, String titulo, String sinopsis) {
+    public Episodio(int idEpisodio, String titulo, String sinopsis, String imagen) {
         setIdEpisodio(idEpisodio);
         setTitulo(titulo);
         setSinopsis(sinopsis);
+        setImagen(imagen);
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public int getIdEpisodio() {
