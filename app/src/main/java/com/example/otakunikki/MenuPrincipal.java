@@ -85,7 +85,7 @@ public class MenuPrincipal extends AppCompatActivity {
             // Si el fragmento actual no es el que intentamos cargar, reemplazamos el fragmento
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.flGeneral, fragment) // Reemplazamos el fragmento
-                    .addToBackStack(null) // Añadimos a la pila de retroceso (opcional)
+                    //.addToBackStack(null) // Añadimos a la pila de retroceso (opcional)
                     .commit();
         }
 
