@@ -96,6 +96,7 @@
             android:focusedSearchResultHighlightColor="@color/gris_seleccionado"
             android:padding="10dp"
             android:text="Confirmar"
+            android:textSize="24dp"
             android:textAlignment="center">
 
         </Button>
