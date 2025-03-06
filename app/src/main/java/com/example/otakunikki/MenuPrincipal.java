@@ -144,7 +144,7 @@ public class MenuPrincipal extends AppCompatActivity {
         });
 
         rqAnimesTemporada.add(mrqAnimesTemporada);
-
+    }
     public void abrirCuenta(){
         Intent intent = new Intent(getApplicationContext(), info_usuario.class);
         startActivity(intent);
