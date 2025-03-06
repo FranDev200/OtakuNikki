@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/gris_oscuro"
+    android:background="#D5D5D5"
     tools:context=".AnyadirPerfil">
 
     <LinearLayout
@@ -23,8 +23,8 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:padding="10dp"
-            android:textColor="@color/white"
-            android:text="Añadir perfil"
+            android:textColor="@color/black"
+            android:text="Nuevo perfil"
             android:textAlignment="center"
             android:textSize="30dp"
             android:textStyle="bold"></TextView>
@@ -43,39 +43,30 @@
 
             <ImageView
                 android:id="@+id/imgIconoPerfil"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                android:background="?android:selectableItemBackgroundBorderless"
                 android:src="@drawable/user"/>
 
             <ImageButton
-                android:id="@+id/imgAnyadirPerfil"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/add"
-                android:background="@null"
-                android:layout_below="@id/imgIconoPerfil"
-                android:layout_alignEnd="@id/imgIconoPerfil"
-                android:scaleType="fitXY"
-                android:layout_marginTop="-5dp"/>
-
-            <ImageButton
                 android:id="@+id/imgAnyadirFondo"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="56dp"
+                android:layout_height="46dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="350dp"
+                android:layout_marginStart="330dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="195dp"
-                android:layout_marginEnd="23dp"
+                android:layout_marginTop="310dp"
+                android:layout_marginEnd="25dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="27dp"
+                android:layout_marginBottom="25dp"
                 android:background="@null"
                 android:scaleType="fitXY"
-                android:src="@drawable/add" />
+                android:src="@drawable/image" />
         </RelativeLayout>
 
         <EditText
@@ -90,47 +81,9 @@
             android:padding="10dp"
             android:textAlignment="textStart"
             android:textColor="@color/black"
-            android:textColorHint="@color/white"
-            android:backgroundTint="@color/white"
-            android:textSize="20dp"></EditText>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="0.4"
-            android:hint="Este será el nombre de perfil que aparece"
-            android:padding="10dp"
-            android:textAlignment="textStart"
-            android:textColorHint="@color/gris"></TextView>
-
-        <EditText
-            android:id="@+id/etNombreUser"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="0.5"
-            android:hint="Nombre del perfil"
-            android:padding="10dp"
-            android:textAlignment="textStart"
-            android:textColor="@color/black"
-            android:textColorHint="@color/white"
-            android:backgroundTint="@color/white"
-            android:textSize="20dp"></EditText>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="0.4"
-            android:hint="Este será el nombre de usuario que utilizarás siempre"
-            android:padding="10dp"
-            android:textAlignment="textStart"
-            android:textColorHint="@color/gris"></TextView>
+            android:textColorHint="@color/black"
+            android:backgroundTint="@color/black"
+            android:textSize="20dp"/>
 
         <Button
             android:id="@+id/BtnInicioSesion"
