@@ -98,7 +98,6 @@ public class FragmentInicio extends Fragment {
                 /**RECOJO LA POSICION DEL ITEM DEL LISTVIEW PARA PODER LUEGO COMPLETAR EL ANIME Y AGREGARLE LOS EPISODIOS**/
                 int position = lvhAnimeRecomendaciones.getChildAdapterPosition(v);  // Obtén la posición del ítem clickeado
                 Anime animeSeleccionado = listaAnimesRecomendados.get(position); // Obtén el anime en esa posición
-                Toast.makeText(getActivity(), "Posicion " + position, Toast.LENGTH_LONG).show();
                 AgregarListaEpisodios(animeSeleccionado);
                 CompletarInfoAnimeIndividual(animeSeleccionado);
 
@@ -270,7 +269,15 @@ public class FragmentInicio extends Fragment {
                         String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").getString("large_image_url");
                         String imagenMediana = animeObject.getJSONObject("images").getJSONObject("jpg").getString("image_url");
                         String imagenPeqenia =animeObject.getJSONObject("images").getJSONObject("jpg").getString("small_image_url");
-                        Anime anime = new Anime(id, titulo, synopsis, score, imagenGrande, imagenMediana, imagenPeqenia, null);
+                        String estado = animeObject.optString("status", "");
+                            Anime anime = null;
+                        if(estado.equals("Finished Airing")){
+                            anime = new Anime(id, titulo, synopsis, score, imagenGrande, imagenMediana, imagenPeqenia, null, false);
+
+                        }else {
+                            anime = new Anime(id, titulo, synopsis, score, imagenGrande, imagenMediana, imagenPeqenia, null, true);
+
+                        }
 
                         if (!listaAnimeTemporada.contains(anime)) {
                             listaAnimeTemporada.add(anime);
@@ -330,8 +337,17 @@ public class FragmentInicio extends Fragment {
                             int id = animeEntry.getInt("mal_id");
                             String titulo = animeEntry.getString("title");
                             String imagenGrande = animeEntry.getJSONObject("images").getJSONObject("jpg").getString("large_image_url");
+                            String estado = animeObject.optString("status", "");
+                            Anime anime = null;
+                            if(estado.equals("Finished Airing")){
+                                anime = new Anime(id, titulo, "", 0, imagenGrande, "", "", null, false);
 
-                            Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", "", null);
+                            }else {
+                                anime = new Anime(id, titulo, "", 0, imagenGrande,
+                                        "", "", null, true);
+
+                            }
+                            //Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", "", null);
                             if(listaAnimesRecomendados.contains(anime) ){
 
                             }else{

@@ -137,7 +137,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Confirmar"
-            android:backgroundTint="@color/blue"
+            android:backgroundTint="@color/azul"
             android:textColor="@color/white"
             android:padding="12dp"/>
 

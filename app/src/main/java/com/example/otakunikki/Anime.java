@@ -13,8 +13,10 @@ public class Anime {
     private String imagenMediana;
     private String imagenPequenia;
     private List<Episodio> listaEpisodios;
+    private boolean enEmision;
 
-    public Anime(int id, String titulo, String synopsis, double puntuacion, String imagenGrande, String imagenMediana, String imagenPequenia, List<Episodio> listaEpisodios) {
+    public Anime(int id, String titulo, String synopsis, double puntuacion, String imagenGrande,
+                 String imagenMediana, String imagenPequenia, List<Episodio> listaEpisodios, boolean enEmision) {
         this.id = id;
         this.titulo = titulo;
         this.synopsis = synopsis;
@@ -23,6 +25,15 @@ public class Anime {
         this.imagenMediana = imagenMediana;
         this.imagenPequenia = imagenPequenia;
         this.listaEpisodios = listaEpisodios;
+        this.enEmision = enEmision;
+    }
+
+    public boolean isEnEmision() {
+        return enEmision;
+    }
+
+    public void setEnEmision(boolean enEmision) {
+        this.enEmision = enEmision;
     }
 
     public int getId() {
