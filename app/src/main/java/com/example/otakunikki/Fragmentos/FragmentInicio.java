@@ -1,8 +1,7 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Fragmentos;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -24,8 +22,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.otakunikki.Adaptadores.AdaptadorLVHorAnimeMenuPrincipal;
+import com.example.otakunikki.Clases.Anime;
+import com.example.otakunikki.Clases.Episodio;
+import com.example.otakunikki.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -169,7 +170,7 @@ public class FragmentInicio extends Fragment {
                             fechaFormateada = fecha.split("T")[0];  // Tomar solo la parte YYYY-MM-DD
                         }
 
-                        lista.add(new Episodio(id, titulo, "", fechaFormateada));
+                        lista.add(new Episodio(id, titulo, "", fechaFormateada, false));
 
                     }
 

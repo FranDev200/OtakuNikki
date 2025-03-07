@@ -1,4 +1,4 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Adaptadores;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.otakunikki.Clases.Anime;
+import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

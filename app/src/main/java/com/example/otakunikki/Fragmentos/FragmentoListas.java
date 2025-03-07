@@ -1,4 +1,4 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Fragmentos;
 
 import android.os.Bundle;
 
@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.otakunikki.Adaptadores.AdaptadorListas;
+import com.example.otakunikki.Clases.Anime;
+import com.example.otakunikki.Actividades.ListaAnime;
+import com.example.otakunikki.R;
+
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 
 public class FragmentoListas extends Fragment {

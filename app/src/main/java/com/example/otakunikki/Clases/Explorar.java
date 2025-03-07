@@ -1,6 +1,5 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Clases;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,11 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.otakunikki.Fragmentos.FragmentoGeneros;
+import com.example.otakunikki.Fragmentos.FragmentoTodoElAnime;
+import com.example.otakunikki.Fragmentos.FragmentoUltTendencias;
+import com.example.otakunikki.R;
 import com.google.android.material.tabs.TabLayout;
 
 public class Explorar extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Actividades;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.otakunikki.R;
 
 public class ActividadInicial extends AppCompatActivity {
     private Button registro, inicioSesion;

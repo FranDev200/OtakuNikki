@@ -1,4 +1,4 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Actividades;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +9,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.otakunikki.R;
 
 public class ActividadRegistro extends AppCompatActivity {
     private String[] paises = {"--Seleccion un pais--","España", "Estados Unidos", "Japón"};

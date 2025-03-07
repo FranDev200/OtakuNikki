@@ -1,4 +1,4 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Fragmentos;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,6 +20,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.otakunikki.Actividades.ActividadVistaDetalleAnime;
+import com.example.otakunikki.Adaptadores.AdaptadorAnimesGV;
+import com.example.otakunikki.Clases.Anime;
+import com.example.otakunikki.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +61,14 @@ public class FragmentoTodoElAnime extends Fragment {
          * LA INFO DE LA PETICION A LA API YA QUE SE EJECUTA DE FORMA ASINCRONA Y SI SE HACE ALGO CON
          * LA LISTA INMEDIATAMENTE DESPUÉS DARA FALLO POR NULLPOINTEREXCEPTION**/
 
+        miGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                abrirVistaDeDetalleAnime(position);
+            }
+        });
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -69,23 +80,23 @@ public class FragmentoTodoElAnime extends Fragment {
             }
         }, 1500); // Espera 1,5 segundos antes de revisar la lista
 
-        miGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                abrirVistaDeDetalleAnime(position);
-            }
-        });
         return vista;
     }
 
     private void abrirVistaDeDetalleAnime(int position) {
+
+        if (listaAnimes == null || listaAnimes.isEmpty()) {
+            Toast.makeText(getActivity(), "Cargando datos, intenta de nuevo", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         Intent intent = new Intent(getActivity().getApplicationContext(), ActividadVistaDetalleAnime.class);
         intent.putExtra("Id", listaAnimes.get(position).getId());
         intent.putExtra("Titulo", listaAnimes.get(position).getTitulo());
         intent.putExtra("ImagenG", listaAnimes.get(position).getImagenGrande());
         intent.putExtra("ImagenP", listaAnimes.get(position).getImagenPequenia());
+        intent.putExtra("EnEmision", listaAnimes.get(position).isEnEmision());
         startActivity(intent);
     }
 
@@ -134,7 +145,7 @@ public class FragmentoTodoElAnime extends Fragment {
 
                         // Crear objeto Anime
                         boolean enEmision = !estado.equals("Finished Airing");
-                        Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", "", null, listaGeneros, enEmision);
+                        Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", imagenPequenya, null, listaGeneros, enEmision);
 
 
                         // Evitar duplicados y agregarlo a la lista
