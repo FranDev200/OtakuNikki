@@ -7,6 +7,7 @@ public class ListaAnime {
 
     private String nombreLista;
     private List<Anime> listaAnimes;
+    private int nroAnimes;
 
     public ListaAnime(String nombreLista, List<Anime> listaAnimes) {
         setNombreLista(nombreLista);
