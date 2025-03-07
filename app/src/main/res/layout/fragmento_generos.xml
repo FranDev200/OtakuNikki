@@ -5,32 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".FragmentoGeneros">
     
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Mis Listas"
-            android:textSize="50dp"
-            android:textStyle="bold"
-            android:gravity="center_vertical"
-
-            />
-
-        <ImageButton
-            android:id="@+id/imgAniadirLista"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/plus"
-            android:scaleType="fitCenter"
-            android:background="?android:selectableItemBackgroundBorderless"
-            android:layout_gravity="center"
-            android:layout_marginLeft="200px"
-            />
-    </LinearLayout>
 
 </FrameLayout>
