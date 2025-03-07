@@ -14,12 +14,12 @@
 
         <ImageButton
             android:id="@+id/imgRetroceso"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/flechasalir"
             android:scaleType="centerCrop"
-            android:backgroundTint="@null"
-            android:layout_gravity="start"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center_vertical"
             />
 
         <com.google.android.material.tabs.TabLayout
@@ -50,12 +50,5 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-
-    <FrameLayout
-        android:id="@+id/fragmentLayout"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
 
 </LinearLayout>
