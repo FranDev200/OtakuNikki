@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.otakunikki.Adaptadores.AdaptadorVistaDetalleLV;
 import com.example.otakunikki.Clases.Episodio;
 import com.example.otakunikki.R;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -91,10 +92,10 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                 .load(urlG)//Esto es donde va la url de la imagen
                 .into(imgAnime); // Aqui lo guardo en el ImageView
 
-        ImageView imgPequenya;
-        Picasso.get()
-                .load(bundle.getString("ImagenP"))//Esto es donde va la url de la imagen
-                .into(imgAnime); // Aqui lo guardo en el ImageView
+        ImageView imgPequenya;//
+
+        Log.d("DEBUG", "URL de la imagen: " + bundle.getString("ImagenP"));
+
 
         if (bundle.getBoolean("EnEmision") == true){
             tvEmision.setText("En emision ●");

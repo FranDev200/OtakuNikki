@@ -129,7 +129,7 @@ public class FragmentoTodoElAnime extends Fragment {
 
                         int id = objetoAnime.optInt("mal_id", 0);
                         String titulo = objetoAnime.optString("title", "Sin titulo");
-                        String imagenGrande = objetoAnime.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Sin imagen");
+                        String imagenGrande = objetoAnime.getJSONObject("images").getJSONObject("webp").optString("large_image_url", "Sin imagen");
                         String imagenPequenya = objetoAnime.getJSONObject("images").getJSONObject("jpg").optString("small_image_url", "Sin imagen");
                         String estado = objetoAnime.optString("status", "");
                         // Obtencion de la lista de géneros
