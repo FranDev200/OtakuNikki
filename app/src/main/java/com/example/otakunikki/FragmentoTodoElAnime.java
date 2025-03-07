@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentoTodoElAnime extends Fragment {
     private static final String TAG = "EXPLORAR (TODO)";
@@ -120,15 +121,21 @@ public class FragmentoTodoElAnime extends Fragment {
                         String imagenGrande = objetoAnime.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Sin imagen");
                         String imagenPequenya = objetoAnime.getJSONObject("images").getJSONObject("jpg").optString("small_image_url", "Sin imagen");
                         String estado = objetoAnime.optString("status", "");
-                        Anime anime = null;
-                        if(estado.equals("Finished Airing")){
-                            anime = new Anime(id, titulo, "", 0, imagenGrande, "", imagenPequenya, null, false);
+                        // Obtencion de la lista de géneros
+                        JSONArray datosGeneros = objetoAnime.optJSONArray("genres");
+                        List<String> listaGeneros = new ArrayList<>(); // Reiniciar la lista en cada iteración
 
-                        }else {
-                            anime = new Anime(id, titulo, "", 0, imagenGrande,
-                                    "", imagenPequenya, null, true);
-
+                        if (datosGeneros != null) {
+                            for (int l = 0; l < datosGeneros.length(); l++) {
+                                JSONObject generoObj = datosGeneros.getJSONObject(l);
+                                listaGeneros.add(generoObj.optString("name", "Género no disponible"));
+                            }
                         }
+
+                        // Crear objeto Anime
+                        boolean enEmision = !estado.equals("Finished Airing");
+                        Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", "", null, listaGeneros, enEmision);
+
 
                         // Evitar duplicados y agregarlo a la lista
                         if (!listaAnimes.contains(anime)) {

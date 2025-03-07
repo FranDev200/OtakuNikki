@@ -34,7 +34,7 @@ public class FragmentoListas extends Fragment {
         listaAnimes = new ArrayList<ListaAnime>();
         // Crear la lista de animes para la primera lista
         ArrayList<Anime> animesLista1 = new ArrayList<>();
-        animesLista1.add(new Anime(0, "Solo Leveling", "", 0, "@drawable/rin", "", "", null, false));
+        animesLista1.add(new Anime(0, "Solo Leveling", "", 0, "@drawable/rin", "", "", null, null,false));
 
         // Agregar la lista de animes a la lista principal
         listaAnimes.add(new ListaAnime("Mi lista 1", animesLista1));
