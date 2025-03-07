@@ -131,23 +131,63 @@ public class FragmentInicio extends Fragment {
                 if (!listaAnimeTemporada.isEmpty()) {
                     Log.i("LISTA", "Tamaño de la lista temporada: " + listaAnimeTemporada.size());
                     Log.i("LISTA", "Tamaño de la lista recomendados: " + listaAnimesRecomendados.size());
-                    //CompletarInfoAnimes(listaAnimesRecomendados);
 
                 } else {
                     Log.i("LISTA", "Aún no hay datos, esperando...");
                 }
             }
         }, 1500); // Espera 1,5 segundos antes de revisar la lista
-
-
-
         return vista;
     }
 
-    /**COMPLETAR METODO PARA RECOGER LOS CAPITULOS**/
     private void AgregarListaEpisodios(Anime anime) {
+        RequestQueue rqEpisodio = Volley.newRequestQueue(getActivity().getApplicationContext());
+        String urlEpisodios = "https://api.jikan.moe/v4/anime/" + anime.getId() + "/episodes";
 
+        List<Episodio> lista = new ArrayList<>();
+
+        StringRequest mrqEpisodios = new StringRequest(Request.Method.GET, urlEpisodios, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    Log.i("INFO INICIO", response); // Ver la respuesta JSON
+
+                    JSONObject jsonResponse = new JSONObject(response);
+                    JSONArray dataArray = jsonResponse.getJSONArray("data");
+
+                    for (int i = 0; i < dataArray.length(); i++) {
+                        JSONObject episodios = dataArray.getJSONObject(i);
+                        int id = episodios.optInt("mal_id", 0);
+                        String titulo = episodios.optString("title", "Titulo no disponible");
+                        String fecha = episodios.optString("aired", "");
+                        String fechaFormateada = "Fecha no disponible";
+
+                        if (!fecha.isEmpty() && fecha.contains("T")) {
+                            fechaFormateada = fecha.split("T")[0];  // Tomar solo la parte YYYY-MM-DD
+                        }
+
+                        lista.add(new Episodio(id, titulo, "", fechaFormateada));
+                        //Log.i("INFO EPISODIOS DE ANIME", "Fecha: " + fechaFormateada);
+
+                    }
+
+                    anime.setListaEpisodios(lista);  // Asignar lista después de llenarla
+                    Log.i("INFO EPISODIOS DE ANIME", "Total episodios: " + anime.getListaEpisodios().size());
+
+                } catch (JSONException e) {
+                    Log.e("ERROR JSON", "Error al parsear JSON", e);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ERROR VOLLEY", "Error en la petición de episodios", error);
+            }
+        });
+
+        rqEpisodio.add(mrqEpisodios);
     }
+
 
     private void CompletarInfoAnimeIndividual(Anime anime){
         RequestQueue rqAnimes = Volley.newRequestQueue(getActivity().getApplicationContext());
@@ -158,7 +198,7 @@ public class FragmentInicio extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.i("INFO JSON", response);
+                            Log.i("INFO JSON INICIO", response);
                             JSONObject animeDetallesResponse = new JSONObject(response);
                             JSONObject animeDetalles = animeDetallesResponse.getJSONObject("data");
 
@@ -177,7 +217,7 @@ public class FragmentInicio extends Fragment {
                             anime.setImagenPequenia(imagenPequenia);
                             anime.setImagenMediana(imagenMediana);
 
-                            Log.i("INFO ", "### " + anime.getPuntuacion() + " ###" + anime.getTitulo());
+                            Log.i("INFO INICIO", "### " + anime.getPuntuacion() + " ###" + anime.getTitulo());
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -203,7 +243,7 @@ public class FragmentInicio extends Fragment {
             @Override
             public void onResponse(String response) {
                 try {
-                    Log.i("INFO", response); // Ver la respuesta JSON
+                    Log.i("INFO INICIO", response); // Ver la respuesta JSON
 
                     JSONObject jsonResponse = new JSONObject(response);
                     JSONArray dataArray = jsonResponse.getJSONArray("data");
@@ -263,7 +303,7 @@ public class FragmentInicio extends Fragment {
             @Override
             public void onResponse(String response) {
                 try {
-                    Log.i("INFO", response.toString());
+                    Log.i("INFO INICIO", response.toString());
 
                     // Parseamos el JSON de recomendaciones
                     JSONObject jsonResponse = new JSONObject(response);
