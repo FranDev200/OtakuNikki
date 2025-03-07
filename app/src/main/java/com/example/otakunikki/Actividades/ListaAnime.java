@@ -1,4 +1,6 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Actividades;
+
+import com.example.otakunikki.Clases.Anime;
 
 import java.util.List;
 import java.util.Objects;

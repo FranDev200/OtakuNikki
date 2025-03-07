@@ -1,4 +1,4 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Clases;
 
 import java.util.Objects;
 
@@ -8,12 +8,22 @@ public class Episodio {
     private String titulo;
     private String sinopsis;
     private String fecha;
+    private boolean estaVisto;
 
-    public Episodio(int idEpisodio, String titulo, String sinopsis, String fecha) {
+    public Episodio(int idEpisodio, String titulo, String sinopsis, String fecha, boolean estaVisto) {
         setIdEpisodio(idEpisodio);
         setTitulo(titulo);
         setSinopsis(sinopsis);
         setFecha(fecha);
+        setEstaVisto(estaVisto);
+    }
+
+    public boolean isEstaVisto() {
+        return estaVisto;
+    }
+
+    public void setEstaVisto(boolean estaVisto) {
+        this.estaVisto = estaVisto;
     }
 
     public String getFecha() {

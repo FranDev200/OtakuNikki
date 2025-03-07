@@ -1,19 +1,15 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Adaptadores;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
+import com.example.otakunikki.Actividades.ListaAnime;
+import com.example.otakunikki.R;
 
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdaptadorListas extends BaseAdapter {

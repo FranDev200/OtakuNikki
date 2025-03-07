@@ -1,4 +1,4 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Fragmentos;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.otakunikki.R;
 
 
 public class FragmentoGeneros extends Fragment {

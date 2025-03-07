@@ -1,4 +1,4 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Clases;
 
 import java.util.List;
 import java.util.Objects;

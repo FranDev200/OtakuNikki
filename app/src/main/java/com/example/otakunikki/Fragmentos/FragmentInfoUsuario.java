@@ -1,4 +1,4 @@
-package com.example.otakunikki;
+package com.example.otakunikki.Fragmentos;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+
+import com.example.otakunikki.Actividades.ActividadInicial;
+import com.example.otakunikki.R;
+import com.example.otakunikki.Actividades.SeleccionPerfil;
 
 public class FragmentInfoUsuario extends Fragment {
     private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil;
