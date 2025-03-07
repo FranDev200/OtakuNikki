@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import java.util.List;
 
 public class FragmentInicio extends Fragment {
     private ImageView imgFotoPrincipal;
+    private ImageButton imgMostrarTexto;
 
     private RecyclerView lvhAnimeRecomendaciones;
     private AdaptadorLVHorAnimeMenuPrincipal adpatdorAnimeRecomendado;
@@ -59,19 +61,21 @@ public class FragmentInicio extends Fragment {
         View vista = inflater.inflate(R.layout.fragment_inicio, container, false);
         tvTituloInicio = vista.findViewById(R.id.tvTituloInicio);
         tvSinopsisInicio = vista.findViewById(R.id.tvSinopsisInicio);
-
+        imgMostrarTexto = vista.findViewById(R.id.imgMostrarTexto);
         /**METODO PARA EXPANDIR EL TEXT VIEW DE SINOPSIS PARA QUE PODAMOS CONTRAER Y EXPANDIR EL CONTROL**/
 
-        tvSinopsisInicio.setOnClickListener(new View.OnClickListener() {
-                boolean flag = false;
+        imgMostrarTexto.setOnClickListener(new View.OnClickListener() {
+            boolean flag = false;
             @Override
             public void onClick(View v) {
                 if(flag){
                     tvSinopsisInicio.setMaxLines(4);
                     flag = false;
+                    imgMostrarTexto.setImageResource(R.drawable.plus);
                 }else{
                     tvSinopsisInicio.setMaxLines(Integer.MAX_VALUE);
                     flag = true;
+                    imgMostrarTexto.setImageResource(R.drawable.menos);
                 }
             }
         });
@@ -138,7 +142,7 @@ public class FragmentInicio extends Fragment {
         }, 1500); // Espera 1,5 segundos antes de revisar la lista
         return vista;
     }
-
+    /**FALTA AGREGAR LA SYNOPSIS AL EPISODIO**/
     private void AgregarListaEpisodios(Anime anime) {
         RequestQueue rqEpisodio = Volley.newRequestQueue(getActivity().getApplicationContext());
         String urlEpisodios = "https://api.jikan.moe/v4/anime/" + anime.getId() + "/episodes";
@@ -166,7 +170,6 @@ public class FragmentInicio extends Fragment {
                         }
 
                         lista.add(new Episodio(id, titulo, "", fechaFormateada));
-                        //Log.i("INFO EPISODIOS DE ANIME", "Fecha: " + fechaFormateada);
 
                     }
 
@@ -263,21 +266,30 @@ public class FragmentInicio extends Fragment {
 
                         JSONObject animeObject = dataArray.getJSONObject(i);
                         int id = animeObject.getInt("mal_id");
-                        String titulo = animeObject.getString("title");
-                        String synopsis = animeObject.getString("synopsis");
+                        String titulo = animeObject.optString("title","Titulo no disponible");
+                        String synopsis = animeObject.optString("synopsis", "Synopsis no disponible");
                         double score = animeObject.optDouble("score", 0);
-                        String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").getString("large_image_url");
-                        String imagenMediana = animeObject.getJSONObject("images").getJSONObject("jpg").getString("image_url");
-                        String imagenPeqenia =animeObject.getJSONObject("images").getJSONObject("jpg").getString("small_image_url");
+                        String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Foto no disponible");
+                        String imagenMediana = animeObject.getJSONObject("images").getJSONObject("jpg").optString("image_url", "Foto no disponible");
+                        String imagenPeqenia =animeObject.getJSONObject("images").getJSONObject("jpg").optString("small_image_url", "Foto no disponible");
                         String estado = animeObject.optString("status", "");
-                            Anime anime = null;
-                        if(estado.equals("Finished Airing")){
-                            anime = new Anime(id, titulo, synopsis, score, imagenGrande, imagenMediana, imagenPeqenia, null, false);
 
-                        }else {
-                            anime = new Anime(id, titulo, synopsis, score, imagenGrande, imagenMediana, imagenPeqenia, null, true);
+                        // Obtencion de la lista de géneros
+                        JSONArray datosGeneros = animeObject.optJSONArray("genres");
+                        List<String> listaGeneros = new ArrayList<>(); // Reiniciar la lista en cada iteración
 
+                        if (datosGeneros != null) {
+                            for (int l = 0; l < datosGeneros.length(); l++) {
+                                JSONObject generoObj = datosGeneros.getJSONObject(l);
+                                listaGeneros.add(generoObj.optString("name", "Género no disponible"));
+
+                            }
                         }
+
+                        // Crear objeto Anime
+                        boolean enEmision = !estado.equals("Finished Airing");
+                        Anime anime = new Anime(id, titulo, synopsis, score, imagenGrande, imagenMediana, imagenPeqenia, null, listaGeneros, enEmision);
+
 
                         if (!listaAnimeTemporada.contains(anime)) {
                             listaAnimeTemporada.add(anime);
@@ -312,56 +324,56 @@ public class FragmentInicio extends Fragment {
                 try {
                     Log.i("INFO INICIO", response.toString());
 
-                    // Parseamos el JSON de recomendaciones
                     JSONObject jsonResponse = new JSONObject(response);
                     JSONArray dataArray = jsonResponse.getJSONArray("data");
 
-                    // Verificamos si la respuesta tiene datos
                     if (dataArray.length() == 0) {
                         Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     for (int i = 0; i < dataArray.length(); i++) {
-                        if(listaAnimesRecomendados.size() == 10){
+                        if (listaAnimesRecomendados.size() == 10) {
                             break;
                         }
+
                         JSONObject animeObject = dataArray.getJSONObject(i);
                         JSONArray entryArray = animeObject.getJSONArray("entry");
 
-                        // Iteramos sobre los elementos en "entry"
                         for (int j = 0; j < entryArray.length(); j++) {
                             JSONObject animeEntry = entryArray.getJSONObject(j);
 
-                            // Accedemos a la información del anime
                             int id = animeEntry.getInt("mal_id");
                             String titulo = animeEntry.getString("title");
                             String imagenGrande = animeEntry.getJSONObject("images").getJSONObject("jpg").getString("large_image_url");
                             String estado = animeObject.optString("status", "");
-                            Anime anime = null;
-                            if(estado.equals("Finished Airing")){
-                                anime = new Anime(id, titulo, "", 0, imagenGrande, "", "", null, false);
 
-                            }else {
-                                anime = new Anime(id, titulo, "", 0, imagenGrande,
-                                        "", "", null, true);
+                            // Obtencion de la lista de géneros
+                            JSONArray datosGeneros = animeEntry.optJSONArray("genres");
+                            List<String> listaGeneros = new ArrayList<>(); // Reiniciar la lista en cada iteración
 
+                            if (datosGeneros != null) {
+                                for (int l = 0; l < datosGeneros.length(); l++) {
+                                    JSONObject generoObj = datosGeneros.getJSONObject(l);
+                                    listaGeneros.add(generoObj.optString("name", "Género no disponible"));
+                                }
                             }
-                            //Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", "", null);
-                            if(listaAnimesRecomendados.contains(anime) ){
 
-                            }else{
+                            // Crear objeto Anime
+                            boolean enEmision = !estado.equals("Finished Airing");
+                            Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", "", null, listaGeneros, enEmision);
+
+                            // Verificación de duplicados
+                            if (!listaAnimesRecomendados.contains(anime)) {
                                 listaAnimesRecomendados.add(anime);
 
-                                if(listaAnimesRecomendados.size() == 10){
+                                if (listaAnimesRecomendados.size() == 10) {
                                     adpatdorAnimeRecomendado.notifyDataSetChanged();
                                     break;
                                 }
                             }
-
                         }
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity().getApplicationContext(), "Error procesando el JSON de recomendaciones", Toast.LENGTH_LONG).show();
@@ -374,9 +386,9 @@ public class FragmentInicio extends Fragment {
             }
         });
 
-        // Añadimos la solicitud a la cola de solicitudes
         rqAnimesRecomendados.add(mrqAnimesRecomendados);
     }
+
 
 
 }
