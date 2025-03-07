@@ -34,17 +34,14 @@ public class Explorar extends AppCompatActivity {
         imgRetroceso = findViewById(R.id.imgRetroceso);
         viewPager2 = findViewById(R.id.vpPaginador);
         tabLayout = findViewById(R.id.tabLayout);
-        /*
+
         imgRetroceso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!flag) {
-                    cargarFragment(new FragmentInicio());
-                    flag = true;
-                }
+               finish();
             }
         });
-*/
+
         viewPager2.setAdapter(new AdaptadorFragment(getSupportFragmentManager(), getLifecycle()));
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
 
@@ -75,14 +72,6 @@ public class Explorar extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void cargarFragment(Fragment fragment) {
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentLayout, fragment); // Usar replace en lugar de add
-        fragmentTransaction.commit();
     }
 
     class AdaptadorFragment extends FragmentStateAdapter {
