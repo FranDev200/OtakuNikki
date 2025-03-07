@@ -6,18 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdaptadorListas extends BaseAdapter {
 
-    private ArrayList<ListaAnime> listadelistasAnimes;
+    private List<ListaAnime> listadelistasAnimes;
     private Context context;
 
-    public AdaptadorListas(Context context, ArrayList<ListaAnime> listadelistasAnimes) {
+    public AdaptadorListas(Context context, List<ListaAnime> listadelistasAnimes) {
         this.context = context;
         this.listadelistasAnimes = listadelistasAnimes;
 
@@ -47,10 +51,17 @@ public class AdaptadorListas extends BaseAdapter {
         TextView tvTitulo = view.findViewById(R.id.tvTituloLista);
         TextView tvNroAnimes = view.findViewById(R.id.tvNroAnimesGuardados);
         TextView tvFecha = view.findViewById(R.id.tvFechaModificacion);
+        RecyclerView lvAnimes = view.findViewById(R.id.lvAnimesLista);
 
         tvTitulo.setText(listadelistasAnimes.get(position).getNombreLista());
         tvNroAnimes.setText(listadelistasAnimes.get(position).getNroAnimes() + " animes");
         tvFecha.setText(listadelistasAnimes.get(position).getFechaModificacion());
+
+        AdaptadorLVHorAnimeListas miAdaptadorLVHor;
+        miAdaptadorLVHor = new AdaptadorLVHorAnimeListas(context, listadelistasAnimes.get(position).getListaAnimes());
+
+        lvAnimes.setAdapter(miAdaptadorLVHor);
+        miAdaptadorLVHor.notifyDataSetChanged();
 
         return view;
     }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class AdaptadorLVHorAnimeListas extends RecyclerView.Adapter<AdaptadorLVHorAnimeMenuPrincipal.ViewHolder> implements View.OnClickListener{
+public class AdaptadorLVHorAnimeListas extends RecyclerView.Adapter<AdaptadorLVHorAnimeListas.ViewHolder> implements View.OnClickListener {
 
     private Context context;
     private List<Anime> listaAnimes;
@@ -27,16 +28,16 @@ public class AdaptadorLVHorAnimeListas extends RecyclerView.Adapter<AdaptadorLVH
     }
     @NonNull
     @Override
-    public AdaptadorLVHorAnimeMenuPrincipal.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdaptadorLVHorAnimeListas.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflamos el layout de cada item
         View view = LayoutInflater.from(context).inflate(R.layout.item_imganime_lista_animes, parent, false);
 
         view.setOnClickListener(this);
-        return new AdaptadorLVHorAnimeMenuPrincipal.ViewHolder(view);
+        return new AdaptadorLVHorAnimeListas.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdaptadorLVHorAnimeMenuPrincipal.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdaptadorLVHorAnimeListas.ViewHolder holder, int position) {
         Anime anime = listaAnimes.get(position);
         // Establecemos el nombre y la imagen del anime
         Picasso.get().load(anime.getImagenGrande()).into(holder.imagen);
