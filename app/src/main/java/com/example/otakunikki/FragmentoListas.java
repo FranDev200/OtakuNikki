@@ -32,7 +32,13 @@ public class FragmentoListas extends Fragment {
         miListView = (ListView) vista.findViewById(R.id.lvListasAnimes);
 
         listaAnimes = new ArrayList<ListaAnime>();
-        listaAnimes.add(new ListaAnime("Mi lista 1", new ArrayList<Anime>(new Anime(0, "Solo Leveling", "", 0, "@drawable/rin", "", "", new ArrayList<Episodio>()).getId())));
+        // Crear la lista de animes para la primera lista
+        ArrayList<Anime> animesLista1 = new ArrayList<>();
+        animesLista1.add(new Anime(0, "Solo Leveling", "", 0, "@drawable/rin", "", "", null, false));
+
+        // Agregar la lista de animes a la lista principal
+        listaAnimes.add(new ListaAnime("Mi lista 1", animesLista1));
+
 
         listaAnimes.add(new ListaAnime("Mi lista 2", new ArrayList<Anime>()));
 

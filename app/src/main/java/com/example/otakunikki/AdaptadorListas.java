@@ -51,17 +51,11 @@ public class AdaptadorListas extends BaseAdapter {
         TextView tvTitulo = view.findViewById(R.id.tvTituloLista);
         TextView tvNroAnimes = view.findViewById(R.id.tvNroAnimesGuardados);
         TextView tvFecha = view.findViewById(R.id.tvFechaModificacion);
-        RecyclerView lvAnimes = view.findViewById(R.id.lvAnimesLista);
+
 
         tvTitulo.setText(listadelistasAnimes.get(position).getNombreLista());
         tvNroAnimes.setText(listadelistasAnimes.get(position).getNroAnimes() + " animes");
         tvFecha.setText(listadelistasAnimes.get(position).getFechaModificacion());
-
-        AdaptadorLVHorAnimeListas miAdaptadorLVHor;
-        miAdaptadorLVHor = new AdaptadorLVHorAnimeListas(context, listadelistasAnimes.get(position).getListaAnimes());
-
-        lvAnimes.setAdapter(miAdaptadorLVHor);
-        miAdaptadorLVHor.notifyDataSetChanged();
 
         return view;
     }
