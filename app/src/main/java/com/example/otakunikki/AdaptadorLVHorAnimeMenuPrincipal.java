@@ -42,12 +42,12 @@ public class AdaptadorLVHorAnimeMenuPrincipal extends RecyclerView.Adapter<Adapt
         Picasso.get().load(anime.getImagenGrande()).into(holder.imagen);
 
         // Asignar el clic con la posición
-        holder.itemView.setOnClickListener(v -> {
+        /*holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 // Pasamos la posición al listener para que pueda usarla
                 listener.onClick(v);
             }
-        });
+        });*/
     }
 
     @Override
