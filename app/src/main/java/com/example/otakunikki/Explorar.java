@@ -34,7 +34,7 @@ public class Explorar extends AppCompatActivity {
         imgRetroceso = findViewById(R.id.imgRetroceso);
         viewPager2 = findViewById(R.id.vpPaginador);
         tabLayout = findViewById(R.id.tabLayout);
-
+        /*
         imgRetroceso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,7 +44,7 @@ public class Explorar extends AppCompatActivity {
                 }
             }
         });
-
+*/
         viewPager2.setAdapter(new AdaptadorFragment(getSupportFragmentManager(), getLifecycle()));
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
 
