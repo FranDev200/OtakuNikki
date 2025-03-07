@@ -8,10 +8,12 @@ public class ListaAnime {
     private String nombreLista;
     private List<Anime> listaAnimes;
     private int nroAnimes;
+    private String fechaModificacion;
 
     public ListaAnime(String nombreLista, List<Anime> listaAnimes) {
         setNombreLista(nombreLista);
         setListaAnimes(listaAnimes);
+        setNroAnimes(getListaAnimes().size());
     }
 
     public String getNombreLista() {
@@ -29,6 +31,14 @@ public class ListaAnime {
     public void setListaAnimes(List<Anime> listaAnimes) {
         this.listaAnimes = listaAnimes;
     }
+
+    public int getNroAnimes() { return nroAnimes; }
+
+    public void setNroAnimes(int nroAnimes) { this.nroAnimes = nroAnimes; }
+
+    public String getFechaModificacion() { return fechaModificacion; }
+
+    public void setFechaModificacion(String fechaModificacion) { this.fechaModificacion = fechaModificacion; }
 
     @Override
     public boolean equals(Object o) {
