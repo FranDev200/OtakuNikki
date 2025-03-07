@@ -119,8 +119,16 @@ public class FragmentoTodoElAnime extends Fragment {
                         String titulo = objetoAnime.optString("title", "Sin titulo");
                         String imagenGrande = objetoAnime.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Sin imagen");
                         String imagenPequenya = objetoAnime.getJSONObject("images").getJSONObject("jpg").optString("small_image_url", "Sin imagen");
+                        String estado = objetoAnime.optString("status", "");
+                        Anime anime = null;
+                        if(estado.equals("Finished Airing")){
+                            anime = new Anime(id, titulo, "", 0, imagenGrande, "", imagenPequenya, null, false);
 
-                        Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", imagenPequenya, null);
+                        }else {
+                            anime = new Anime(id, titulo, "", 0, imagenGrande,
+                                    "", imagenPequenya, null, true);
+
+                        }
 
                         // Evitar duplicados y agregarlo a la lista
                         if (!listaAnimes.contains(anime)) {
@@ -128,7 +136,7 @@ public class FragmentoTodoElAnime extends Fragment {
                             miAdaptador.notifyDataSetChanged();
                         }
 
-                        Log.i(TAG, "Anime cargado: " + titulo);
+                        Log.i(TAG, "Anime cargado: " + titulo + estado);
 
                     }
 
