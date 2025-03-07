@@ -52,22 +52,21 @@
 
             <ImageButton
                 android:id="@+id/imgAnyadirFondo"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="75dp"
+                android:layout_height="53dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="330dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="400dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="25dp"
-                android:scaleType="centerCrop"
+                android:layout_marginStart="319dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="321dp"
+                android:layout_marginEnd="17dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="7dp"
                 android:background="?android:selectableItemBackgroundBorderless"
-                android:src="@drawable/image"
-                />
+                android:scaleType="fitCenter"
+                android:src="@drawable/image" />
         </RelativeLayout>
 
         <EditText
