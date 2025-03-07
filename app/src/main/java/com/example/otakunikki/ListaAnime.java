@@ -36,7 +36,7 @@ public class ListaAnime {
 
     public void setNroAnimes(int nroAnimes) { this.nroAnimes = nroAnimes; }
 
-    public String getFechaModificacion() { return fechaModificacion; }
+    public String getFechaModificacion() { return fechaModificacion;}
 
     public void setFechaModificacion(String fechaModificacion) { this.fechaModificacion = fechaModificacion; }
 
