@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.otakunikki.Adaptadores.AdaptadorAnimesGV;
 import com.example.otakunikki.Adaptadores.AdaptadorListaAnimeDetalle;
 import com.example.otakunikki.Clases.Anime;
+import com.example.otakunikki.Clases.ListaAnime;
 import com.example.otakunikki.R;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actividad_vista_detalle_lista_anime);
 
-        listaCreada = (ListaAnime) getIntent().getSerializableExtra("ListaAnime");
+        listaCreada =  getIntent().getParcelableExtra("ListaAnime");
 
         etTituloLista = findViewById(R.id.etTituloListaDetalle);
         tvNroAnimesLista = findViewById(R.id.nroAnimesLista);

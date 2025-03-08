@@ -1,9 +1,14 @@
 package com.example.otakunikki.Clases;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.List;
 import java.util.Objects;
 
-public class ListaAnime {
+public class ListaAnime implements Parcelable {
 
     private String nombreLista;
     private List<Anime> listaAnimes;
@@ -15,6 +20,25 @@ public class ListaAnime {
         setListaAnimes(listaAnimes);
         setNroAnimes(getListaAnimes().size());
     }
+
+    protected ListaAnime(Parcel in) {
+        nombreLista = in.readString();
+        listaAnimes = in.createTypedArrayList(Anime.CREATOR);
+        nroAnimes = in.readInt();
+        fechaModificacion = in.readString();
+    }
+
+    public static final Creator<ListaAnime> CREATOR = new Creator<ListaAnime>() {
+        @Override
+        public ListaAnime createFromParcel(Parcel in) {
+            return new ListaAnime(in);
+        }
+
+        @Override
+        public ListaAnime[] newArray(int size) {
+            return new ListaAnime[size];
+        }
+    };
 
     public String getNombreLista() {
         return nombreLista;
@@ -51,5 +75,18 @@ public class ListaAnime {
     @Override
     public int hashCode() {
         return Objects.hash(getNombreLista(), getListaAnimes());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(nombreLista);
+        dest.writeTypedList(listaAnimes);
+        dest.writeInt(nroAnimes);
+        dest.writeString(fechaModificacion);
     }
 }

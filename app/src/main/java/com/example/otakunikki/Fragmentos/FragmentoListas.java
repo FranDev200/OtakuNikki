@@ -70,7 +70,7 @@ public class FragmentoListas extends Fragment {
                 ListaAnime animeSeleccionado = (ListaAnime) parent.getItemAtPosition(position);
 
                 Intent intent = new Intent(view.getContext(), ActividadVistaDetalleListaAnime.class);
-                intent.putExtra("ListaAnime", animeSeleccionado);
+                intent.putExtra("ListaAnime", (CharSequence) animeSeleccionado);
                 startActivity(intent);
             }
         });
