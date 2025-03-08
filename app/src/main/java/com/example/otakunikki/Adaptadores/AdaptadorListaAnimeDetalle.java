@@ -13,15 +13,17 @@ import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class AdaptadorAnimesGV  extends BaseAdapter {
+public class AdaptadorListaAnimeDetalle extends BaseAdapter {
 
-    private ArrayList<Anime> listaAnimes;
+    private List<Anime> listaAnimes;
     private Context context;
 
-    public AdaptadorAnimesGV(Context context, ArrayList<Anime> listaAnimes) {
+    public AdaptadorListaAnimeDetalle(Context context, List<Anime> listaAnimes) {
         this.context = context;
         this.listaAnimes = listaAnimes;
+
     }
 
     @Override
@@ -43,8 +45,9 @@ public class AdaptadorAnimesGV  extends BaseAdapter {
     public View getView(int position, View view, ViewGroup parent) {
 
         LayoutInflater li = LayoutInflater.from(context);
-        view = li.inflate(R.layout.item_anime_recomendados, null);
+        view = li.inflate(R.layout.item_anime_lista_detalle, null);
 
+        /*
         ImageView img = view.findViewById(R.id.imgPortadaAnime);
         TextView tvImg = view.findViewById(R.id.tvTitulo);
 
@@ -52,6 +55,8 @@ public class AdaptadorAnimesGV  extends BaseAdapter {
                 .load(listaAnimes.get(position).getImagenGrande())
                 .into(img);
         tvImg.setText(listaAnimes.get(position).getTitulo().toString());
+
+*/
 
         return view;
     }

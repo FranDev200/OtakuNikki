@@ -1,5 +1,6 @@
 package com.example.otakunikki.Fragmentos;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,9 +8,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.otakunikki.Actividades.ActividadVistaDetalleListaAnime;
 import com.example.otakunikki.Adaptadores.AdaptadorListas;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.ListaAnime;
@@ -61,6 +64,16 @@ public class FragmentoListas extends Fragment {
 
         tvNroListas.setText(listaAnimes.size() + " /11 listas");
 
+        miListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListaAnime animeSeleccionado = (ListaAnime) parent.getItemAtPosition(position);
+
+                Intent intent = new Intent(view.getContext(), ActividadVistaDetalleListaAnime.class);
+                intent.putExtra("ListaAnime", animeSeleccionado);
+                startActivity(intent);
+            }
+        });
 
         return vista;
     }
