@@ -1,4 +1,4 @@
-package com.example.otakunikki.Clases;
+package com.example.otakunikki.Actividades;
 
 import android.os.Bundle;
 import android.util.Log;

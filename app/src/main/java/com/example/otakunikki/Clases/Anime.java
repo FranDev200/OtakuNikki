@@ -1,9 +1,14 @@
 package com.example.otakunikki.Clases;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.List;
 import java.util.Objects;
 
-public class Anime {
+public class Anime implements Parcelable {
 
     private int id;
     private String titulo;
@@ -29,6 +34,30 @@ public class Anime {
         this.generos = generos;
         this.enEmision = enEmision;
     }
+
+    protected Anime(Parcel in) {
+        id = in.readInt();
+        titulo = in.readString();
+        synopsis = in.readString();
+        puntuacion = in.readDouble();
+        imagenGrande = in.readString();
+        imagenMediana = in.readString();
+        imagenPequenia = in.readString();
+        generos = in.createStringArrayList();
+        enEmision = in.readByte() != 0;
+    }
+
+    public static final Creator<Anime> CREATOR = new Creator<Anime>() {
+        @Override
+        public Anime createFromParcel(Parcel in) {
+            return new Anime(in);
+        }
+
+        @Override
+        public Anime[] newArray(int size) {
+            return new Anime[size];
+        }
+    };
 
     public List<String> getGeneros() {
         return generos;
@@ -107,5 +136,23 @@ public class Anime {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getTitulo(), getSynopsis(), getPuntuacion(), getImagenGrande(), getImagenMediana(), getImagenPequenia(), getListaEpisodios());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(titulo);
+        dest.writeString(synopsis);
+        dest.writeDouble(puntuacion);
+        dest.writeString(imagenGrande);
+        dest.writeString(imagenMediana);
+        dest.writeString(imagenPequenia);
+        dest.writeStringList(generos);
+        dest.writeByte((byte) (enEmision ? 1 : 0));
     }
 }
