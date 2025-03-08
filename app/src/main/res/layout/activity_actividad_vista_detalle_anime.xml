@@ -59,6 +59,15 @@
                 android:text="Aquí va la sinopsis..."
                 android:paddingTop="5dp"/>
 
+            <ImageButton
+                android:id="@+id/imgMostrarTexto"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/plus"
+                android:scaleType="fitCenter"
+                android:layout_gravity="end"
+                android:background="@android:color/transparent"/>
+
             <TextView
                 android:id="@+id/tvEmision"
                 android:layout_width="wrap_content"
