@@ -22,7 +22,7 @@
             android:name=".Actividades.ActividadListas"
             android:exported="false" />
         <activity
-            android:name=".Clases.Explorar"
+            android:name=".Actividades.Explorar"
             android:exported="false" />
         <activity
             android:name=".Actividades.AnyadirPerfil"

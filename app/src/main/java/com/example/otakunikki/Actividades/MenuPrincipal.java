@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.otakunikki.Clases.Explorar;
 import com.example.otakunikki.Fragmentos.FragmentInfoUsuario;
 import com.example.otakunikki.Fragmentos.FragmentInicio;
 import com.example.otakunikki.Fragmentos.FragmentoListas;

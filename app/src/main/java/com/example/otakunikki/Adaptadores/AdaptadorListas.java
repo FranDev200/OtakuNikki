@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.otakunikki.Actividades.ListaAnime;
+import com.example.otakunikki.Clases.ListaAnime;
 import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
