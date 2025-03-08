@@ -37,13 +37,20 @@ public class FragmentoListas extends Fragment {
         listaAnimes = new ArrayList<ListaAnime>();
         // Crear la lista de animes para la primera lista
         ArrayList<Anime> animesLista1 = new ArrayList<>();
-        animesLista1.add(new Anime(0, "Solo Leveling", "", 0, "@drawable/rin", "", "", null, null,false));
+        animesLista1.add(new Anime(0, "Solo Leveling", "", 0, "https://cdn.myanimelist.net/images/anime/1448/147351l.jpg", "", "", null, null,false));
+        animesLista1.add(new Anime(1, "Sakamoto Days", "", 0, "https://cdn.myanimelist.net/images/anime/1026/146459l.jpg", "", "", null, null,false));
+        animesLista1.add(new Anime(2, "Kusuriya no Hitorigoto 2nd Season", "", 0, "https://cdn.myanimelist.net/images/anime/1025/147458l.jpg", "", "", null, null,false));
+        animesLista1.add(new Anime(3, "Dr. Stone: Science Future", "", 0, "https://cdn.myanimelist.net/images/anime/1403/146479l.jpg", "", "", null, null,false));
+        animesLista1.add(new Anime(4, "Salaryman ga Isekai ni Ittara Shitennou ni Natta Hanashi", "", 0, "https://cdn.myanimelist.net/images/anime/1668/144352l.jpg", "", "", null, null,false));
+
+        ArrayList<Anime> animesLista2 = new ArrayList<>();
+        animesLista2.add(new Anime(0, "Solo Leveling", "", 0, "https://cdn.myanimelist.net/images/anime/1448/147351l.jpg", "", "", null, null,false));
+        animesLista2.add(new Anime(1, "Sakamoto Days", "", 0, "https://cdn.myanimelist.net/images/anime/1026/146459l.jpg", "", "", null, null,false));
 
         // Agregar la lista de animes a la lista principal
         listaAnimes.add(new ListaAnime("Mi lista 1", animesLista1));
 
-
-        listaAnimes.add(new ListaAnime("Mi lista 2", new ArrayList<Anime>()));
+        listaAnimes.add(new ListaAnime("Mi lista 2", animesLista2));
 
         listaAnimes.add(new ListaAnime("Mi lista 3", new ArrayList<Anime>()));
 
