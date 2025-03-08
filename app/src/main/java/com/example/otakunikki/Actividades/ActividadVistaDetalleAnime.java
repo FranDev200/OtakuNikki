@@ -42,7 +42,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
     private String[] filtros = {"Filtrar por:","Más antiguo", "Más reciente"};
     Spinner spFiltro;
     //-------------------------------------------------------------------------
-    ImageButton btnRetroceso, btnFavoritos;
+    ImageButton btnRetroceso, btnFavoritos, imgMostrarTexto;
     ImageView imgAnime;
     TextView tvTituloAnime, tvSinopsisAnime, tvEmision,
             tvPuntuacion, tvGeneros, tvNumEpisodios;
@@ -60,6 +60,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         setContentView(R.layout.activity_actividad_vista_detalle_anime);
 
         imgAnime = findViewById(R.id.imgAnime);
+        imgMostrarTexto = findViewById(R.id.imgMostrarTexto);
 
         btnRetroceso = findViewById(R.id.btnRetroceso);
         btnFavoritos = findViewById(R.id.btnFavoritos);
@@ -72,7 +73,26 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         tvGeneros = findViewById(R.id.tvGeneros);
         tvNumEpisodios = findViewById(R.id.tvNumEpisodios);
 
+        imgMostrarTexto.setOnClickListener(new View.OnClickListener() {
+            boolean flag = false;
+            @Override
+            public void onClick(View v) {
+                if(flag){
+                    tvSinopsisAnime.setMaxLines(4);
+                    flag = false;
+                    imgMostrarTexto.setImageResource(R.drawable.plus);
+                }else{
+                    tvSinopsisAnime.setMaxLines(Integer.MAX_VALUE);
+                    flag = true;
+                    imgMostrarTexto.setImageResource(R.drawable.menos);
+                }
+            }
+        });
+
+        /**ADAPTADOR DE LA LISTA DE EPISODIOS**/
         lvEpisodios = findViewById(R.id.lvEpisodios);
+        miAdaptadorEp = new AdaptadorVistaDetalleLV(this, listaEpisodios);
+        lvEpisodios.setAdapter(miAdaptadorEp);
 
         spFiltro = findViewById(R.id.spFiltro);
 
@@ -174,7 +194,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                         listaEpisodios.add(new Episodio(id, titulo, "", fechaFormateada, false));
 
                     }
-
+                    miAdaptadorEp.notifyDataSetChanged();
                     anime.setListaEpisodios(listaEpisodios);  // Asignar lista después de llenarla
                     Log.i("INFO EPISODIOS DE ANIME", "Total episodios: " + anime.getListaEpisodios().size());
                     tvNumEpisodios.setText(listaEpisodios.size()+"");
