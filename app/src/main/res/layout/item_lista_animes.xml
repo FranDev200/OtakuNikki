@@ -48,5 +48,44 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="30px"
+        >
+
+        <ImageView
+            android:id="@+id/imgAnime0"
+            android:layout_width="79dp"
+            android:layout_height="108dp"
+            android:layout_marginRight="40px"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/imgAnime1"
+            android:layout_width="79dp"
+            android:layout_height="108dp"
+            android:layout_marginRight="40px"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/imgAnime2"
+            android:layout_width="79dp"
+            android:layout_height="108dp"
+            android:layout_marginRight="40px"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/imgAnime3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
 
 </LinearLayout>

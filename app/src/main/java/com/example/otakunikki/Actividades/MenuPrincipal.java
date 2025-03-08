@@ -45,8 +45,6 @@ public class MenuPrincipal extends AppCompatActivity {
                     cargarFragment(new FragmentInfoUsuario());
                 }
 
-
-
                 return true;
             }
         });
