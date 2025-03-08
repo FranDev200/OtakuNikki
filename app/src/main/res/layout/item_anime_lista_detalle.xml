@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10px"
+    >
+
+
+    <ImageView
+        android:id="@+id/imgPortadaAnime"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:src="@drawable/levi"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:padding="25px"
+        android:orientation="vertical"
+        >
+        
+        <TextView
+            android:layout_marginTop="50px"
+            android:id="@+id/tvTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:text="Blue Lock"
+            />
+
+        <TextView
+            android:id="@+id/tvNumEpisodios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:text="35 ep"
+            android:layout_marginLeft="20px"
+            android:layout_marginTop="20px"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            >
+
+            <TextView
+                android:id="@+id/tvEnEmision"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="En emision ●"
+                android:textSize="23dp"
+                />
+
+            <ImageButton
+                android:id="@+id/imgFavorito"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/heart"
+                android:scaleType="centerCrop"
+                android:background="@android:color/transparent"
+                />
+        </LinearLayout>
+
+        
+    </LinearLayout>
+
+
+
+</LinearLayout>

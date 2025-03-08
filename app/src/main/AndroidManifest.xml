@@ -16,6 +16,9 @@
         android:theme="@style/Theme.OtakuNikki"
         tools:targetApi="31">
         <activity
+            android:name=".Actividades.ActividadVistaDetalleListaAnime"
+            android:exported="false" />
+        <activity
             android:name=".Actividades.ActividadVistaDetalleAnime"
             android:exported="false" />
         <activity
