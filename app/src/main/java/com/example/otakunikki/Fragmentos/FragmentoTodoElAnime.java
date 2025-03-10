@@ -140,7 +140,7 @@ public class FragmentoTodoElAnime extends Fragment {
 
                         // Crear objeto Anime
                         boolean enEmision = !estado.equals("Finished Airing");
-                        Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", imagenPequenya, null, listaGeneros, enEmision);
+                        Anime anime = new Anime(id, titulo, "", 0, "",imagenGrande, "", imagenPequenya, null, listaGeneros, enEmision);
 
 
                         // Evitar duplicados y agregarlo a la lista

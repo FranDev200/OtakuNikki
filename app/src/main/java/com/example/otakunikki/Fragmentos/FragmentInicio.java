@@ -124,7 +124,7 @@ public class FragmentInicio extends Fragment {
                 int position = lvhAnimeRecomendaciones.getChildAdapterPosition(v);  // Obtén la posición del ítem clickeado
                 Anime animeSeleccionado = listaAnimesRecomendados.get(position); // Obtén el anime en esa posición
                 EnvioInformacionVistaDetalle(animeSeleccionado);
-
+                Log.i("ANIME ID PRUEBA", animeSeleccionado.getId()+"");
             }
         });
 
@@ -202,6 +202,7 @@ public class FragmentInicio extends Fragment {
                         String titulo = animeObject.optString("title","Titulo no disponible");
                         String synopsis = animeObject.optString("synopsis", "Synopsis no disponible");
                         double score = animeObject.optDouble("score", 0);
+                        String trailer = animeObject.getJSONObject("trailer").optString("url", "Trailer no disponible");
                         String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Foto no disponible");
                         String imagenMediana = animeObject.getJSONObject("images").getJSONObject("jpg").optString("image_url", "Foto no disponible");
                         String imagenPeqenia =animeObject.getJSONObject("images").getJSONObject("jpg").optString("small_image_url", "Foto no disponible");
@@ -221,8 +222,7 @@ public class FragmentInicio extends Fragment {
 
                         // Crear objeto Anime
                         boolean enEmision = !estado.equals("Finished Airing");
-                        Anime anime = new Anime(id, titulo, synopsis, score, imagenGrande, imagenMediana, imagenPeqenia, null, listaGeneros, enEmision);
-
+                        Anime anime = new Anime(id, titulo,synopsis, score,trailer,imagenGrande,imagenMediana,imagenPeqenia,null, listaGeneros, enEmision);
 
                         if (!listaAnimeTemporada.contains(anime)) {
                             listaAnimeTemporada.add(anime);
@@ -284,7 +284,7 @@ public class FragmentInicio extends Fragment {
 
                             // Crear objeto Anime
                             boolean enEmision = !estado.equals("Finished Airing");
-                            Anime anime = new Anime(id, titulo, "", 0, imagenGrande, "", "", null, null, enEmision);
+                            Anime anime = new Anime(id, titulo, "", 0, "",imagenGrande, "", "", null, null, enEmision);
 
                             // Verificación de duplicados
                             if (!listaAnimesRecomendados.contains(anime)) {
