@@ -25,7 +25,7 @@ import java.util.List;
 
 public class FragmentoListas extends Fragment {
 
-    ArrayList<ListaAnime> lista_de_listasAnimes;
+    List<ListaAnime> lista_de_listasAnimes;
     AdaptadorListas miAdaptador;
 
     private ListView miListView;
