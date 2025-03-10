@@ -9,5 +9,6 @@
     <color name="gris_oscuro">#494952</color>
     <color name="azul">#3F51B5</color>
     <color name="rojo">#FD0211</color>
+    <color name="negro_difuminado">#CB000000</color> <!-- Negro con opacidad -->
 
 </resources>
