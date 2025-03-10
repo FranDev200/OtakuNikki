@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,12 @@ import java.util.List;
 public class FragmentoListas extends Fragment {
 
     List<ListaAnime> lista_de_listasAnimes;
+    List<Anime> animesLista1;
+    List<Anime> animesLista2;
+    List<Episodio> listaEpisodios;
+    List<String> listaGeneros;
     AdaptadorListas miAdaptador;
+    ListaAnime listaSeleccionada;
 
     private ListView miListView;
     private TextView tvNroListas;
@@ -38,39 +44,38 @@ public class FragmentoListas extends Fragment {
         tvNroListas = (TextView) vista.findViewById(R.id.tvNroListas);
         miListView = (ListView) vista.findViewById(R.id.lvListasAnimes);
 
-        lista_de_listasAnimes = new ArrayList<ListaAnime>();
-        // Crear la lista de animes para la primera lista
-        List<Episodio> listaEpisodios = new ArrayList<>();
-        listaEpisodios.add(new Episodio(0, "", "", "", false));
-        listaEpisodios.add(new Episodio(1, "", "", "", false));
-        listaEpisodios.add(new Episodio(2, "", "", "", false));
-        listaEpisodios.add(new Episodio(3, "", "", "", false));
-        listaEpisodios.add(new Episodio(4, "", "", "", false));
+        listaEpisodios = new ArrayList<>();
+        listaEpisodios.add(new Episodio(0, "Episodio1", "", "", false));
+        listaEpisodios.add(new Episodio(1, "Episodio2", "", "", false));
+        listaEpisodios.add(new Episodio(2, "Episodio3", "", "", false));
+        listaEpisodios.add(new Episodio(3, "Episodio4", "", "", false));
+        listaEpisodios.add(new Episodio(4, "Episodio5", "", "", false));
 
-        List<String> listaGeneros = new ArrayList<>();
+        listaGeneros = new ArrayList<>();
         listaGeneros.add("Acción");
+        listaGeneros.add("Aventura");
+        listaGeneros.add("Drama");
+        listaGeneros.add("Fantasía");
+        listaGeneros.add("Supernatural");
 
-
-        List<Anime> animesLista1 = new ArrayList<>();
+        animesLista1 = new ArrayList<>();
         animesLista1.add(new Anime(0, "Solo Leveling", "", 0, "","https://cdn.myanimelist.net/images/anime/1448/147351l.jpg", "", "", listaEpisodios, listaGeneros,false));
         animesLista1.add(new Anime(1, "Sakamoto Days", "", 0, "","https://cdn.myanimelist.net/images/anime/1026/146459l.jpg", "", "", listaEpisodios, listaGeneros,false));
         animesLista1.add(new Anime(2, "Kusuriya no Hitorigoto 2nd Season", "", 0, "","https://cdn.myanimelist.net/images/anime/1025/147458l.jpg", "", "", listaEpisodios, listaGeneros,false));
         animesLista1.add(new Anime(3, "Dr. Stone: Science Future", "", 0, "","https://cdn.myanimelist.net/images/anime/1403/146479l.jpg", "", "", listaEpisodios, listaGeneros,false));
         animesLista1.add(new Anime(4, "Salaryman ga Isekai ni Ittara Shitennou ni Natta Hanashi", "", 0, "","https://cdn.myanimelist.net/images/anime/1668/144352l.jpg", "", "", listaEpisodios, listaGeneros,false));
 
-        List<Anime> animesLista2 = new ArrayList<>();
-        animesLista2.add(new Anime(0, "Solo Leveling", "", 0, "","https://cdn.myanimelist.net/images/anime/1448/147351l.jpg", "", "", listaEpisodios, listaGeneros,false));
-        animesLista2.add(new Anime(1, "Sakamoto Days", "", 0, "","https://cdn.myanimelist.net/images/anime/1026/146459l.jpg", "", "", listaEpisodios, listaGeneros,false));
+        animesLista2 = new ArrayList<>();
+        //animesLista2.add(new Anime(5, "Solo Leveling", "", 0, "","https://cdn.myanimelist.net/images/anime/1448/147351l.jpg", "", "", listaEpisodios, listaGeneros,false));
+        //animesLista2.add(new Anime(6, "Sakamoto Days", "", 0, "","https://cdn.myanimelist.net/images/anime/1026/146459l.jpg", "", "", listaEpisodios, listaGeneros,false));
 
         // Agregar la lista de animes a la lista principal
+        lista_de_listasAnimes = new ArrayList<ListaAnime>();
         lista_de_listasAnimes.add(new ListaAnime("Mi lista 1", animesLista1));
-
         lista_de_listasAnimes.add(new ListaAnime("Mi lista 2", animesLista2));
 
-
-        miAdaptador = new AdaptadorListas(getActivity(), lista_de_listasAnimes);
+        miAdaptador = new AdaptadorListas(getActivity().getApplicationContext(), lista_de_listasAnimes);
         miListView.setAdapter(miAdaptador);
-
         miAdaptador.notifyDataSetChanged();
 
         tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
@@ -79,10 +84,14 @@ public class FragmentoListas extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ListaAnime listaSeleccionada = lista_de_listasAnimes.get(position);
+                listaSeleccionada = lista_de_listasAnimes.get(position);
+
+                Log.i("LISTA", "Nombre de la lista: " + listaSeleccionada.getNombreLista());
+                Log.i("LISTA", "Numero de animes (con el atributo): " + listaSeleccionada.getNroAnimes());
+                Log.i("LISTA", "Numero de animes (con el .size): " + listaSeleccionada.getListaAnimes().size());
 
                 Intent intent = new Intent(getActivity().getApplicationContext(), ActividadVistaDetalleListaAnime.class);
-                intent.putExtra("ListaAnime", listaSeleccionada);
+                intent.putExtra("ListaAnimeSeleccionada", listaSeleccionada);
                 startActivity(intent);
 
             }

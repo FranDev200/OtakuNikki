@@ -21,7 +21,7 @@ public class Anime implements Parcelable {
     private List<Episodio> listaEpisodios;
     private List<String> generos;
     private boolean enEmision;
-    private boolean favorito;
+    private boolean favorito = false;
 
     public Anime(int id, String titulo, String synopsis, double puntuacion, String trailer, String imagenGrande,
                  String imagenMediana, String imagenPequenia, List<Episodio> listaEpisodios, List<String> generos, boolean enEmision) {
@@ -36,6 +36,7 @@ public class Anime implements Parcelable {
         this.listaEpisodios = listaEpisodios;
         this.generos = generos;
         this.enEmision = enEmision;
+        this.favorito = false;
     }
 
     protected Anime(Parcel in) {
@@ -130,6 +131,9 @@ public class Anime implements Parcelable {
 
     public void setListaEpisodios(List<Episodio> listaEpisodios) { this.listaEpisodios = listaEpisodios; }
 
+    public int getNroEpisodios(){
+        return getListaEpisodios().size();
+    }
     public String getImagenGrande() { return imagenGrande; }
 
     public void setImagenGrande(String imagenGrande) { this.imagenGrande = imagenGrande; }

@@ -7,13 +7,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.otakunikki.Adaptadores.AdaptadorAnimesGV;
 import com.example.otakunikki.Adaptadores.AdaptadorListaAnimeDetalle;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.ListaAnime;
@@ -24,7 +19,8 @@ import java.util.List;
 
 public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
 
-    ListaAnime listaCreada;
+    ListaAnime listaSeleccionada;
+    List<Anime> lista_de_animes_guardados;
     AdaptadorListaAnimeDetalle miAdaptador;
     private EditText etTituloLista;
     private TextView tvNroAnimesLista;
@@ -37,23 +33,24 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actividad_vista_detalle_lista_anime);
 
-        listaCreada = getIntent().getParcelableExtra("ListaAnime");
+        listaSeleccionada = getIntent().getParcelableExtra("ListaAnimeSeleccionada");
 
         etTituloLista = findViewById(R.id.etTituloListaDetalle);
         tvNroAnimesLista = findViewById(R.id.nroAnimesLista);
-        lvAnimesLista = findViewById(R.id.lvAnimesLista);
+        lvAnimesLista = findViewById(R.id.lvAnimesGuardadosLista);
         imgRetroceso = findViewById(R.id.imgRetroceso);
 
-        etTituloLista.setText(listaCreada.getNombreLista());
-        tvNroAnimesLista.setText(listaCreada.getNroAnimes() + " animes");
+        etTituloLista.setText(listaSeleccionada.getNombreLista());
+        tvNroAnimesLista.setText(listaSeleccionada.getNroAnimes() + " animes");
 
-        List<Anime> listaRecibida = new ArrayList<Anime>();
-        listaRecibida.addAll(listaCreada.getListaAnimes());
+        lista_de_animes_guardados = new ArrayList<Anime>();
+        lista_de_animes_guardados.addAll(listaSeleccionada.getListaAnimes());
 
-        miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(),listaRecibida );
+        miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(), lista_de_animes_guardados);
         lvAnimesLista.setAdapter(miAdaptador);
-
         miAdaptador.notifyDataSetChanged();
+
+
         imgRetroceso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

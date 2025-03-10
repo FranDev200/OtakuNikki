@@ -56,7 +56,7 @@ public class ListaAnime implements Parcelable {
         this.listaAnimes = listaAnimes;
     }
 
-    public int getNroAnimes() { return nroAnimes; }
+    public int getNroAnimes() { return getListaAnimes().size(); }
 
     public void setNroAnimes(int nroAnimes) { this.nroAnimes = nroAnimes; }
 
