@@ -54,7 +54,6 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
     List<Episodio> listaEpisodios = new ArrayList<Episodio>();
     //-------------------------------------------------------------------------
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,24 +148,17 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
         tvSinopsisAnime.setText(anime.getSynopsis());
         tvPuntuacion.setText(anime.getPuntuacion() + "");
-        String trailer = anime.getTrailer();
+
         CompletarInfoAnimeIndividual(anime);
         AgregarListaEpisodios(anime);
 
-        if(trailer.equals("Trailer no disponible")){
-            btnReproducir.setVisibility(View.GONE);
-        }else {
-            btnReproducir.setVisibility(View.VISIBLE);
-            btnReproducir.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(getApplicationContext(), ReproductorTrailerAnime.class);
-                    intent.putExtra("Trailer", trailer);
-                    startActivity(intent);
-                }
-            });
-        }
+        /**BOTON DE RETROCESO**/
+        btnRetroceso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
@@ -309,6 +301,23 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                             }
 
                             tvGeneros.setText(generosText);
+
+                            /**METO ESTO AQUI PARA PODER CARGAR EL TRAILER SIN DIFICULTAD O PROBLEMAS DE LECTURA
+                             * POR EJECUCION ASINCRONA DE LA API USADA.**/
+                            if(anime.getTrailer().equals("Trailer no disponible") || anime.getTrailer().contains("null")){
+                                btnReproducir.setVisibility(View.GONE);
+                            }else {
+                                btnReproducir.setVisibility(View.VISIBLE);
+                                btnReproducir.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        Intent intent = new Intent(getApplicationContext(), ReproductorTrailerAnime.class);
+                                        intent.putExtra("Trailer", anime.getTrailer());
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
