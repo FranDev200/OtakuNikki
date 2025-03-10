@@ -20,6 +20,7 @@ public class Anime implements Parcelable {
     private List<Episodio> listaEpisodios;
     private List<String> generos;
     private boolean enEmision;
+    private boolean favorito;
 
     public Anime(int id, String titulo, String synopsis, double puntuacion, String imagenGrande,
                  String imagenMediana, String imagenPequenia, List<Episodio> listaEpisodios, List<String> generos, boolean enEmision) {
@@ -33,6 +34,7 @@ public class Anime implements Parcelable {
         this.listaEpisodios = listaEpisodios;
         this.generos = generos;
         this.enEmision = enEmision;
+        this.favorito = false;
     }
 
     protected Anime(Parcel in) {
@@ -45,6 +47,7 @@ public class Anime implements Parcelable {
         imagenPequenia = in.readString();
         generos = in.createStringArrayList();
         enEmision = in.readByte() != 0;
+        favorito = in.readByte() != 0;
     }
 
     public static final Creator<Anime> CREATOR = new Creator<Anime>() {
@@ -125,6 +128,9 @@ public class Anime implements Parcelable {
 
     public void setImagenPequenia(String imagenPequenia) { this.imagenPequenia = imagenPequenia; }
 
+    public boolean getFavorito() {return favorito;}
+
+    public void setFavorito(boolean favorito) {this.favorito = favorito;}
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
