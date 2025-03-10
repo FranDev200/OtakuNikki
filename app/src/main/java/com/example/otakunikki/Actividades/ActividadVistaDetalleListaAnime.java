@@ -20,6 +20,7 @@ import com.example.otakunikki.Clases.ListaAnime;
 import com.example.otakunikki.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
 
@@ -36,7 +37,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actividad_vista_detalle_lista_anime);
 
-        listaCreada =  getIntent().getParcelableExtra("ListaAnime");
+        listaCreada = getIntent().getParcelableExtra("ListaAnime");
 
         etTituloLista = findViewById(R.id.etTituloListaDetalle);
         tvNroAnimesLista = findViewById(R.id.nroAnimesLista);
@@ -46,9 +47,13 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         etTituloLista.setText(listaCreada.getNombreLista());
         tvNroAnimesLista.setText(listaCreada.getNroAnimes() + " animes");
 
-        miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(), listaCreada.getListaAnimes());
+        List<Anime> listaRecibida = new ArrayList<Anime>();
+        listaRecibida.addAll(listaCreada.getListaAnimes());
+
+        miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(),listaRecibida );
         lvAnimesLista.setAdapter(miAdaptador);
 
+        miAdaptador.notifyDataSetChanged();
         imgRetroceso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

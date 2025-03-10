@@ -120,7 +120,6 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         });
 
         //RECOGEMOS TODA LA INFORMACION DEL ANIME MANDADO DESDE LOS FRAGMENTOS
-        Bundle bundle = getIntent().getExtras();
         Anime anime = null;
         anime = getIntent().getParcelableExtra("Anime");
         tvTituloAnime.setText(anime.getTitulo());

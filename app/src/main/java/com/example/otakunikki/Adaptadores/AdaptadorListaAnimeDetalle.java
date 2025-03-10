@@ -1,6 +1,7 @@
 package com.example.otakunikki.Adaptadores;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,41 +50,55 @@ public class AdaptadorListaAnimeDetalle extends BaseAdapter {
         LayoutInflater li = LayoutInflater.from(context);
         view = li.inflate(R.layout.item_anime_lista_detalle, null);
 
-        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
+        TextView tvTitulo = view.findViewById(R.id.tvTituloListaDetalle);
         TextView tvNumEpisodios = view.findViewById(R.id.tvNumEpisodios);
         TextView tvEnEmision = view.findViewById(R.id.tvEnEmision);
         ImageView imgPortada = view.findViewById(R.id.imgPortadaAnime);
         ImageButton imgFavorito = view.findViewById(R.id.imgFavorito);
 
+        Anime anime = listaAnimes.get(position);
 
-/*        Anime anime = listaAnimes.get(position);
-        tvTitulo.setText(anime.getTitulo());
+        if (anime != null) {
+            tvTitulo.setText(anime.getTitulo() != null ? anime.getTitulo() : "Título no disponible");
 
-        if(anime.getListaEpisodios().size() != 0){
-
-            if(anime.getListaEpisodios().size() == 1){
-                tvNumEpisodios.setText(anime.getListaEpisodios().size() + " ep");
+            // Comprobar si la lista de episodios no es null ni vacía
+            if (anime.getListaEpisodios() != null && !anime.getListaEpisodios().isEmpty()) {
+                if (anime.getListaEpisodios().size() == 1) {
+                    tvNumEpisodios.setText(anime.getListaEpisodios().size() + " ep");
+                } else {
+                    tvNumEpisodios.setText(anime.getListaEpisodios().size() + " eps");
+                }
             } else {
-                tvNumEpisodios.setText(anime.getListaEpisodios().size() + " eps");
+                tvNumEpisodios.setText("No disponible");
             }
-        }
 
-        if (anime.isEnEmision()) {
-            tvEnEmision.setText("En emision ●");
-            tvEnEmision.setTextColor(R.color.rojo);
+            // Comprobar si el anime está en emisión
+            if (anime.isEnEmision()) {
+                tvEnEmision.setText("En emisión ●");
+                tvEnEmision.setTextColor(context.getResources().getColor(R.color.rojo));
+            } else {
+                tvEnEmision.setText("Finalizado");
+                tvEnEmision.setTextColor(context.getResources().getColor(R.color.black));
+            }
+
+            // Verificar si el anime es favorito
+            if (anime.getFavorito()) {
+                imgFavorito.setImageResource(R.drawable.heart);
+            } else {
+                imgFavorito.setImageResource(R.drawable.corazon_vacio);
+            }
+
+            // Cargar la imagen utilizando Picasso, y verificar que la URL no sea null
+            if (anime.getImagenGrande() != null && !anime.getImagenGrande().isEmpty()) {
+                Picasso.get().load(anime.getImagenGrande()).into(imgPortada);
+            } else {
+                 // Imagen por defecto en caso de error
+            }
         } else {
-            tvEnEmision.setText("Finalizado");
-            tvEnEmision.setTextColor(R.color.black);
+            Log.e("AdaptadorListaAnimeDetalle", "El anime en la posición " + position + " es nulo");
         }
 
-        if(anime.getFavorito() == true){
-            imgFavorito.setImageResource(R.drawable.heart);
-        } else {
-            imgFavorito.setImageResource(R.drawable.corazon_vacio);
-        }
-
-        Picasso.get().load(anime.getImagenGrande()).into(imgPortada);
-*/
         return view;
     }
+
 }
