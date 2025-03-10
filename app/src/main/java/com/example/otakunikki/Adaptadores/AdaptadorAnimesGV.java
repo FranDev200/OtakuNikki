@@ -13,13 +13,14 @@ import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdaptadorAnimesGV  extends BaseAdapter {
 
-    private ArrayList<Anime> listaAnimes;
+    private List<Anime> listaAnimes;
     private Context context;
 
-    public AdaptadorAnimesGV(Context context, ArrayList<Anime> listaAnimes) {
+    public AdaptadorAnimesGV(Context context, List<Anime> listaAnimes) {
         this.context = context;
         this.listaAnimes = listaAnimes;
     }

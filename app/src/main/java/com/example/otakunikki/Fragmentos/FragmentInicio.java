@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.example.otakunikki.Actividades.ActividadVistaDetalleAnime;
 import com.example.otakunikki.Adaptadores.AdaptadorLVHorAnimeMenuPrincipal;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Episodio;
+import com.example.otakunikki.ControlDeslizante.BusquedaAnimeFragDeslizante;
 import com.example.otakunikki.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
@@ -41,6 +43,8 @@ import java.util.List;
 public class FragmentInicio extends Fragment {
     private ImageView imgFotoPrincipal;
     private ImageButton imgMostrarTexto;
+    private EditText etNombreAnimeBusqueda;
+    private ImageButton ibNombreAnimeBusqueda;
 
     private RecyclerView lvhAnimeRecomendaciones;
     private AdaptadorLVHorAnimeMenuPrincipal adpatdorAnimeRecomendado;
@@ -65,8 +69,22 @@ public class FragmentInicio extends Fragment {
         tvTituloInicio = vista.findViewById(R.id.tvTituloInicio);
         tvSinopsisInicio = vista.findViewById(R.id.tvSinopsisInicio);
         imgMostrarTexto = vista.findViewById(R.id.imgMostrarTexto);
-        /**METODO PARA EXPANDIR EL TEXT VIEW DE SINOPSIS PARA QUE PODAMOS CONTRAER Y EXPANDIR EL CONTROL**/
+        etNombreAnimeBusqueda = vista.findViewById(R.id.etNombreAnimeBusqueda);
+        ibNombreAnimeBusqueda = vista.findViewById(R.id.ibNombreAnimeBusqueda);
 
+        /**METODO PARA BUSCAR ANIME Y DESPLEGAR EL FRAGMENTO DESLIZANTE**/
+        ibNombreAnimeBusqueda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BusquedaAnimeFragDeslizante miBusqueda = new BusquedaAnimeFragDeslizante(etNombreAnimeBusqueda.getText().toString());
+                miBusqueda.show(requireActivity().getSupportFragmentManager(), "Busqueda");
+                etNombreAnimeBusqueda.setText("");
+                etNombreAnimeBusqueda.clearFocus();
+            }
+        });
+
+
+        /**METODO PARA EXPANDIR EL TEXT VIEW DE SINOPSIS PARA QUE PODAMOS CONTRAER Y EXPANDIR EL CONTROL**/
         imgMostrarTexto.setOnClickListener(new View.OnClickListener() {
             boolean flag = false;
             @Override
@@ -166,7 +184,7 @@ public class FragmentInicio extends Fragment {
                     JSONArray dataArray = jsonResponse.getJSONArray("data");
 
                     if (dataArray.length() == 0) {
-                        Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -216,7 +234,7 @@ public class FragmentInicio extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getActivity().getApplicationContext(), "Error procesando el JSON de temporada", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity().getApplicationContext(), "Error procesando el JSON de temporada", Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -243,7 +261,7 @@ public class FragmentInicio extends Fragment {
                     JSONArray dataArray = jsonResponse.getJSONArray("data");
 
                     if (dataArray.length() == 0) {
-                        Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -287,7 +305,7 @@ public class FragmentInicio extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getActivity().getApplicationContext(), "Error procesando el JSON de recomendaciones", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity().getApplicationContext(), "Error procesando el JSON de recomendaciones", Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
