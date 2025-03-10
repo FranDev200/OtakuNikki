@@ -14,6 +14,7 @@ public class Anime implements Parcelable {
     private String titulo;
     private String synopsis;
     private double puntuacion;
+    private String trailer;
     private String imagenGrande;
     private String imagenMediana;
     private String imagenPequenia;
@@ -22,19 +23,19 @@ public class Anime implements Parcelable {
     private boolean enEmision;
     private boolean favorito;
 
-    public Anime(int id, String titulo, String synopsis, double puntuacion, String imagenGrande,
+    public Anime(int id, String titulo, String synopsis, double puntuacion, String trailer, String imagenGrande,
                  String imagenMediana, String imagenPequenia, List<Episodio> listaEpisodios, List<String> generos, boolean enEmision) {
         this.id = id;
         this.titulo = titulo;
         this.synopsis = synopsis;
         this.puntuacion = puntuacion;
+        this.trailer = trailer;
         this.imagenGrande = imagenGrande;
         this.imagenMediana = imagenMediana;
         this.imagenPequenia = imagenPequenia;
         this.listaEpisodios = listaEpisodios;
         this.generos = generos;
         this.enEmision = enEmision;
-        this.favorito = false;
     }
 
     protected Anime(Parcel in) {
@@ -42,6 +43,7 @@ public class Anime implements Parcelable {
         titulo = in.readString();
         synopsis = in.readString();
         puntuacion = in.readDouble();
+        trailer = in.readString();
         imagenGrande = in.readString();
         imagenMediana = in.readString();
         imagenPequenia = in.readString();
@@ -61,6 +63,18 @@ public class Anime implements Parcelable {
             return new Anime[size];
         }
     };
+
+    public String getTrailer() {
+        return trailer;
+    }
+
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
+    }
+
+    public boolean isFavorito() {
+        return favorito;
+    }
 
     public List<String> getGeneros() {
         return generos;
@@ -155,6 +169,7 @@ public class Anime implements Parcelable {
         dest.writeString(titulo);
         dest.writeString(synopsis);
         dest.writeDouble(puntuacion);
+        dest.writeString(trailer);
         dest.writeString(imagenGrande);
         dest.writeString(imagenMediana);
         dest.writeString(imagenPequenia);

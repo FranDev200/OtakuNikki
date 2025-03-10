@@ -27,6 +27,7 @@ import com.example.otakunikki.Adaptadores.AdaptadorVistaDetalleLV;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Episodio;
 import com.example.otakunikki.R;
+import com.example.otakunikki.ReproductorTrailerAnime;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -42,7 +43,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
     private String[] filtros = {"Filtrar por:","Más antiguo", "Más reciente"};
     Spinner spFiltro;
     //-------------------------------------------------------------------------
-    ImageButton btnRetroceso, btnFavoritos, imgMostrarTexto;
+    ImageButton btnRetroceso, btnFavoritos, imgMostrarTexto, btnReproducir;
     ImageView imgAnime;
     TextView tvTituloAnime, tvSinopsisAnime, tvEmision,
             tvPuntuacion, tvGeneros, tvNumEpisodios;
@@ -64,6 +65,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
         btnRetroceso = findViewById(R.id.btnRetroceso);
         btnFavoritos = findViewById(R.id.btnFavoritos);
+        btnReproducir = findViewById(R.id.btnReproducir);
         btnAnyadirAnime = findViewById(R.id.btnAnyadirAnime);
 
         tvTituloAnime = findViewById(R.id.tvTituloAnime);
@@ -74,6 +76,21 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         tvNumEpisodios = findViewById(R.id.tvNumEpisodios);
 
         imgMostrarTexto.setOnClickListener(new View.OnClickListener() {
+            boolean flag = false;
+            @Override
+            public void onClick(View v) {
+                if(flag){
+                    tvSinopsisAnime.setMaxLines(4);
+                    flag = false;
+                    imgMostrarTexto.setImageResource(R.drawable.plus);
+                }else{
+                    tvSinopsisAnime.setMaxLines(Integer.MAX_VALUE);
+                    flag = true;
+                    imgMostrarTexto.setImageResource(R.drawable.menos);
+                }
+            }
+        });
+        tvSinopsisAnime.setOnClickListener(new View.OnClickListener() {
             boolean flag = false;
             @Override
             public void onClick(View v) {
@@ -132,10 +149,27 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
         tvSinopsisAnime.setText(anime.getSynopsis());
         tvPuntuacion.setText(anime.getPuntuacion() + "");
+        String trailer = anime.getTrailer();
         CompletarInfoAnimeIndividual(anime);
         AgregarListaEpisodios(anime);
 
+        if(trailer.equals("Trailer no disponible")){
+            btnReproducir.setVisibility(View.GONE);
+        }else {
+            btnReproducir.setVisibility(View.VISIBLE);
+            btnReproducir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(getApplicationContext(), ReproductorTrailerAnime.class);
+                    intent.putExtra("Trailer", trailer);
+                    startActivity(intent);
+                }
+            });
+        }
+
     }
+
 
     /**PENDIENTE DE SI LLEGAREMOS A USAR LA SINOPSIS DEL EPISODIO**/
     private void AgregarSinopsisEpisodios(List<Episodio> episodios, int idAnime) {
@@ -229,6 +263,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
                             String sinopsis = animeDetalles.optString("synopsis", "Sin sinopsis disponible");
                             double puntuacion = animeDetalles.optDouble("score", 0.0);
+                            String trailer = animeDetalles.getJSONObject("trailer").optString("url", "Trailer no disponible");
                             String imagenPequenia = animeDetalles.optJSONObject("images")
                                     .optJSONObject("jpg")
                                     .optString("image_url", "URL no disponible");
@@ -256,6 +291,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                             // Actualizar los campos del objeto Anime
                             anime.setSynopsis(sinopsis);
                             anime.setPuntuacion(puntuacion);
+                            anime.setTrailer(trailer);
                             anime.setImagenPequenia(imagenPequenia);
                             anime.setImagenMediana(imagenMediana);
                             anime.setGeneros(listaGeneros);

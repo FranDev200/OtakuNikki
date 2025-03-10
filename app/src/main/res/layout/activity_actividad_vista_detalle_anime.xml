@@ -18,65 +18,126 @@
         android:background="@android:color/transparent"
         android:layout_gravity="start"/>
 
-
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp"
-        android:padding="5dp">
-
-        <ImageView
-            android:id="@+id/imgAnime"
-            android:layout_width="120dp"
-            android:layout_height="180dp"
-            android:scaleType="fitStart"
-            android:adjustViewBounds="true"
-            android:background="@android:color/darker_gray"/>
+        android:layout_height="match_parent"
+        android:layout_above="@id/menu_navegador"
+        android:layout_marginBottom="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingLeft="10dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvTituloAnime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Título del Anime"
-                android:textSize="20sp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/tvSinopsisAnime"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="4"
-                android:ellipsize="end"
-                android:text="Aquí va la sinopsis..."
-                android:paddingTop="5dp"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:padding="5dp">
 
-            <ImageButton
-                android:id="@+id/imgMostrarTexto"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/plus"
-                android:scaleType="fitCenter"
-                android:layout_gravity="end"
-                android:background="@android:color/transparent"/>
+                <ImageView
+                    android:id="@+id/imgAnime"
+                    android:layout_width="120dp"
+                    android:layout_height="180dp"
+                    android:scaleType="fitStart"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"/>
 
-            <TextView
-                android:id="@+id/tvEmision"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="En emisión ●"
-                android:textColor="@color/rojo"
-                android:paddingTop="5dp"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:id="@+id/tvTituloAnime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Título del Anime"
+                        android:textSize="20sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvSinopsisAnime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="4"
+                        android:ellipsize="end"
+                        android:text="Aquí va la sinopsis..."
+                        android:paddingTop="5dp"/>
+
+                    <ImageButton
+                        android:id="@+id/imgMostrarTexto"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/plus"
+                        android:scaleType="fitCenter"
+                        android:layout_gravity="end"
+                        android:background="@android:color/transparent"/>
+
+                    <TextView
+                        android:id="@+id/tvEmision"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="En emisión ●"
+                        android:textColor="@color/rojo"
+                        android:paddingTop="5dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:text="Puntuación media:"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/tvPuntuacion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textStyle="bold"
+                            android:paddingLeft="5dp"/>
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="end">
+                        <ImageButton
+                            android:id="@+id/btnReproducir"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="end"
+                            android:visibility="gone"
+                            android:background="@android:color/transparent"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/play"
+                            android:layout_marginRight="5dp"/>
+
+                        <ImageButton
+                            android:id="@+id/btnFavoritos"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="end"
+                            android:background="@android:color/transparent"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/heart" />
+                        </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -84,94 +145,66 @@
                 android:orientation="horizontal"
                 android:paddingTop="5dp">
 
+                <Button
+                    android:id="@+id/btnAnyadirAnime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+ Añadir a la lista"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:backgroundTint="@color/gris_oscuro"
+                    android:textColor="@color/white"/>
+
                 <TextView
-                    android:text="Puntuación media:"
+                    android:id="@+id/tvGeneros"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Géneros"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end">
+
+                    <Spinner
+                        android:id="@+id/spFiltro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:text="Episodios: "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
                 <TextView
-                    android:id="@+id/tvPuntuacion"
+                    android:id="@+id/tvNumEpisodios"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textStyle="bold"
                     android:paddingLeft="5dp"/>
-
-
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/btnFavoritos"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="end"
-                android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/heart" />
+            <ListView
+            android:id="@+id/lvEpisodios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"/>
 
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="5dp">
-
-        <Button
-            android:id="@+id/btnAnyadirAnime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+ Añadir a la lista"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:backgroundTint="@color/gris_oscuro"
-            android:textColor="@color/white"/>
-
-        <TextView
-            android:id="@+id/tvGeneros"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Géneros"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end">
-            <Spinner
-                android:id="@+id/spFiltro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="5dp">
-
-        <TextView
-            android:text="Episodios: "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/tvNumEpisodios"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textStyle="bold"
-            android:paddingLeft="5dp"/>
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/lvEpisodios"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"/>
+    </ScrollView>
 </LinearLayout>
