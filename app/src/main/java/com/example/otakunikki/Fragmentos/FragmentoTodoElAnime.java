@@ -45,7 +45,8 @@ public class FragmentoTodoElAnime extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("FragmentoTodoElAnime", "onCreateView llamado");
+        //Comprobamos que en tra en el onCreateView
+        //Log.d("FragmentoTodoElAnime", "onCreateView llamado");
         // Inflate the layout for this fragment
         View vista = inflater.inflate(R.layout.fragmento_todo_el_anime, container, false);
 
@@ -54,12 +55,8 @@ public class FragmentoTodoElAnime extends Fragment {
 
         miAdaptador = new AdaptadorAnimesGV(getActivity(), listaAnimes);
         miGridView.setAdapter(miAdaptador);
-        Log.d("FragmentoTodoElAnime", "onResume llamado");
-        cargarN_AnimesAleatorios();
 
-        /**RETRASO LA EJECUCION DEL CODIGO PARA QUE LOS METODOS DE ARRIBA TENGAN TIEMPO DE CARGAR
-         * LA INFO DE LA PETICION A LA API YA QUE SE EJECUTA DE FORMA ASINCRONA Y SI SE HACE ALGO CON
-         * LA LISTA INMEDIATAMENTE DESPUÉS DARA FALLO POR NULLPOINTEREXCEPTION**/
+        cargar_AnimesFiltrados();
 
         miGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,6 +65,10 @@ public class FragmentoTodoElAnime extends Fragment {
                 abrirVistaDeDetalleAnime(position);
             }
         });
+
+        /**RETRASO LA EJECUCION DEL CODIGO PARA QUE LOS METODOS DE ARRIBA TENGAN TIEMPO DE CARGAR
+         * LA INFO DE LA PETICION A LA API YA QUE SE EJECUTA DE FORMA ASINCRONA Y SI SE HACE ALGO CON
+         * LA LISTA INMEDIATAMENTE DESPUÉS DARA FALLO POR NULLPOINTEREXCEPTION**/
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -95,7 +96,7 @@ public class FragmentoTodoElAnime extends Fragment {
         startActivity(intent);
     }
 
-    private void cargarN_AnimesAleatorios() {
+    private void cargar_AnimesFiltrados() {
 
         //Hemos creado un filtro oara cada vez que entras al fragmento que te muestre 25 animes aleatorios de los diferentes generos que añadimos
         /*

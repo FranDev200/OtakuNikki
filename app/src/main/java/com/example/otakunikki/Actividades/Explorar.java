@@ -21,6 +21,7 @@ import com.google.android.material.tabs.TabLayout;
 
 public class Explorar extends AppCompatActivity {
 
+    private static final String TAG = "EXPLORAR";
     private ImageButton imgRetroceso;
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
@@ -29,7 +30,8 @@ public class Explorar extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Explorar", "onCreate llamado");
+
+        //Log.d(TAG, "onCreate llamado");
 
         setContentView(R.layout.activity_explorar);
 
@@ -51,7 +53,13 @@ public class Explorar extends AppCompatActivity {
             //Es importante hacerlo porque si no, no irá sincronizado con el tabLayout.addOnTabSelectedListener() desarrollado debajo
             @Override
             public void onPageSelected(int position) {
-                Log.d("ViewPager2", "Página seleccionada: " + position);
+                if(position == 0)
+                    Log.d(TAG, "Página seleccionada: Todo el anime");
+                else if(position == 1)
+                    Log.d(TAG, "Página seleccionada: Generos");
+                else if(position == 2)
+                    Log.d(TAG, "Página seleccionada: Últimas tendencias");
+
                 tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
@@ -59,7 +67,7 @@ public class Explorar extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Log.d("TabLayout", "Tab seleccionada en posición: " + tab.getPosition());
+                Log.d(TAG, "Tab seleccionada en posición: " + tab.getPosition());
                 viewPager2.setCurrentItem(tab.getPosition());
             }
 
