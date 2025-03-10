@@ -7,7 +7,7 @@
 
 
     <ImageView
-        android:id="@+id/imgPortadaAnime"
+        android:id="@+id/imgPortadaAnimeDetalle"
         android:layout_width="100dp"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
@@ -23,7 +23,7 @@
         >
 
         <TextView
-            android:id="@+id/tvTituloListaDetalle"
+            android:id="@+id/tvTituloAnimeDetalle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50px"
@@ -32,7 +32,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvNumEpisodios"
+            android:id="@+id/tvNumEpisodiosDetalle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15dp"
@@ -48,7 +48,7 @@
             >
 
             <TextView
-                android:id="@+id/tvEnEmision"
+                android:id="@+id/tvEnEmisionDetalle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -58,7 +58,7 @@
                 />
 
             <ImageButton
-                android:id="@+id/imgFavorito"
+                android:id="@+id/imgFavoritoDetalle"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/heart"
