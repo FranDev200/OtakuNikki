@@ -184,6 +184,7 @@ public class FragmentoTodoElAnime extends Fragment {
 
                             String sinopsis = animeDetalles.optString("synopsis", "Sin sinopsis disponible");
                             double puntuacion = animeDetalles.optDouble("score", 0.0);
+                            String trailer = animeDetalles.getJSONObject("trailer").optString("url", "Trailer no disponible");
                             String imagenPequenia = animeDetalles.optJSONObject("images")
                                     .optJSONObject("jpg")
                                     .optString("image_url", "URL no disponible");
@@ -194,6 +195,7 @@ public class FragmentoTodoElAnime extends Fragment {
 
                             anime.setSynopsis(sinopsis);
                             anime.setPuntuacion(puntuacion);
+                            anime.setTrailer(trailer);
                             anime.setImagenPequenia(imagenPequenia);
                             anime.setImagenMediana(imagenMediana);
                             Log.i("INFO INICIO", "### " + anime.getPuntuacion() + " ###" + anime.getTitulo());
