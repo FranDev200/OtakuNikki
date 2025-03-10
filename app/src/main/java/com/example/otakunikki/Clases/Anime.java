@@ -128,6 +128,9 @@ public class Anime implements Parcelable {
 
     public void setImagenPequenia(String imagenPequenia) { this.imagenPequenia = imagenPequenia; }
 
+    public boolean getFavorito() {return favorito;}
+
+    public void setFavorito(boolean favorito) {this.favorito = favorito;}
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

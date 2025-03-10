@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,17 +49,41 @@ public class AdaptadorListaAnimeDetalle extends BaseAdapter {
         LayoutInflater li = LayoutInflater.from(context);
         view = li.inflate(R.layout.item_anime_lista_detalle, null);
 
-        /*
-        ImageView img = view.findViewById(R.id.imgPortadaAnime);
-        TextView tvImg = view.findViewById(R.id.tvTitulo);
+        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
+        TextView tvNumEpisodios = view.findViewById(R.id.tvNumEpisodios);
+        TextView tvEnEmision = view.findViewById(R.id.tvEnEmision);
+        ImageView imgPortada = view.findViewById(R.id.imgPortadaAnime);
+        ImageButton imgFavorito = view.findViewById(R.id.imgFavorito);
 
-        Picasso.get()
-                .load(listaAnimes.get(position).getImagenGrande())
-                .into(img);
-        tvImg.setText(listaAnimes.get(position).getTitulo().toString());
 
+/*        Anime anime = listaAnimes.get(position);
+        tvTitulo.setText(anime.getTitulo());
+
+        if(anime.getListaEpisodios().size() != 0){
+
+            if(anime.getListaEpisodios().size() == 1){
+                tvNumEpisodios.setText(anime.getListaEpisodios().size() + " ep");
+            } else {
+                tvNumEpisodios.setText(anime.getListaEpisodios().size() + " eps");
+            }
+        }
+
+        if (anime.isEnEmision()) {
+            tvEnEmision.setText("En emision ●");
+            tvEnEmision.setTextColor(R.color.rojo);
+        } else {
+            tvEnEmision.setText("Finalizado");
+            tvEnEmision.setTextColor(R.color.black);
+        }
+
+        if(anime.getFavorito() == true){
+            imgFavorito.setImageResource(R.drawable.heart);
+        } else {
+            imgFavorito.setImageResource(R.drawable.corazon_vacio);
+        }
+
+        Picasso.get().load(anime.getImagenGrande()).into(imgPortada);
 */
-
         return view;
     }
 }
