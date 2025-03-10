@@ -175,9 +175,9 @@ public class FragmentInicio extends Fragment {
 
     private void CargarAnimesTemporada() {
         rqAnimesTemporada = Volley.newRequestQueue(getActivity().getApplicationContext());
+        int numeroAleatorio = (int) (Math.random() * 3) + 1;
 
-
-        mrqAnimesTemporada = new StringRequest(Request.Method.GET, urlAnimeTemporada, new Response.Listener<String>() {
+        mrqAnimesTemporada = new StringRequest(Request.Method.GET, urlAnimeTemporada+"?page="+numeroAleatorio, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -192,8 +192,8 @@ public class FragmentInicio extends Fragment {
                     }
 
                     for (int i = 0; i < dataArray.length(); i++) {
-                        if(listaAnimeTemporada.size() == 10){
-                            int nroAleatorio = (int) (Math.random() * 10);
+                        if(listaAnimeTemporada.size() == 24){
+                            int nroAleatorio = (int) (Math.random() * 25);
                             Picasso.get().load(listaAnimeTemporada.get(nroAleatorio).getImagenMediana()).into(imgFotoPrincipal);
                             tvTituloInicio.setText(listaAnimeTemporada.get(nroAleatorio).getTitulo());
                             tvSinopsisInicio.setText(listaAnimeTemporada.get(nroAleatorio).getSynopsis());
@@ -253,8 +253,8 @@ public class FragmentInicio extends Fragment {
 
     private void CargarAnimesRecomendados() {
         rqAnimesRecomendados = Volley.newRequestQueue(getActivity().getApplicationContext());
-
-        mrqAnimesRecomendados = new StringRequest(Request.Method.GET, urlRecomendados, new Response.Listener<String>() {
+        int numeroAleatorio = (int) (Math.random() * 10) + 1;
+        mrqAnimesRecomendados = new StringRequest(Request.Method.GET, urlRecomendados+"?page="+numeroAleatorio, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -269,7 +269,7 @@ public class FragmentInicio extends Fragment {
                     }
 
                     for (int i = 0; i < dataArray.length(); i++) {
-                        if (listaAnimesRecomendados.size() == 10) {
+                        if (listaAnimesRecomendados.size() == 25) {
                             break;  // Si ya tenemos 10 animes, salimos del ciclo.
                         }
 
@@ -292,13 +292,13 @@ public class FragmentInicio extends Fragment {
                             // Verificación de duplicados
                             if (!listaAnimesRecomendados.contains(anime)) {
                                 listaAnimesRecomendados.add(anime);
-                                if (listaAnimesRecomendados.size() == 10) {
+                                if (listaAnimesRecomendados.size() == 25) {
                                     break; // Si ya tenemos 10 elementos, salimos del bucle
                                 }
                             }
                         }
 
-                        if (listaAnimesRecomendados.size() == 10) {
+                        if (listaAnimesRecomendados.size() == 25) {
                             break; // Salir del primer bucle también
                         }
                     }
