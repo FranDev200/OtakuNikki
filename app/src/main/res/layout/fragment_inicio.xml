@@ -15,12 +15,14 @@
             android:layout_height="wrap_content">
 
             <EditText
+                android:id="@+id/etNombreAnimeBusqueda"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:hint="Escribe el nombre del anime" />
 
             <ImageButton
+                android:id="@+id/ibNombreAnimeBusqueda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"

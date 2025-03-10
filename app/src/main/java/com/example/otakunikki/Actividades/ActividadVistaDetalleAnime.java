@@ -94,6 +94,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         miAdaptadorEp = new AdaptadorVistaDetalleLV(this, listaEpisodios);
         lvEpisodios.setAdapter(miAdaptadorEp);
 
+        /**CREACION DEL SPINNER**/
         spFiltro = findViewById(R.id.spFiltro);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, filtros);
@@ -137,6 +138,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
     }
 
+    /**PENDIENTE DE SI LLEGAREMOS A USAR LA SINOPSIS DEL EPISODIO**/
     private void AgregarSinopsisEpisodios(List<Episodio> episodios, int idAnime) {
         RequestQueue rqSynopsis = Volley.newRequestQueue(getApplicationContext());
         for (Episodio aux : episodios) {
@@ -185,7 +187,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                         int id = episodios.optInt("mal_id", 0);
                         String titulo = episodios.optString("title", "Titulo no disponible");
                         String fecha = episodios.optString("aired", "");
-                        String fechaFormateada = "Fecha no disponible";
+                        String fechaFormateada = "0000-00-00";
 
                         if (!fecha.isEmpty() && fecha.contains("T")) {
                             fechaFormateada = fecha.split("T")[0];  // Tomar solo la parte YYYY-MM-DD
