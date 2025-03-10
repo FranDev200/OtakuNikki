@@ -60,6 +60,7 @@ public class FragmentInicio extends Fragment {
     private RequestQueue rqAnimesTemporada;
     private StringRequest mrqAnimesTemporada;
     private String urlAnimeTemporada = "https://api.jikan.moe/v4/seasons/now";
+    private int pagina = 0;
 
     private TextView tvTituloInicio, tvSinopsisInicio;
     @Override
@@ -139,10 +140,9 @@ public class FragmentInicio extends Fragment {
             }
         });
 
-
-
-        CargarAnimesRecomendados();
         CargarAnimesTemporada();
+        CargarAnimesRecomendados();
+
 
 
         /**RETRASO LA EJECUCION DEL CODIGO PARA QUE LOS METODOS DE ARRIBA TENGAN TIEMPO DE CARGAR
@@ -171,8 +171,11 @@ public class FragmentInicio extends Fragment {
 
     }
 
+
+
     private void CargarAnimesTemporada() {
         rqAnimesTemporada = Volley.newRequestQueue(getActivity().getApplicationContext());
+
 
         mrqAnimesTemporada = new StringRequest(Request.Method.GET, urlAnimeTemporada, new Response.Listener<String>() {
             @Override
@@ -317,4 +320,5 @@ public class FragmentInicio extends Fragment {
 
         rqAnimesRecomendados.add(mrqAnimesRecomendados);
     }
+
 }
