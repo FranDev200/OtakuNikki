@@ -1,5 +1,6 @@
 package com.example.otakunikki.Fragmentos;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,9 +20,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.otakunikki.Adaptadores.AdaptadorAnimesGV;
+import com.example.otakunikki.Actividades.ActividadDetalleGenero;
 import com.example.otakunikki.Adaptadores.AdaptadorGeneroGV;
-import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Genero;
 import com.example.otakunikki.R;
 
@@ -82,6 +82,18 @@ public class FragmentoGeneros extends Fragment {
             }
         }, 1500); // Espera 1,5 segundos antes de revisar la lista
 
+        miGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Genero generoSeleccionado = listaGeneros.get(position);
+                int idGenero = generoSeleccionado.getIdGenero();  // Asegúrate de tener este método en tu clase Genero
+
+                // Crear un Intent para iniciar ActividadDetalleGenero
+                Intent intent = new Intent(getActivity(), ActividadDetalleGenero.class);
+                intent.putExtra("IdGenero", idGenero);
+                startActivity(intent);
+            }
+        });
 
         return vista;
     }
@@ -103,6 +115,10 @@ public class FragmentoGeneros extends Fragment {
                     JSONArray animeArray = objeto.getJSONArray("data");
 
                     for (int j = 0; j < animeArray.length(); j++) {
+                        if(listaGeneros.size()==12){
+                            break;
+                        }
+
                         JSONObject objetoGenero = animeArray.getJSONObject(j);
 
                         int id = objetoGenero.optInt("mal_id", 0);
@@ -113,12 +129,25 @@ public class FragmentoGeneros extends Fragment {
 
                         Genero genero = new Genero(id, nombreGenero, numAnimes, imagenGenero);
 
-                        // Evitar duplicados y agregarlo a la lista
-                        if (!listaGeneros.contains(genero)) {
-                            listaGeneros.add(genero);
+                        //Vamos a cargar únicamente 11 géneros diferentes porque hay demasiados y algunos son de un contenido no apropiado para el trabajo
+                        if(     nombreGenero.equalsIgnoreCase("action") ||
+                                nombreGenero.equalsIgnoreCase("adventure") ||
+                                nombreGenero.equalsIgnoreCase("comedy") ||
+                                nombreGenero.equalsIgnoreCase("sports") ||
+                                nombreGenero.equalsIgnoreCase("drama") ||
+                                nombreGenero.equalsIgnoreCase("fantasy") ||
+                                nombreGenero.equalsIgnoreCase("horror") ||
+                                nombreGenero.equalsIgnoreCase("mystery") ||
+                                nombreGenero.equalsIgnoreCase("romance") ||
+                                nombreGenero.equalsIgnoreCase("sci-fi") ||
+                                nombreGenero.equalsIgnoreCase("suspense")||
+                                nombreGenero.equalsIgnoreCase("kids")) {
+                            // Evitar duplicados y agregarlo a la lista
+                            if (!listaGeneros.contains(genero)) {
+                                listaGeneros.add(genero);
+                            }
+                            Log.i(TAG, "Id: " + id + " Nombre: " + nombreGenero + " Animes del género: " + numAnimes);
                         }
-
-                        Log.i(TAG, "Id: " + id + " Nombre: " +nombreGenero + " Animes del género: " + numAnimes);
                     }
 
                     miAdaptador.notifyDataSetChanged();
@@ -162,6 +191,8 @@ public class FragmentoGeneros extends Fragment {
             return R.drawable.sci_fi;
         else if(nombre.equalsIgnoreCase("suspense"))
             return R.drawable.suspense;
+        else if(nombre.equalsIgnoreCase("kids"))
+            return R.drawable.kids;
         else
             return R.drawable.accion;
 
