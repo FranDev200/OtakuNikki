@@ -9,14 +9,14 @@ public class Genero implements Parcelable {
     int idGenero;
     String nombreGenero;
     int numAnimes; //Esto es el número de animes que son del genero
-    String imgGenero;
+    int imgGenero;
 
     /*Constructor completo*/
-    public Genero(int idGenero, String nombreGenero, int numAnimes, String urlImagen) {
+    public Genero(int idGenero, String nombreGenero, int numAnimes, int imagen) {
         this.idGenero = idGenero;
         this.nombreGenero = nombreGenero;
         this.numAnimes = numAnimes;
-        this.imgGenero = urlImagen;
+        this.imgGenero = imagen;
     }
 
     /*Constructor vacío*/
@@ -24,14 +24,14 @@ public class Genero implements Parcelable {
         this.idGenero = 0;
         this.nombreGenero = "";
         this.numAnimes = 0;
-        this.imgGenero = "";
+        this.imgGenero = 0;
     }
 
     protected Genero(Parcel in) {
         idGenero = in.readInt();
         nombreGenero = in.readString();
         numAnimes = in.readInt();
-        imgGenero = in.readString();
+        imgGenero = in.readInt();
     }
 
     public static final Creator<Genero> CREATOR = new Creator<Genero>() {
@@ -71,11 +71,11 @@ public class Genero implements Parcelable {
         this.numAnimes = numAnimes;
     }
 
-    public String getImgGenero() {
+    public int getImgGenero() {
         return imgGenero;
     }
 
-    public void setImgGenero(String imgGenero) {
+    public void setImgGenero(int imgGenero) {
         this.imgGenero = imgGenero;
     }
 
@@ -89,6 +89,6 @@ public class Genero implements Parcelable {
         dest.writeInt(idGenero);
         dest.writeString(nombreGenero);
         dest.writeInt(numAnimes);
-        dest.writeString(imgGenero);
+        dest.writeInt(imgGenero);
     }
 }

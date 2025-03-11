@@ -2,7 +2,6 @@ package com.example.otakunikki.Actividades;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,8 +26,6 @@ import com.example.otakunikki.Adaptadores.AdaptadorVistaDetalleLV;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Episodio;
 import com.example.otakunikki.R;
-import com.example.otakunikki.ReproductorTrailerAnime;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -36,7 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ActividadVistaDetalleAnime extends AppCompatActivity {

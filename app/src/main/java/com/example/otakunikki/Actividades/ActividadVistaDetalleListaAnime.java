@@ -1,6 +1,7 @@
 package com.example.otakunikki.Actividades;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -33,7 +34,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actividad_vista_detalle_lista_anime);
 
-        listaSeleccionada = getIntent().getParcelableExtra("ListaAnimeSeleccionada");
+        listaSeleccionada = getIntent().getParcelableExtra("Lista");
 
         etTituloLista = findViewById(R.id.etTituloListaDetalle);
         tvNroAnimesLista = findViewById(R.id.nroAnimesLista);
@@ -43,10 +44,10 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         etTituloLista.setText(listaSeleccionada.getNombreLista());
         tvNroAnimesLista.setText(listaSeleccionada.getNroAnimes() + " animes");
 
-        lista_de_animes_guardados = new ArrayList<Anime>();
-        lista_de_animes_guardados.addAll(listaSeleccionada.getListaAnimes());
 
-        miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(), lista_de_animes_guardados);
+
+
+        miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(),listaSeleccionada.getListaAnimes() );
         lvAnimesLista.setAdapter(miAdaptador);
         miAdaptador.notifyDataSetChanged();
 
