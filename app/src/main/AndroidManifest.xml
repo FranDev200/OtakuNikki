@@ -16,6 +16,9 @@
         android:theme="@style/Theme.OtakuNikki"
         tools:targetApi="31">
         <activity
+            android:name=".Actividades.ActividadDetalleGenero"
+            android:exported="false" />
+        <activity
             android:name=".Actividades.ReproductorTrailerAnime"
             android:exported="false" />
         <activity
