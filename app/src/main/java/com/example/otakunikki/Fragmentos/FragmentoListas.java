@@ -74,6 +74,7 @@ public class FragmentoListas extends Fragment {
         lista_de_listasAnimes.add(new ListaAnime("Mi lista 1", animesLista1));
         lista_de_listasAnimes.add(new ListaAnime("Mi lista 2", animesLista2));
 
+
         miAdaptador = new AdaptadorListas(getActivity().getApplicationContext(), lista_de_listasAnimes);
         miListView.setAdapter(miAdaptador);
         miAdaptador.notifyDataSetChanged();
