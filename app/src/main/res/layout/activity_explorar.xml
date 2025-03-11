@@ -6,11 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Actividades.Explorar">
+    tools:context=".Actividades.Explorar"
+    android:background="@color/black">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <ImageButton
             android:id="@+id/imgRetroceso"
@@ -26,12 +28,16 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            app:tabTextColor="@color/white"
+            app:tabSelectedTextColor="#8597F2">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Todo el anime"/>
+                android:text="Todo el anime"
+                />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"

@@ -2,14 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:background="@color/black">
 
     <ImageView
         android:id="@+id/imgGenero"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="1dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitCenter" />
 
     <TextView
         android:id="@+id/tvGenero"

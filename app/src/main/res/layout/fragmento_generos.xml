@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragmentos.FragmentoGeneros">
+    tools:context=".Fragmentos.FragmentoGeneros"
+    android:background="@color/black">
 
     <GridView
         android:id="@+id/gvGeneros"
@@ -12,7 +13,7 @@
         android:layout_height="match_parent"
         android:textAlignment="center"
         android:padding="10dp"
-        android:layout_margin="20dp"
+        android:layout_margin="5dp"
         android:numColumns="2">
     </GridView>
 
