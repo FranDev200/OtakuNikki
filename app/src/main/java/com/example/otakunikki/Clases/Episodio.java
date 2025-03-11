@@ -1,8 +1,13 @@
 package com.example.otakunikki.Clases;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
-public class Episodio {
+public class Episodio implements Parcelable {
 
     private int idEpisodio;
     private String titulo;
@@ -17,6 +22,26 @@ public class Episodio {
         setFecha(fecha);
         setEstaVisto(estaVisto);
     }
+
+    protected Episodio(Parcel in) {
+        idEpisodio = in.readInt();
+        titulo = in.readString();
+        sinopsis = in.readString();
+        fecha = in.readString();
+        estaVisto = in.readByte() != 0;
+    }
+
+    public static final Creator<Episodio> CREATOR = new Creator<Episodio>() {
+        @Override
+        public Episodio createFromParcel(Parcel in) {
+            return new Episodio(in);
+        }
+
+        @Override
+        public Episodio[] newArray(int size) {
+            return new Episodio[size];
+        }
+    };
 
     public boolean isEstaVisto() {
         return estaVisto;
@@ -69,5 +94,19 @@ public class Episodio {
     @Override
     public int hashCode() {
         return Objects.hash(getIdEpisodio(), getTitulo(), getSinopsis());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(idEpisodio);
+        dest.writeString(titulo);
+        dest.writeString(sinopsis);
+        dest.writeString(fecha);
+        dest.writeByte((byte) (estaVisto ? 1 : 0));
     }
 }

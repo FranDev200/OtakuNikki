@@ -54,6 +54,8 @@ public class AdaptadorListas extends BaseAdapter {
         ImageView imgAnime2 = view.findViewById(R.id.imgAnime2);
         ImageView imgAnime3 = view.findViewById(R.id.imgAnime3);
 
+
+
         for (int i = 0; i < listadelistasAnimes.get(position).getListaAnimes().size(); i++){
             if(listadelistasAnimes.get(position).getListaAnimes().size() != 0){
                 switch (i){
@@ -85,7 +87,7 @@ public class AdaptadorListas extends BaseAdapter {
 
         tvTitulo.setText(listadelistasAnimes.get(position).getNombreLista());
         tvNroAnimes.setText(listadelistasAnimes.get(position).getNroAnimes() + " animes");
-        tvFecha.setText(listadelistasAnimes.get(position).getFechaModificacion());
+        //tvFecha.setText(listadelistasAnimes.get(position).getFechaModificacion());
 
         return view;
     }
