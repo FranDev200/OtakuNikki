@@ -192,12 +192,12 @@ public class FragmentInicio extends Fragment {
                     }
 
                     for (int i = 0; i < dataArray.length(); i++) {
-                        if(listaAnimeTemporada.size() == 24){
-                            int nroAleatorio = (int) (Math.random() * 25);
+                        if(listaAnimeTemporada.size() == 10){
+                            int nroAleatorio = (int) (Math.random() * 10);
                             Picasso.get().load(listaAnimeTemporada.get(nroAleatorio).getImagenMediana()).into(imgFotoPrincipal);
                             tvTituloInicio.setText(listaAnimeTemporada.get(nroAleatorio).getTitulo());
                             tvSinopsisInicio.setText(listaAnimeTemporada.get(nroAleatorio).getSynopsis());
-                            break;
+                            //break;
                         }
 
                         JSONObject animeObject = dataArray.getJSONObject(i);

@@ -39,6 +39,7 @@ public class Anime implements Parcelable {
         this.favorito = false;
     }
 
+
     protected Anime(Parcel in) {
         id = in.readInt();
         titulo = in.readString();
@@ -48,6 +49,7 @@ public class Anime implements Parcelable {
         imagenGrande = in.readString();
         imagenMediana = in.readString();
         imagenPequenia = in.readString();
+        listaEpisodios = in.createTypedArrayList(Episodio.CREATOR);
         generos = in.createStringArrayList();
         enEmision = in.readByte() != 0;
         favorito = in.readByte() != 0;
@@ -162,6 +164,7 @@ public class Anime implements Parcelable {
         return Objects.hash(getId(), getTitulo(), getSynopsis(), getPuntuacion(), getImagenGrande(), getImagenMediana(), getImagenPequenia(), getListaEpisodios());
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -177,7 +180,9 @@ public class Anime implements Parcelable {
         dest.writeString(imagenGrande);
         dest.writeString(imagenMediana);
         dest.writeString(imagenPequenia);
+        dest.writeTypedList(listaEpisodios);
         dest.writeStringList(generos);
         dest.writeByte((byte) (enEmision ? 1 : 0));
+        dest.writeByte((byte) (favorito ? 1 : 0));
     }
 }
