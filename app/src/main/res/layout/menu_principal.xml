@@ -6,15 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Actividades.MenuPrincipal"
-    android:background="#D5D5D5"
-    android:padding="5dp">
+    android:background="@color/black">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu_navegador"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="?android:attr/windowBackground"
+        android:background="#A7112F7C"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
         app:menu="@menu/menu_navegador"/>
 
     <ScrollView
@@ -23,6 +24,7 @@
         android:layout_above="@id/menu_navegador"
         android:layout_marginBottom="0dp"
         android:clipToPadding="false"
+        android:padding="5dp"
         android:fillViewport="true">
 
     <FrameLayout

@@ -21,9 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.otakunikki.Actividades.ActividadDetalleGenero;
-import com.example.otakunikki.Adaptadores.AdaptadorAnimesGV;
 import com.example.otakunikki.Adaptadores.AdaptadorGeneroGV;
-import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Genero;
 import com.example.otakunikki.R;
 
@@ -117,6 +115,10 @@ public class FragmentoGeneros extends Fragment {
                     JSONArray animeArray = objeto.getJSONArray("data");
 
                     for (int j = 0; j < animeArray.length(); j++) {
+                        if(listaGeneros.size()==12){
+                            break;
+                        }
+
                         JSONObject objetoGenero = animeArray.getJSONObject(j);
 
                         int id = objetoGenero.optInt("mal_id", 0);
@@ -139,13 +141,12 @@ public class FragmentoGeneros extends Fragment {
                                 nombreGenero.equalsIgnoreCase("romance") ||
                                 nombreGenero.equalsIgnoreCase("sci-fi") ||
                                 nombreGenero.equalsIgnoreCase("suspense")||
-                                nombreGenero.equalsIgnoreCase("kids"))
-                        {
+                                nombreGenero.equalsIgnoreCase("kids")) {
                             // Evitar duplicados y agregarlo a la lista
                             if (!listaGeneros.contains(genero)) {
                                 listaGeneros.add(genero);
                             }
-                            Log.i(TAG, "Id: " + id + " Nombre: " +nombreGenero + " Animes del género: " + numAnimes);
+                            Log.i(TAG, "Id: " + id + " Nombre: " + nombreGenero + " Animes del género: " + numAnimes);
                         }
                     }
 

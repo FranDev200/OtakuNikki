@@ -52,6 +52,7 @@ public class AdaptadorGeneroGV extends BaseAdapter {
 
         Picasso.get()
                 .load(listaGeneros.get(position).getImgGenero())
+                .resize(900, 750)
                 .into(imgGenero);
 
         tvGenero.setText(listaGeneros.get(position).getNombreGenero().toString());
