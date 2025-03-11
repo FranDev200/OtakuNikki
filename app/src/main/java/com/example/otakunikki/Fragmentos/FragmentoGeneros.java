@@ -109,7 +109,7 @@ public class FragmentoGeneros extends Fragment {
                         String nombreGenero = objetoGenero.optString("name", "Sin género");
                         int numAnimes = objetoGenero.optInt("count", 0);
 
-                        String imagenGenero = obtenerImagenPorNombre(nombreGenero);
+                        int imagenGenero = obtenerImagenPorNombre(nombreGenero);
 
                         Genero genero = new Genero(id, nombreGenero, numAnimes, imagenGenero);
 
@@ -139,31 +139,31 @@ public class FragmentoGeneros extends Fragment {
 
     }
 
-    private String obtenerImagenPorNombre(String nombre) {
+    private int obtenerImagenPorNombre(String nombre) {
         if(nombre.equalsIgnoreCase("action"))
-            return "https://img.youtube.com/vi/gY5nDXOtv_o/maxresdefault.jpg";
+            return R.drawable.accion;
         else if(nombre.equalsIgnoreCase("adventure"))
-            return "https://img.youtube.com/vi/-tviZNY6CSw/maxresdefault.jpg";
+            return R.drawable.aventura;
         else if(nombre.equalsIgnoreCase("comedy"))
-            return "https://img.youtube.com/vi/6TN4a0kZuXg/maxresdefault.jpg";
+            return R.drawable.comedia;
         else if (nombre.equalsIgnoreCase("sports"))
-            return "https://img.youtube.com/vi/K4hy46Y-Cf8/maxresdefault.jpg";
+            return R.drawable.deportes;
         else if(nombre.equalsIgnoreCase("drama"))
-            return "https://img.youtube.com/vi/eI8aUqsCovo/maxresdefault.jpg";
+            return R.drawable.drama;
         else if(nombre.equalsIgnoreCase("fantasy"))
-            return "https://img.youtube.com/vi/xs6xzznC9tY/maxresdefault.jpg";
+            return R.drawable.fantasia;
         else if(nombre.equalsIgnoreCase("horror"))
-            return "https://img.youtube.com/vi/5GjS0Vvs8KA/maxresdefault.jpg";
+            return R.drawable.terror;
         else if(nombre.equalsIgnoreCase("mystery"))
-            return "https://img.youtube.com/vi/35GXUVBRIEM/maxresdefault.jpg";
+            return R.drawable.misterio;
         else if(nombre.equalsIgnoreCase("romance"))
-            return "https://img.youtube.com/vi/XMCqw1vxMnY/maxresdefault.jpg";
+            return R.drawable.romance;
         else if(nombre.equalsIgnoreCase("sci-fi"))
-            return "https://img.youtube.com/vi/bJVyIXeUznY/maxresdefault.jpg";
+            return R.drawable.sci_fi;
         else if(nombre.equalsIgnoreCase("suspense"))
-            return "https://img.youtube.com/vi/35GXUVBRIEM/maxresdefault.jpg";
+            return R.drawable.suspense;
         else
-            return "https://img.youtube.com/vi/gY5nDXOtv_o/maxresdefault.jpg";
+            return R.drawable.accion;
 
     }
 
