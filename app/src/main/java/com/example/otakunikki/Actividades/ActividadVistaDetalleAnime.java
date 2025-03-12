@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -131,11 +132,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         anime = getIntent().getParcelableExtra("Anime");
         tvTituloAnime.setText(anime.getTitulo());
         Picasso.get().load(anime.getImagenGrande()).into(imgAnime);
-        if(anime.isEnEmision()){
-            tvEmision.setText("En emisión ●");
-        }else{
-            tvEmision.setText("Finalizado ●");
-        }
+
 
         CompletarInfoAnimeIndividual(anime);
         AgregarListaEpisodios(anime);
@@ -307,12 +304,12 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                             tvSinopsisAnime.setText(anime.getSynopsis());
                             tvPuntuacion.setText(String.valueOf(anime.getPuntuacion()));
 
-                            if(anime.isEnEmision()){
+                            if (anime.isEnEmision()) {
                                 tvEmision.setText("En emisión ●");
-                                tvEmision.setTextColor(R.color.rojo);
-                            }else{
+                                tvEmision.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.rojo)); // Usa ContextCompat
+                            } else {
                                 tvEmision.setText("Finalizado");
-                                tvEmision.setTextColor(R.color.black);
+                                tvEmision.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.moradoDifuminadoIcono)); // Usa ContextCompat
                             }
 
                             if(anime.getNroEpisodios() == 1){
