@@ -22,7 +22,7 @@
                 android:id="@+id/imgIconoUser"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_launcher_foreground"
+                android:scaleType="fitCenter"
                 android:contentDescription="Icono de usuario"/>
 
             <ImageButton

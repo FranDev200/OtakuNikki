@@ -45,6 +45,13 @@
             >
         </EditText>
 
+        <CheckBox
+            android:id="@+id/chkMantenerSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Mantener sesion iniciada."/>
+
         <Button
             android:id="@+id/BtnInicioSesion"
             android:layout_width="wrap_content"

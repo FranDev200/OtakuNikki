@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "276280356641",
+    "project_id": "otakunikki",
+    "storage_bucket": "otakunikki.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276280356641:android:35366a7663d95ba23d5860",
+        "android_client_info": {
+          "package_name": "com.example.otakunikki"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgAfXPu-BFT6PL9KMHHgnfiefB4_-bh1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
