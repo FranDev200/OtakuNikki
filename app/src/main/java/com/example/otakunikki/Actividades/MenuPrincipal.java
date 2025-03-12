@@ -52,9 +52,17 @@ public class MenuPrincipal extends AppCompatActivity {
 
     public void abrirExplorar(){
         Intent intent = new Intent(getApplicationContext(), Explorar.class);
-        startActivity(intent);
+        startActivityForResult(intent, 1); // El 1 es para ponerle un id a la actividad
+        //Utilizo startActivityForResult para que detecte cuando se cierra la actividad y cambie el estado del navegador
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) { // Compruebo que es la actividad 1 por el id
+            menu_navegador.setSelectedItemId(R.id.mnu_home); // Selecciono el Inicio
+        }
+    }
 
     private void cargarFragment(Fragment fragment) {
 
