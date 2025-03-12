@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-
-        >
+    >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,9 +21,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:backgroundTint="@android:color/primary_text_dark"
+                android:textColor="@color/blancoIcono"
+                android:textColorHint="@color/blancoIcono"
+                android:backgroundTint="@color/blancoIcono"
                 android:hint="Escribe el nombre del anime" />
 
             <ImageButton
@@ -32,6 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"
+                android:backgroundTint="@color/moradoDifuminadoIcono"
                 android:src="@drawable/lupa" />
         </LinearLayout>
 
@@ -41,8 +41,8 @@
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_width="25dp"
+                android:layout_height="250dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="16dp"
                 >
@@ -51,7 +51,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
-
                 android:scaleType="centerCrop"/>
             </androidx.cardview.widget.CardView>
             <LinearLayout
@@ -64,20 +63,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Titulo:"
-                    android:textColor="@color/white"
+                    android:textColor="@color/moradoClaroIcono"
+                    android:textSize="20dp"
                     android:textStyle="bold"/>
                 <TextView
                     android:id="@+id/tvTituloInicio"
                     android:paddingLeft="5dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/blancoIcono"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
                 <TextView
                     android:paddingLeft="15dp"
+                    android:textSize="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/moradoClaroIcono"
                     android:text="Synopsis:"
                     android:textStyle="bold"/>
                 <TextView
@@ -85,7 +86,7 @@
                     android:paddingLeft="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/blancoIcono"
                     android:maxLines="4"
                     android:ellipsize="end"
                     android:clickable="true"/>
@@ -95,6 +96,7 @@
                     android:layout_height="40dp"
                     android:src="@drawable/plus"
                     android:scaleType="fitCenter"
+                    android:backgroundTint="@color/moradoDifuminadoIcono"
                     android:layout_gravity="end"/>
             </LinearLayout>
         </LinearLayout>
@@ -106,7 +108,7 @@
             android:paddingTop="10dp"
             android:paddingBottom="2dp"
             android:text="Animes Recomendados:"
-            android:textColor="@color/white"
+            android:textColor="@color/blancoIcono"
             android:textSize="15dp"
             android:textStyle="bold" />
 
@@ -125,7 +127,7 @@
             android:paddingTop="10dp"
             android:paddingBottom="2dp"
             android:text="Ultimos añadidos:"
-            android:textColor="@color/white"
+            android:textColor="@color/blancoIcono"
             android:textSize="15dp"
             android:textStyle="bold" />
 

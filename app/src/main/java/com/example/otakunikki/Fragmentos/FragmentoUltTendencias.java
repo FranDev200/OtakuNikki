@@ -110,21 +110,11 @@ public class FragmentoUltTendencias extends Fragment {
                     JSONArray dataArray = jsonResponse.getJSONArray("data");
 
                     if (dataArray.length() == 0) {
-                        //Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     for (int i = 0; i < dataArray.length(); i++) {
-                        if(listaAnimesTemporada.size() == 25){
-
-                            /*int nroAleatorio = (int) (Math.random() * 25);
-
-                            String imgTendencia =
-                            Picasso.get().load(listaAnimesTemporada.get(nroAleatorio).getImagenMediana()).into();
-                            tvTituloInicio.setText(listaAnimesTemporada.get(nroAleatorio).getTitulo());
-                            tvSinopsisInicio.setText(listaAnimesTemporada.get(nroAleatorio).getSynopsis());
-                            */
-                        }
 
                         JSONObject animeObject = dataArray.getJSONObject(i);
                         int id = animeObject.getInt("mal_id");
