@@ -62,7 +62,6 @@ public class FragmentoUltTendencias extends Fragment {
         miGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CompletarInfoAnimeIndividual(listaAnimesTemporada.get(position));
                 abrirVistaDeDetalleAnime(position);
             }
         });
@@ -119,29 +118,9 @@ public class FragmentoUltTendencias extends Fragment {
                         JSONObject animeObject = dataArray.getJSONObject(i);
                         int id = animeObject.getInt("mal_id");
                         String titulo = animeObject.optString("title","Titulo no disponible");
-                        String synopsis = animeObject.optString("synopsis", "Synopsis no disponible");
-                        double score = animeObject.optDouble("score", 0);
-                        String trailer = animeObject.getJSONObject("trailer").optString("url", "Trailer no disponible");
                         String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Foto no disponible");
-                        String imagenMediana = animeObject.getJSONObject("images").getJSONObject("jpg").optString("image_url", "Foto no disponible");
-                        String imagenPeqenia =animeObject.getJSONObject("images").getJSONObject("jpg").optString("small_image_url", "Foto no disponible");
-                        String estado = animeObject.optString("status", "");
 
-                        // Obtenemos de la lista de géneros
-                        JSONArray datosGeneros = animeObject.optJSONArray("genres");
-                        List<String> listaGeneros = new ArrayList<>();
-
-                        if (datosGeneros != null) {
-                            for (int l = 0; l < datosGeneros.length(); l++) {
-                                JSONObject generoObj = datosGeneros.getJSONObject(l);
-                                listaGeneros.add(generoObj.optString("name", "Género no disponible"));
-
-                            }
-                        }
-
-                        // Creamos el objeto Anime
-                        boolean enEmision = !estado.equals("Finished Airing");
-                        Anime anime = new Anime(id, titulo,synopsis, score,trailer,imagenGrande,imagenMediana,imagenPeqenia,null, listaGeneros, enEmision, 0, "");
+                        Anime anime = new Anime(id, titulo,"", 0,"",imagenGrande,"","",null, null, false, 0, "");
 
                         if (!listaAnimesTemporada.contains(anime)) {
                             listaAnimesTemporada.add(anime);
@@ -169,51 +148,4 @@ public class FragmentoUltTendencias extends Fragment {
 
     }
 
-    private void CompletarInfoAnimeIndividual(Anime anime){
-        RequestQueue rqAnimes = Volley.newRequestQueue(getActivity().getApplicationContext());
-        String urlAnime = "https://api.jikan.moe/v4/anime/" + anime.getId();
-
-        StringRequest mrqAnimes = new StringRequest(Request.Method.GET, urlAnime,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            Log.i(TAG, "Completando info: " + response);
-                            JSONObject animeDetallesResponse = new JSONObject(response);
-                            JSONObject animeDetalles = animeDetallesResponse.getJSONObject("data");
-
-                            String sinopsis = animeDetalles.optString("synopsis", "Sin sinopsis disponible");
-                            double puntuacion = animeDetalles.optDouble("score", 0.0);
-                            String trailer = animeDetalles.getJSONObject("trailer").optString("url", "Trailer no disponible");
-                            String imagenPequenia = animeDetalles.optJSONObject("images")
-                                    .optJSONObject("jpg")
-                                    .optString("image_url", "URL no disponible");
-
-                            String imagenMediana = animeDetalles.optJSONObject("images")
-                                    .optJSONObject("jpg")
-                                    .optString("medium_image_url", "URL no disponible");
-
-                            anime.setSynopsis(sinopsis);
-                            anime.setPuntuacion(puntuacion);
-                            anime.setTrailer(trailer);
-                            anime.setImagenPequenia(imagenPequenia);
-                            anime.setImagenMediana(imagenMediana);
-                            Log.i(TAG, anime.getPuntuacion() + " ++ " + anime.getTitulo());
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getActivity().getApplicationContext(), "Error procesando los detalles del anime", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("ERROR", "Error al obtener detalles del anime: " + error.getMessage());
-                    }
-                }
-        );
-
-        rqAnimes.add(mrqAnimes);
-    }
 }
