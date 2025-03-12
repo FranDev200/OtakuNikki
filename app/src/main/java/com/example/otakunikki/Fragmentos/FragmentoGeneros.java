@@ -88,7 +88,7 @@ public class FragmentoGeneros extends Fragment {
                 Genero generoSeleccionado = listaGeneros.get(position);
                 int idGenero = generoSeleccionado.getIdGenero();  // Asegúrate de tener este método en tu clase Genero
 
-                // Crear un Intent para iniciar ActividadDetalleGenero
+                // Creamos un Intent para iniciar ActividadDetalleGenero
                 Intent intent = new Intent(getActivity(), ActividadDetalleGenero.class);
                 intent.putExtra("IdGenero", idGenero);
                 startActivity(intent);

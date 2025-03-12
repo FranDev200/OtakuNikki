@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragmentos.FragmentInfoUsuario">
+    tools:context=".Fragmentos.FragmentInfoUsuario"
+    android:background="@color/moradoYNegroIcono">
 
 
     <LinearLayout
@@ -42,6 +43,7 @@
                     android:text="Fran"
                     android:textAlignment="center"
                     android:textSize="30dp"
+                    android:textColor="@color/moradoMuyClaroIcono"
                     android:textStyle="bold|italic" />
 
                 <Button
@@ -49,6 +51,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50px"
+                    android:textColorHint="@color/blancoIcono"
+                    android:backgroundTint="@color/moradoClaroIcono"
+                    android:textColor="@color/blancoIcono"
+                    android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
                     android:text="Cambiar Perfil"
                     android:textSize="17dp"
                     />
@@ -66,7 +72,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:textColor="@color/moradoDifuminadoIcono"
                 android:text="@string/usuarioSubrayado"
                 android:textSize="30dp"
                 android:textStyle="bold|italic" />
@@ -77,16 +83,39 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20px"
                 android:textSize="23dp"
+                android:textColorHint="@color/blancoIcono"
+                android:backgroundTint="@color/moradoClaroIcono"
+                android:textColor="@color/blancoIcono"
                 android:hint="Nombre de usuario" />
 
-            <Spinner
-                android:id="@+id/spRegion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20px"
-                android:textSize="20dp"
-                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
 
+            <TextView
+                android:id="@+id/tvRegionSeleccionada"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:textColorHint="@color/blancoIcono"
+                android:textColor="@color/blancoIcono"
+                android:textSize="16sp"
+                android:text="@string/pais_seleccionado"
+                android:textStyle=""/>
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spRegion"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/blancoIcono"
+                android:backgroundTint="@color/moradoClaroIcono"
+                android:textColor="@color/blancoIcono"/>
         </LinearLayout>
 
         <LinearLayout
@@ -94,12 +123,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.5"
-            >
-
+        >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:textColor="@color/moradoDifuminadoIcono"
                 android:text="@string/correoSubrayado"
                 android:textSize="30dp"
                 android:textStyle="bold|italic" />
@@ -110,6 +138,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20px"
                 android:textSize="23dp"
+                android:textColorHint="@color/blancoIcono"
+                android:backgroundTint="@color/moradoClaroIcono"
+                android:textColor="@color/blancoIcono"
                 android:hint="Correo del usuario" />
 
             <EditText
@@ -118,6 +149,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20px"
                 android:textSize="23dp"
+                android:textColorHint="@color/blancoIcono"
+                android:backgroundTint="@color/moradoClaroIcono"
+                android:textColor="@color/blancoIcono"
                 android:hint="Contraseña del usuario" />
 
 
@@ -133,7 +167,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:textColor="@color/moradoDifuminadoIcono"
                 android:text="@string/gestionPerfil"
                 android:textSize="30dp"
                 android:textStyle="bold|italic" />
@@ -149,6 +183,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/moradoClaroIcono"
+                    android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
                     android:text="Eliminar Perfil"
                     android:textSize="17dp"
                     />
@@ -159,6 +195,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="50px"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/moradoClaroIcono"
+                    android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
                     android:text="Desconectarse"
                     android:textSize="17dp"
                     />

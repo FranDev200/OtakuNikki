@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".Actividades.ActividadRegistro"
-        android:background="#D5D5D5"
+        android:background="@color/moradoYAzulIcono"
         android:padding="20dp">
 
         <!--  Zona de imagen  -->
@@ -40,9 +40,9 @@
             android:id="@+id/etNombreCompleto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/black"
-            android:backgroundTint="@android:color/primary_text_dark"
-            android:textColor="@color/black"
+            android:textColorHint="@color/blancoIcono"
+            android:backgroundTint="@color/moradoClaroIcono"
+            android:textColor="@color/blancoIcono"
             android:hint="Introduce tu nombre completo"
             android:inputType="textPersonName"
             android:padding="12dp"
@@ -52,9 +52,9 @@
             android:id="@+id/etNombreUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/black"
-            android:backgroundTint="@android:color/primary_text_dark"
-            android:textColor="@color/black"
+            android:textColorHint="@color/blancoIcono"
+            android:backgroundTint="@color/moradoClaroIcono"
+            android:textColor="@color/blancoIcono"
             android:hint="Introduce nombre de usuario"
             android:inputType="textPersonName"
             android:padding="12dp"
@@ -65,9 +65,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Introduce correo"
-            android:textColorHint="@color/black"
-            android:backgroundTint="@android:color/primary_text_dark"
-            android:textColor="@color/black"
+            android:textColorHint="@color/blancoIcono"
+            android:backgroundTint="@color/moradoClaroIcono"
+            android:textColor="@color/blancoIcono"
             android:inputType="textEmailAddress"
             android:padding="12dp"
             android:layout_marginBottom="12dp"/>
@@ -85,7 +85,8 @@
                 android:layout_weight="3"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
-                android:textColor="@color/black"
+                android:textColorHint="@color/blancoIcono"
+                android:textColor="@color/blancoIcono"
                 android:textSize="16sp"
                 android:text="@string/pais_seleccionado"
                 android:textStyle=""/>
@@ -95,7 +96,9 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/black"/>
+                android:textColorHint="@color/blancoIcono"
+                android:backgroundTint="@color/moradoClaroIcono"
+                android:textColor="@color/blancoIcono"/>
         </LinearLayout>
 
         <EditText
@@ -103,9 +106,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Contraseña"
-            android:textColorHint="@color/black"
-            android:backgroundTint="@android:color/primary_text_dark"
-            android:textColor="@color/black"
+            android:textColorHint="@color/blancoIcono"
+            android:backgroundTint="@color/moradoClaroIcono"
+            android:textColor="@color/blancoIcono"
             android:inputType="textPassword"
             android:padding="12dp"
             android:layout_marginBottom="12dp"/>
@@ -114,9 +117,9 @@
             android:id="@+id/etPwdConfirmacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/black"
-            android:backgroundTint="@android:color/primary_text_dark"
-            android:textColor="@color/black"
+            android:textColorHint="@color/blancoIcono"
+            android:backgroundTint="@color/moradoClaroIcono"
+            android:textColor="@color/blancoIcono"
             android:hint="Repite la contraseña"
             android:inputType="textPassword"
             android:padding="12dp"
@@ -128,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Acepto los términos y condiciones"
-            android:textColor="@color/black"
+            android:textColor="@color/blancoIcono"
             android:layout_marginBottom="16dp"/>
 
         <!--  Botón de confirmación  -->
@@ -137,7 +140,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Confirmar"
-            android:backgroundTint="@color/azul"
+            android:backgroundTint="@color/moradoDifuminadoIcono"
             android:textColor="@color/white"
             android:padding="12dp"/>
 

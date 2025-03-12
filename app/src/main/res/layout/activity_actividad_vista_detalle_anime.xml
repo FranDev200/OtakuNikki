@@ -8,7 +8,7 @@
         android:orientation="vertical"
         tools:context=".Actividades.ActividadVistaDetalleAnime"
         android:padding="10dp"
-    android:background="@color/black">
+        android:background="@color/black">
 
         <ImageButton
             android:id="@+id/btnRetroceso"
@@ -281,6 +281,7 @@
                         android:textAlignment="center"
                         android:gravity="center"
                         android:text="Más antiguo"
+                        android:textColor="@color/moradoMuyClaroIcono"
                         />
 
                     <Spinner
