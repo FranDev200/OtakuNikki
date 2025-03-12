@@ -99,7 +99,7 @@ public class BusquedaAnimeFragDeslizante extends BottomSheetDialogFragment {
 
                             // Crear objeto Anime
                             boolean enEmision = !estado.equals("Finished Airing");
-                            Anime anime = new Anime(id, titulo, "", 0, "",imagenGrande, "", "", null, null, enEmision);
+                            Anime anime = new Anime(id, titulo, "", 0, "",imagenGrande, "", "", null, null, enEmision, 0, "");
 
                             // Verificación de duplicados
                             if (!listaAnimes.contains(anime)) {
