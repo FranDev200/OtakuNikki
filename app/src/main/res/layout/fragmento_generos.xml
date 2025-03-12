@@ -6,7 +6,6 @@
     android:orientation="vertical"
     tools:context=".Fragmentos.FragmentoGeneros"
     >
-
     <GridView
         android:id="@+id/gvGeneros"
         android:layout_width="match_parent"
@@ -14,7 +13,9 @@
         android:textAlignment="center"
         android:padding="10dp"
         android:layout_margin="5dp"
-        android:numColumns="2">
+        android:numColumns="auto_fit"
+        android:columnWidth="180dp"
+        android:stretchMode="columnWidth">
     </GridView>
-
+    <!--con autofit ajustamos el espacio disponible de forma dinámica dependiendo del tamaño que le asignams-->
 </FrameLayout>

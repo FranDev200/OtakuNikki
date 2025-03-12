@@ -42,7 +42,8 @@ public class Explorar extends AppCompatActivity {
         imgRetroceso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               finish();
+                setResult(RESULT_OK); //Mando el resultado al menú principal para cambiar el item del navegador seleccionado
+                finish();
             }
         });
 

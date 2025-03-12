@@ -11,10 +11,14 @@
         android:id="@+id/gvTodosAnimes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:textAlignment="center"
         android:padding="10dp"
-        android:layout_margin="20dp"
-        android:numColumns="2">
+        android:layout_margin="5dp"
+        android:numColumns="auto_fit"
+        android:columnWidth="180dp"
+        android:stretchMode="columnWidth">
     </GridView>
+    <!--con autofit ajustamos el espacio disponible de forma dinámica dependiendo del tamaño que le asignams-->
 
 </FrameLayout>
