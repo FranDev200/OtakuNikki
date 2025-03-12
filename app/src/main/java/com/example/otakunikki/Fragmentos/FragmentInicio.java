@@ -64,8 +64,8 @@ public class FragmentInicio extends Fragment {
 
     private TextView tvTituloInicio, tvSinopsisInicio;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View vista = inflater.inflate(R.layout.fragment_inicio, container, false);
         tvTituloInicio = vista.findViewById(R.id.tvTituloInicio);
         tvSinopsisInicio = vista.findViewById(R.id.tvSinopsisInicio);
