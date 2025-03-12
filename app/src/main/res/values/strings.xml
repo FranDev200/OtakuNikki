@@ -10,4 +10,5 @@
     <string name="gestionPerfil"><u>Gestión de Perfil</u></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="registrar"><u>Si no tienes cuenta registrate aqui:</u></string>
 </resources>
