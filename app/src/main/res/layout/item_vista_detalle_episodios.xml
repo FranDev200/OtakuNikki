@@ -12,6 +12,7 @@
         android:textAlignment="viewStart"
         android:layout_weight="0.5"
         android:paddingTop="5dp"
+        android:textColor="@color/white"
         android:text="Ep ->"
     >
     </TextView>
@@ -24,6 +25,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:textAlignment="textStart"
+        android:textColor="@color/white"
         android:paddingTop="5dp"
         android:text="0"
         >
@@ -36,6 +38,7 @@
         android:layout_weight="1"
         android:textAlignment="textStart"
         android:paddingTop="5dp"
+        android:textColor="@color/white"
         android:text="0"
         >
     </TextView>
