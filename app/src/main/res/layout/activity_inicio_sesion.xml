@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/levi"
+    android:background="@drawable/satoru"
     tools:context=".Actividades.InicioSesion"
     android:gravity="center">
 
@@ -26,8 +26,8 @@
             android:padding="10dp"
             android:layout_margin="20dp"
             android:hint="@string/introduce_nombre"
-            android:textColor="@color/black"
-            android:background="#C5BDE6BD"
+            android:textColor="@color/blancoIcono"
+            android:background="@color/moradoDifuminadoIcono"
             >
         </EditText>
 
@@ -40,8 +40,8 @@
             android:padding="10dp"
             android:layout_margin="20dp"
             android:hint="@string/introduce_contrasenya"
-            android:textColor="@color/black"
-            android:background="#C5BDE6BD"
+            android:textColor="@color/blancoIcono"
+            android:background="@color/moradoDifuminadoIcono"
             >
         </EditText>
 
@@ -52,12 +52,13 @@
             android:textAlignment="center"
             android:layout_gravity="center"
             android:text="INICIAR SESIÓN"
-            android:textColor="@color/black"
+            android:textColor="@color/blancoIcono"
+
             android:textStyle="bold"
             android:textSize="15dp"
             android:padding="10dp"
-            android:backgroundTint="@color/verde_claro"
-            android:focusedSearchResultHighlightColor="@color/verde_seleccionado"
+            android:backgroundTint="#7733C8"
+            android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
             android:layout_margin="20dp"
             >
 

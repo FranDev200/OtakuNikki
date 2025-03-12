@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -59,6 +60,16 @@ public class ActividadDetalleGenero extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        gvAnimes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Creamos un Intent para iniciar la ActividadVistaDetalleAnime
+                Intent intent = new Intent(getApplicationContext(), ActividadVistaDetalleAnime.class);
+                intent.putExtra("Anime", listaAnimes.get(position));
+                startActivity(intent);
             }
         });
     }

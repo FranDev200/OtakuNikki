@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/moradoMuyClaroIcono" android:state_checked="true" />  <!-- Cuando está seleccionado -->
+    <item android:color="@color/moradoDifuminadoIcono" android:state_checked="false"/>  <!-- Cuando NO está seleccionado -->
+</selector>

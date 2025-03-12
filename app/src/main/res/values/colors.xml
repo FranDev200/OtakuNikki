@@ -11,4 +11,15 @@
     <color name="rojo">#FD0211</color>
     <color name="negro_difuminado">#CB000000</color> <!-- Negro con opacidad -->
 
+    <!--        prueba alma         -->
+    <color name="moradoYAzulIcono">#31234F</color>
+    <color name="blancoIcono">#F5F3F9</color>
+    <color name ="moradoMuyClaroIcono">#B97AF2</color>
+    <color name="moradoClaroIcono">#533F74</color>
+    <color name="cianIcono">#35EEF6</color>
+    <color name="moradoOscuroIcono">#33152E</color>
+    <color name="moradoDifuminadoIcono">#C88542ED</color>
+    <color name="moradoYNegroIcono">#14011F</color>
+
+
 </resources>
