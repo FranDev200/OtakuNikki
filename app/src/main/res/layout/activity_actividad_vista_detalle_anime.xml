@@ -7,7 +7,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".Actividades.ActividadVistaDetalleAnime"
-        android:padding="10dp">
+        android:padding="10dp"
+    android:background="@color/black">
 
         <ImageButton
             android:id="@+id/btnRetroceso"
@@ -15,7 +16,7 @@
             android:layout_height="40dp"
             android:src="@drawable/flechasalir"
             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
+            android:background="@color/gris"
             android:layout_gravity="start"/>
 
     <androidx.core.widget.NestedScrollView
@@ -94,6 +95,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="0 / 10"
                                 android:textStyle="bold"
+                                android:textColor="@color/white"
                                 android:textSize="20dp"
                                 android:layout_marginLeft="30px"
                                 />
@@ -131,6 +133,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="124 ep"
                                 android:textStyle="bold"
+                                android:textColor="@color/white"
                                 android:textSize="18dp"
                                 android:layout_marginLeft="30px"
                                 />
@@ -138,7 +141,7 @@
                             <View
                                 android:layout_width="200px"
                                 android:layout_height="2dp"
-                                android:background="#404040"
+                                android:background="@color/white"
                                 android:layout_marginVertical="1dp"
                                 android:layout_marginLeft="30px"
                                 />
@@ -149,6 +152,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="50 min"
                                 android:textStyle="bold"
+                                android:textColor="@color/white"
                                 android:textSize="18dp"
                                 android:layout_marginLeft="30px"
                                 />
@@ -169,6 +173,7 @@
                                 android:text="Favorito: "
                                 android:textStyle="bold"
                                 android:textSize="20dp"
+                                android:textColor="@color/white"
                                 android:layout_gravity="end"
                                 android:layout_marginRight="5dp"
                                 />
@@ -191,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:text="Class no Daikirai na Joshi to Kekkon Suru Koto ni Natta."
                     android:textAlignment="center"
-                    android:textColor="@color/gris_oscuro"
+                    android:textColor="@color/white"
                     android:textSize="35dp"
                     android:maxLines="2"
                     android:ellipsize="end"
@@ -215,7 +220,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:background="#6B6B6B"
+                    android:background="@color/white"
                     android:layout_marginVertical="5dp"
                     />
 
@@ -225,6 +230,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="3"
                     android:ellipsize="end"
+                    android:textColor="@color/white"
                     android:text="Aquí va la sinopsis..."
                     android:textSize="20dp"
                     android:layout_marginTop="15px"
@@ -263,7 +269,7 @@
                         android:text="+ Añadir a la lista"
                         android:textStyle="bold"
                         android:textSize="18dp"
-                        android:backgroundTint="@color/gris_oscuro"
+                        android:backgroundTint="@color/azul"
                         android:textColor="@color/white"/>
 
                     <TextView
@@ -281,6 +287,9 @@
                         android:id="@+id/spFiltro"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:backgroundTint="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textColor="@color/white"
                         />
 
                 </LinearLayout>

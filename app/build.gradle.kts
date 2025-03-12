@@ -46,4 +46,5 @@ dependencies {
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.0.0")
+
 }
