@@ -12,11 +12,11 @@
 
         <ImageButton
             android:id="@+id/btnRetroceso"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/flechasalir"
             android:scaleType="fitCenter"
-            android:background="@color/gris"
+            android:background="@android:color/transparent"
             android:layout_gravity="start"/>
 
     <androidx.core.widget.NestedScrollView
@@ -245,7 +245,7 @@
                     android:scaleType="fitCenter"
                     android:layout_gravity="center"
                     android:layout_marginTop="10px"
-                    android:background="@color/gris"/>
+                    android:background="@android:color/transparent"/>
 
                 <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
                     android:id="@+id/youtube_player_view"
