@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ public class InicioSesion extends AppCompatActivity {
 
     private TextView tvNombre, tvContrasenya;
     private Button btnInicioSesion;
+    private CheckBox chkMantenerSesion;
     Usuario usuario;
 
     @Override
@@ -25,6 +27,7 @@ public class InicioSesion extends AppCompatActivity {
         tvNombre = findViewById(R.id.etNombreUser);
         tvContrasenya = findViewById(R.id.etContrasenya);
         btnInicioSesion = findViewById(R.id.BtnInicioSesion);
+        chkMantenerSesion = findViewById(R.id.chkMantenerSesion);
 
         btnInicioSesion.setOnClickListener(new View.OnClickListener() {
             @Override
