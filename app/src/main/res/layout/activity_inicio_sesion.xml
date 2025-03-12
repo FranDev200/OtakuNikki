@@ -18,7 +18,7 @@
     >
 
         <EditText
-            android:id="@+id/etNombreUser"
+            android:id="@+id/etEmailInicioSesion"
             android:layout_width="250dp"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -32,7 +32,7 @@
         </EditText>
 
         <EditText
-            android:id="@+id/etContrasenya"
+            android:id="@+id/etPwdInicioSesion"
             android:layout_width="250dp"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -73,5 +73,30 @@
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/registrar"
+            android:textStyle="italic"
+            android:paddingRight="10dp"
+            />
+
+        <ImageButton
+            android:id="@+id/imgBtnRegistro"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/add"
+            android:scaleType="fitCenter"
+            android:background="?android:selectableItemBackgroundBorderless" />
+
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -35,6 +35,9 @@ import com.example.otakunikki.R;
 
 //FIREBASE
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
@@ -107,49 +110,78 @@ public class ActividadRegistro extends AppCompatActivity {
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String email = etEmail.getText().toString();
+                String nombreCompleto = etNombreCompleto.getText().toString();
+                String nombreUsuario = etNombreUsuario.getText().toString();
+                String pwd = etPwd.getText().toString();
+                String pwdConfirmada = etPwdConfirmacion.getText().toString();
 
-                if (etNombreCompleto.getText().toString().isEmpty() || etNombreUsuario.getText().toString().isEmpty()
-                        || etEmail.getText().toString().isEmpty() || etPwd.getText().toString().isEmpty()
-                        || etPwdConfirmacion.getText().toString().isEmpty() || !chkTerminos.isChecked()) {
-
+                // Verificar que todos los campos estén completos
+                if (nombreCompleto.isEmpty() || nombreUsuario.isEmpty() || email.isEmpty() || pwd.isEmpty() || pwdConfirmada.isEmpty() || !chkTerminos.isChecked()) {
                     Toast.makeText(getApplicationContext(), "Rellena todos los campos", Toast.LENGTH_LONG).show();
-                } else {
-                    String email = etEmail.getText().toString();
-                    String nombreCompleto = etNombreCompleto.getText().toString();
-                    String nombreUsuario = etNombreUsuario.getText().toString();
-                    if(etPwd.getText().toString().equals(etPwdConfirmacion.getText().toString())){
-                        String pwd = etPwdConfirmacion.getText().toString();
-                        authRegistro.createUserWithEmailAndPassword(email, pwd)
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        FirebaseUser firebaseUser = authRegistro.getCurrentUser();
-                                        if (firebaseUser != null) {
-                                            String idUsuario = firebaseUser.getUid();
-                                            List<Perfil> listaPerfiles = new ArrayList<Perfil>();
-                                            listaPerfiles.add(new Perfil());
-                                            // Crear usuario en Firestore
-                                            Usuario nuevoUsuario = new Usuario();
-                                            baseDatos.collection("Usuarios").document(idUsuario)
-                                                    .set(nuevoUsuario)
-                                                    .addOnSuccessListener(aVoid -> {
-                                                        // Usuario guardado con éxito en Firestore
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        // Error al guardar usuario
-                                                    });
-                                        }
-                                    } else {
-                                        // Error en la autenticación
-                                    }
-                                });
-                        abrirSeleccion();
-                    }else{
-                        Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden", Toast.LENGTH_LONG).show();
-                    }
-
+                    return; // Detener la ejecución si algún campo está vacío
                 }
+
+                // Verificar que el correo electrónico tenga un formato válido
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(getApplicationContext(), "Formato email no valido", Toast.LENGTH_LONG).show();
+                    return; // Detener la ejecución si el formato del correo electrónico es incorrecto
+                }
+
+                // Verificar que las contraseñas coincidan
+                if (!pwd.equals(pwdConfirmada)) {
+                    Toast.makeText(getApplicationContext(), "Contraseñas no coinciden", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // Verificar que la contraseña tenga al menos 6 caracteres
+                if (pwd.length() < 6) {
+                    Toast.makeText(getApplicationContext(), "Minimo 6 caracteres en la contraseña", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // Crear el usuario en Firebase
+                authRegistro.createUserWithEmailAndPassword(email, pwd)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                FirebaseUser firebaseUser = authRegistro.getCurrentUser();
+                                if (firebaseUser != null) {
+                                    /**ID QUE GENERA FIREBASE**/
+                                    String userId = firebaseUser.getUid();
+                                    List<Perfil> userProfiles = new ArrayList<>();
+                                    userProfiles.add(new Perfil(nombreUsuario + "_Perfil1", R.drawable.terror));
+
+                                    // Crear el objeto de usuario
+                                    Usuario newUser = new Usuario(userId, nombreCompleto, nombreUsuario, email, tvPaisSeleccionado.getText().toString(), userProfiles);
+
+                                    // Guardar el usuario en Firestore
+                                    baseDatos.collection("Usuarios").document(userId)
+                                            .set(newUser)
+                                            .addOnSuccessListener(aVoid -> {
+                                                Log.d("Firebase", "Usuario creado correctamente");
+                                                abrirSeleccion(); // Abrir la siguiente actividad después de guardar el usuario
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Log.e("Firebase", "Error guardando al usuario: " + e.getMessage());
+                                                Toast.makeText(getApplicationContext(), "Error al guardar intentelo de nuevo", Toast.LENGTH_LONG).show();
+                                            });
+                                }
+                            } else {
+                                Exception exception = task.getException();
+                                if (exception instanceof FirebaseAuthWeakPasswordException) {
+                                    Toast.makeText(getApplicationContext(), "Contraseña debil", Toast.LENGTH_LONG).show();
+                                } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
+                                    Toast.makeText(getApplicationContext(), "Formato mail no valido", Toast.LENGTH_LONG).show();
+                                } else if (exception instanceof FirebaseAuthUserCollisionException) {
+                                    Toast.makeText(getApplicationContext(), "Email ya en uso", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Fallo de autentificacion: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
             }
         });
+
     }
 
     public void abrirSeleccion() {

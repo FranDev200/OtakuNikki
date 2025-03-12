@@ -1,6 +1,8 @@
 package com.example.otakunikki.Fragmentos;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.example.otakunikki.Actividades.ActividadInicial;
 import com.example.otakunikki.R;
 import com.example.otakunikki.Actividades.SeleccionPerfil;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class FragmentInfoUsuario extends Fragment {
     private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil;
@@ -55,11 +58,17 @@ public class FragmentInfoUsuario extends Fragment {
         btnDesconexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), ActividadInicial.class);
+                FirebaseAuth.getInstance().signOut();
+
+                // Eliminar la preferencia de recordar sesión
+                SharedPreferences.Editor editor = requireContext().getSharedPreferences("PreferenciaSesion", Context.MODE_PRIVATE).edit();
+                editor.putBoolean("rememberMe", false);
+                editor.apply();
+
+                // Redirigir al usuario al LoginActivity
+                Intent intent = new Intent(requireActivity(), ActividadInicial.class);
                 startActivity(intent);
-
-                // Aquí puedes implementar la lógica para desconectarse del usuario
-
+                requireActivity().finish();
             }
         });
 
