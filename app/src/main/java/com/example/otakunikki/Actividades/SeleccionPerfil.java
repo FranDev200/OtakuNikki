@@ -32,7 +32,7 @@ public class SeleccionPerfil extends AppCompatActivity {
         miAdaptadorPerfilesGridView = new AdaptadorPerfilesGridView(getApplicationContext(), R.layout.item_perfiles, miListaPerfiles );
         miGridView.setAdapter(miAdaptadorPerfilesGridView);
 
-        miListaPerfiles.add(new Perfil("https://i.blogs.es/0f7b87/solo-leveling/500_333.webp", "Mario", null));
+        miListaPerfiles.add(new Perfil("Mario", "https://i.blogs.es/0f7b87/solo-leveling/500_333.webp",  null));
         miAdaptadorPerfilesGridView.notifyDataSetChanged();
 
         miGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
