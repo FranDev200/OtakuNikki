@@ -22,9 +22,12 @@ public class Anime implements Parcelable {
     private List<String> generos;
     private boolean enEmision;
     private boolean favorito = false;
+    private int nroEpisodios;
+    private String duracionEp;
 
     public Anime(int id, String titulo, String synopsis, double puntuacion, String trailer, String imagenGrande,
-                 String imagenMediana, String imagenPequenia, List<Episodio> listaEpisodios, List<String> generos, boolean enEmision) {
+                 String imagenMediana, String imagenPequenia, List<Episodio> listaEpisodios, List<String> generos,
+                 boolean enEmision, int nroEpisodios, String duracionEp) {
         this.id = id;
         this.titulo = titulo;
         this.synopsis = synopsis;
@@ -36,36 +39,12 @@ public class Anime implements Parcelable {
         this.listaEpisodios = listaEpisodios;
         this.generos = generos;
         this.enEmision = enEmision;
+        this.nroEpisodios = nroEpisodios;
+        this.duracionEp = duracionEp;
         this.favorito = false;
     }
 
 
-    protected Anime(Parcel in) {
-        id = in.readInt();
-        titulo = in.readString();
-        synopsis = in.readString();
-        puntuacion = in.readDouble();
-        trailer = in.readString();
-        imagenGrande = in.readString();
-        imagenMediana = in.readString();
-        imagenPequenia = in.readString();
-        listaEpisodios = in.createTypedArrayList(Episodio.CREATOR);
-        generos = in.createStringArrayList();
-        enEmision = in.readByte() != 0;
-        favorito = in.readByte() != 0;
-    }
-
-    public static final Creator<Anime> CREATOR = new Creator<Anime>() {
-        @Override
-        public Anime createFromParcel(Parcel in) {
-            return new Anime(in);
-        }
-
-        @Override
-        public Anime[] newArray(int size) {
-            return new Anime[size];
-        }
-    };
 
     public String getTrailer() {
         return trailer;
@@ -134,7 +113,7 @@ public class Anime implements Parcelable {
     public void setListaEpisodios(List<Episodio> listaEpisodios) { this.listaEpisodios = listaEpisodios; }
 
     public int getNroEpisodios(){
-        return getListaEpisodios().size();
+        return nroEpisodios;
     }
     public String getImagenGrande() { return imagenGrande; }
 
@@ -151,19 +130,25 @@ public class Anime implements Parcelable {
     public boolean getFavorito() {return favorito;}
 
     public void setFavorito(boolean favorito) {this.favorito = favorito;}
+
+    public void setNroEpisodios(int nroEpisodios) { this.nroEpisodios = nroEpisodios; }
+
+    public String getDuracionEp() { return duracionEp;  }
+
+    public void setDuracionEp(String duracionEp) { this.duracionEp = duracionEp; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Anime anime = (Anime) o;
-        return getId() == anime.getId() && Double.compare(getPuntuacion(), anime.getPuntuacion()) == 0 && Objects.equals(getTitulo(), anime.getTitulo()) && Objects.equals(getSynopsis(), anime.getSynopsis()) && Objects.equals(getImagenGrande(), anime.getImagenGrande()) && Objects.equals(getImagenMediana(), anime.getImagenMediana()) && Objects.equals(getImagenPequenia(), anime.getImagenPequenia()) && Objects.equals(getListaEpisodios(), anime.getListaEpisodios());
+        return getId() == anime.getId() && Double.compare(getPuntuacion(), anime.getPuntuacion()) == 0 && isEnEmision() == anime.isEnEmision() && isFavorito() == anime.isFavorito() && getNroEpisodios() == anime.getNroEpisodios() && getDuracionEp() == anime.getDuracionEp() && Objects.equals(getTitulo(), anime.getTitulo()) && Objects.equals(getSynopsis(), anime.getSynopsis()) && Objects.equals(getTrailer(), anime.getTrailer()) && Objects.equals(getImagenGrande(), anime.getImagenGrande()) && Objects.equals(getImagenMediana(), anime.getImagenMediana()) && Objects.equals(getImagenPequenia(), anime.getImagenPequenia()) && Objects.equals(getListaEpisodios(), anime.getListaEpisodios()) && Objects.equals(getGeneros(), anime.getGeneros());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitulo(), getSynopsis(), getPuntuacion(), getImagenGrande(), getImagenMediana(), getImagenPequenia(), getListaEpisodios());
+        return Objects.hash(getId(), getTitulo(), getSynopsis(), getPuntuacion(), getTrailer(), getImagenGrande(), getImagenMediana(), getImagenPequenia(), getListaEpisodios(), getGeneros(), isEnEmision(), isFavorito(), getNroEpisodios(), getDuracionEp());
     }
-
 
     @Override
     public int describeContents() {
@@ -171,7 +156,7 @@ public class Anime implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(titulo);
         dest.writeString(synopsis);
@@ -184,5 +169,37 @@ public class Anime implements Parcelable {
         dest.writeStringList(generos);
         dest.writeByte((byte) (enEmision ? 1 : 0));
         dest.writeByte((byte) (favorito ? 1 : 0));
+        dest.writeInt(nroEpisodios);
+        dest.writeString(duracionEp);
     }
+
+    public static final Parcelable.Creator<Anime> CREATOR = new Parcelable.Creator<Anime>() {
+        @Override
+        public Anime createFromParcel(Parcel in) {
+            return new Anime(in);
+        }
+
+        @Override
+        public Anime[] newArray(int size) {
+            return new Anime[size];
+        }
+    };
+
+    protected Anime(Parcel in) {
+        id = in.readInt();
+        titulo = in.readString();
+        synopsis = in.readString();
+        puntuacion = in.readDouble();
+        trailer = in.readString();
+        imagenGrande = in.readString();
+        imagenMediana = in.readString();
+        imagenPequenia = in.readString();
+        listaEpisodios = in.createTypedArrayList(Episodio.CREATOR);
+        generos = in.createStringArrayList();
+        enEmision = in.readByte() != 0;
+        favorito = in.readByte() != 0;
+        nroEpisodios = in.readInt();
+        duracionEp = in.readString();
+    }
+
 }

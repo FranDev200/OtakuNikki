@@ -225,7 +225,7 @@ public class FragmentInicio extends Fragment {
 
                         // Crear objeto Anime
                         boolean enEmision = !estado.equals("Finished Airing");
-                        Anime anime = new Anime(id, titulo,synopsis, score,trailer,imagenGrande,imagenMediana,imagenPeqenia,null, listaGeneros, enEmision);
+                        Anime anime = new Anime(id, titulo,synopsis, score,trailer,imagenGrande,imagenMediana,imagenPeqenia,null, listaGeneros, enEmision, 0, "");
 
                         if (!listaAnimeTemporada.contains(anime)) {
                             listaAnimeTemporada.add(anime);
@@ -287,7 +287,7 @@ public class FragmentInicio extends Fragment {
 
                             // Crear objeto Anime
                             boolean enEmision = !estado.equals("Finished Airing");
-                            Anime anime = new Anime(id, titulo, "", 0, "",imagenGrande, "", "", null, null, enEmision);
+                            Anime anime = new Anime(id, titulo, "", 0, "",imagenGrande, "", "", null, null, enEmision, 0, "");
 
                             // Verificación de duplicados
                             if (!listaAnimesRecomendados.contains(anime)) {

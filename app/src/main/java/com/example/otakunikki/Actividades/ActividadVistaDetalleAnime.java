@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,6 +28,9 @@ import com.example.otakunikki.Adaptadores.AdaptadorVistaDetalleLV;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Episodio;
 import com.example.otakunikki.R;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -34,18 +39,21 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ActividadVistaDetalleAnime extends AppCompatActivity {
-    private String[] filtros = {"Filtrar por:","Más antiguo", "Más reciente"};
+    private String[] filtros = {"Más antiguo", "Más reciente"};
     Spinner spFiltro;
+    YouTubePlayerView youTubePlayerView;
     //-------------------------------------------------------------------------
-    ImageButton btnRetroceso, btnFavoritos, imgMostrarTexto, btnReproducir;
-    ImageView imgAnime;
+    ImageButton btnRetroceso, btnFavoritos;
+    ImageView imgAnime, imgMostrarTexto;
     TextView tvTituloAnime, tvSinopsisAnime, tvEmision,
-            tvPuntuacion, tvGeneros, tvNumEpisodios;
+            tvPuntuacion, tvGeneros, tvNumEpisodios, tvSeleccionSpinner, tvDuracion;
     Button btnAnyadirAnime;
     //-------------------------------------------------------------------------
-    ListView lvEpisodios;
+    RecyclerView lvEpisodios;
     AdaptadorVistaDetalleLV miAdaptadorEp; //El adaptador que usuamos para el lv de episodios
     List<Episodio> listaEpisodios = new ArrayList<Episodio>();
     //-------------------------------------------------------------------------
@@ -60,7 +68,6 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
         btnRetroceso = findViewById(R.id.btnRetroceso);
         btnFavoritos = findViewById(R.id.btnFavoritos);
-        btnReproducir = findViewById(R.id.btnReproducir);
         btnAnyadirAnime = findViewById(R.id.btnAnyadirAnime);
 
         tvTituloAnime = findViewById(R.id.tvTituloAnime);
@@ -69,22 +76,14 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         tvPuntuacion = findViewById(R.id.tvPuntuacion);
         tvGeneros = findViewById(R.id.tvGeneros);
         tvNumEpisodios = findViewById(R.id.tvNumEpisodios);
+        tvSeleccionSpinner = findViewById(R.id.tvSeleccionSpinner);
+        tvDuracion = findViewById(R.id.tvDuracionEp);
 
-        imgMostrarTexto.setOnClickListener(new View.OnClickListener() {
-            boolean flag = false;
-            @Override
-            public void onClick(View v) {
-                if(flag){
-                    tvSinopsisAnime.setMaxLines(4);
-                    flag = false;
-                    imgMostrarTexto.setImageResource(R.drawable.plus);
-                }else{
-                    tvSinopsisAnime.setMaxLines(Integer.MAX_VALUE);
-                    flag = true;
-                    imgMostrarTexto.setImageResource(R.drawable.menos);
-                }
-            }
-        });
+        lvEpisodios = findViewById(R.id.lvEpisodios);
+
+        youTubePlayerView = findViewById(R.id.youtube_player_view);
+        getLifecycle().addObserver(youTubePlayerView);
+
         tvSinopsisAnime.setOnClickListener(new View.OnClickListener() {
             boolean flag = false;
             @Override
@@ -92,17 +91,17 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                 if(flag){
                     tvSinopsisAnime.setMaxLines(4);
                     flag = false;
-                    imgMostrarTexto.setImageResource(R.drawable.plus);
+                    imgMostrarTexto.setImageResource(R.drawable.flecha_abajo);
                 }else{
                     tvSinopsisAnime.setMaxLines(Integer.MAX_VALUE);
                     flag = true;
-                    imgMostrarTexto.setImageResource(R.drawable.menos);
+                    imgMostrarTexto.setImageResource(R.drawable.flecha_arriba);
                 }
             }
         });
 
         /**ADAPTADOR DE LA LISTA DE EPISODIOS**/
-        lvEpisodios = findViewById(R.id.lvEpisodios);
+        lvEpisodios.setLayoutManager(new LinearLayoutManager(this));
         miAdaptadorEp = new AdaptadorVistaDetalleLV(this, listaEpisodios);
         lvEpisodios.setAdapter(miAdaptadorEp);
 
@@ -114,14 +113,12 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         spFiltro.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (filtros[position].contentEquals("Filtrar por:")) {
 
-                }
                 if (filtros[position].contentEquals("Más antiguo")) {
-
+                    tvSeleccionSpinner.setText("Más antiguo");
                 }
                 if (filtros[position].contentEquals("Más reciente")) {
-
+                    tvSeleccionSpinner.setText("Más reciente");
                 }
             }
 
@@ -141,9 +138,6 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         }else{
             tvEmision.setText("Finalizado ●");
         }
-
-        tvSinopsisAnime.setText(anime.getSynopsis());
-        tvPuntuacion.setText(anime.getPuntuacion() + "");
 
         CompletarInfoAnimeIndividual(anime);
         AgregarListaEpisodios(anime);
@@ -220,7 +214,6 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                     miAdaptadorEp.notifyDataSetChanged();
                     anime.setListaEpisodios(listaEpisodios);  // Asignar lista después de llenarla
                     Log.i("INFO EPISODIOS DE ANIME", "Total episodios: " + anime.getListaEpisodios().size());
-                    tvNumEpisodios.setText(listaEpisodios.size()+"");
 
                 } catch (JSONException e) {
                     Log.e("ERROR JSON", "Error al parsear JSON", e);
@@ -251,7 +244,11 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
                             String sinopsis = animeDetalles.optString("synopsis", "Sin sinopsis disponible");
                             double puntuacion = animeDetalles.optDouble("score", 0.0);
-                            String trailer = animeDetalles.getJSONObject("trailer").optString("url", "Trailer no disponible");
+                            String url = animeDetalles.getJSONObject("trailer").optString("url", "Trailer no disponible");
+                            String videoId = extractYouTubeVideoId(url);
+                            String status = animeDetalles.optString("status", "Status no disponible");
+                            int numEpisodios = animeDetalles.optInt("episodes", 0);
+                            String duracionEp = animeDetalles.optString("duration", "Duración no disponible");
                             String imagenPequenia = animeDetalles.optJSONObject("images")
                                     .optJSONObject("jpg")
                                     .optString("image_url", "URL no disponible");
@@ -276,13 +273,35 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                                 listaGeneros.add("Género no disponible");
                             }
 
+                            youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                                @Override
+                                public void onReady(YouTubePlayer youTubePlayer) {
+
+
+                                    if (videoId != null && !videoId.isEmpty()) {
+                                        youTubePlayer.cueVideo(videoId, 0); // Carga el video pero no lo reproduce
+                                    } else {
+                                        Toast.makeText(ActividadVistaDetalleAnime.this, "No se ha proporcionado un video válido", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
+
                             // Actualizar los campos del objeto Anime
                             anime.setSynopsis(sinopsis);
                             anime.setPuntuacion(puntuacion);
-                            anime.setTrailer(trailer);
+                            anime.setTrailer(videoId);
                             anime.setImagenPequenia(imagenPequenia);
                             anime.setImagenMediana(imagenMediana);
                             anime.setGeneros(listaGeneros);
+                            anime.setNroEpisodios(numEpisodios);
+                            anime.setDuracionEp(duracionEp);
+
+                            if(status.contentEquals("Finished Airing")){
+                                anime.setEnEmision(false);
+                            }else{
+                                anime.setEnEmision(true);
+                            }
 
                             Log.i("INFO INICIO", "### " + anime.getPuntuacion() + " ### " + anime.getTitulo());
 
@@ -290,30 +309,28 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                             tvSinopsisAnime.setText(anime.getSynopsis());
                             tvPuntuacion.setText(String.valueOf(anime.getPuntuacion()));
 
+                            if(anime.isEnEmision()){
+                                tvEmision.setText("En emisión ●");
+                                tvEmision.setTextColor(R.color.rojo);
+                            }else{
+                                tvEmision.setText("Finalizado");
+                                tvEmision.setTextColor(R.color.black);
+                            }
+
+                            if(anime.getNroEpisodios() == 1){
+                                tvNumEpisodios.setText(anime.getNroEpisodios() + " ep");
+                            }else{
+                                tvNumEpisodios.setText(anime.getNroEpisodios() + " eps");
+                            }
+
+                            tvDuracion.setText(anime.getDuracionEp());
 
                             String generosText = "";
                             for (String genero : listaGeneros) {
-                                generosText += genero+" ";
+                                generosText += genero + " · ";
                             }
 
                             tvGeneros.setText(generosText);
-
-                            /**METO ESTO AQUI PARA PODER CARGAR EL TRAILER SIN DIFICULTAD O PROBLEMAS DE LECTURA
-                             * POR EJECUCION ASINCRONA DE LA API USADA.**/
-                            if(anime.getTrailer().equals("Trailer no disponible") || anime.getTrailer().contains("null")){
-                                btnReproducir.setVisibility(View.GONE);
-                            }else {
-                                btnReproducir.setVisibility(View.VISIBLE);
-                                btnReproducir.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-
-                                        Intent intent = new Intent(getApplicationContext(), ReproductorTrailerAnime.class);
-                                        intent.putExtra("Trailer", anime.getTrailer());
-                                        startActivity(intent);
-                                    }
-                                });
-                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -330,6 +347,20 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         );
 
         rqAnimes.add(mrqAnimes);
+    }
+
+    public String extractYouTubeVideoId(String youtubeUrl) {
+        String videoId = null;
+        if (youtubeUrl != null && youtubeUrl.trim().length() > 0) {
+            // Expresión regular para extraer el ID del video
+            String pattern = "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|\\/e\\/|watch\\?v%3D|watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed%2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*";
+            Pattern compiledPattern = Pattern.compile(pattern);
+            Matcher matcher = compiledPattern.matcher(youtubeUrl);
+            if (matcher.find()) {
+                videoId = matcher.group();
+            }
+        }
+        return videoId;
     }
 
 }

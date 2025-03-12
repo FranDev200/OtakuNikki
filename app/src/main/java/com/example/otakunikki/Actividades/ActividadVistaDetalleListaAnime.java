@@ -21,7 +21,6 @@ import java.util.List;
 public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
 
     ListaAnime listaSeleccionada;
-    List<Anime> lista_de_animes_guardados;
     AdaptadorListaAnimeDetalle miAdaptador;
     private EditText etTituloLista;
     private TextView tvNroAnimesLista;
@@ -34,7 +33,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actividad_vista_detalle_lista_anime);
 
-        listaSeleccionada = getIntent().getParcelableExtra("Lista");
+        listaSeleccionada = getIntent().getParcelableExtra("ListaAnimeSeleccionada");
 
         etTituloLista = findViewById(R.id.etTituloListaDetalle);
         tvNroAnimesLista = findViewById(R.id.nroAnimesLista);

@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.otakunikki.Clases.Episodio;
 import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
@@ -15,7 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdaptadorVistaDetalleLV extends BaseAdapter {
+public class AdaptadorVistaDetalleLV extends RecyclerView.Adapter<AdaptadorVistaDetalleLV.ViewHolder> {
 
     private List<Episodio> listaEpisodios;
     private Context context;
@@ -25,46 +28,46 @@ public class AdaptadorVistaDetalleLV extends BaseAdapter {
         this.listaEpisodios = listaEpisodios;
     }
 
+    @NonNull
     @Override
-    public int getCount() {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_vista_detalle_episodios, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Episodio episodio = listaEpisodios.get(position);
+
+        holder.tvNumEp.setText(listaEpisodios.get(position).getIdEpisodio() + "");
+        holder.tvTitCap.setText(listaEpisodios.get(position).getTitulo());
+        holder.tvFecha.setText(listaEpisodios.get(position).getFecha());
+
+        if (listaEpisodios.get(position).isEstaVisto())
+            Picasso.get().load(R.drawable.ojo_visto).into(holder.imgBoton); //Si el boolean que comprueba el capitulo está visto = true --> ponemos como imagen el ojo_visto
+        else
+            Picasso.get().load(R.drawable.ojo_novisto).into(holder.imgBoton); // Justo lo contrario
+
+    }
+
+    @Override
+    public int getItemCount() {
         return listaEpisodios.size();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return listaEpisodios.get(position);
-    }
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvNumEp;
+        TextView tvTitCap;
+        TextView tvFecha;
+        ImageButton imgBoton;
 
-    @Override
-    public long getItemId(int position) {
-        return listaEpisodios.get(position).getIdEpisodio();
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.item_vista_detalle_episodios, parent, false);
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvNumEp = itemView.findViewById(R.id.tvNumEp);
+            tvTitCap = itemView.findViewById(R.id.tvTitCap);
+            tvFecha = itemView.findViewById(R.id.tvFecha);
+            imgBoton = itemView.findViewById(R.id.imgOjo);
         }
-
-        TextView tvNumEp = convertView.findViewById(R.id.tvNumEp);
-        TextView tvTitCap = convertView.findViewById(R.id.tvTitCap);
-        TextView tvFecha = convertView.findViewById(R.id.tvFecha);
-        ImageButton imgBoton = convertView.findViewById(R.id.imgOjo);
-
-        //Recogemos el episodio
-        //Episodio episodio = listaEpisodios.get(position);
-
-        tvNumEp.setText(listaEpisodios.get(position).getIdEpisodio() + "");
-        tvTitCap.setText(listaEpisodios.get(position).getTitulo());
-        tvFecha.setText(listaEpisodios.get(position).getFecha());
-
-        if (listaEpisodios.get(position).isEstaVisto())
-            Picasso.get().load(R.drawable.ojo_visto).into(imgBoton); //Si el boolean que comprueba el capitulo está visto = true --> ponemos como imagen el ojo_visto
-        else
-            Picasso.get().load(R.drawable.ojo_novisto).into(imgBoton); // Justo lo contrario
-
-        return convertView;
     }
 
 }

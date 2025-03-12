@@ -80,7 +80,7 @@ public class ActividadDetalleGenero extends AppCompatActivity {
                         String titulo = animeJson.optString("title", "Sin título");
                         String imagenG = animeJson.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "");
 
-                        Anime anime = new Anime(id, titulo, "", 0d, "",  imagenG, "", "",null, null, false);
+                        Anime anime = new Anime(id, titulo, "", 0d, "",  imagenG, "", "",null, null, false, 0, "");
                         
                         // Evitar duplicados y agregarlo a la lista
                         if (!listaAnimes.contains(anime)) {
