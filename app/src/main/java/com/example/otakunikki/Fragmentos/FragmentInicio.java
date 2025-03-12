@@ -204,28 +204,10 @@ public class FragmentInicio extends Fragment {
                         int id = animeObject.getInt("mal_id");
                         String titulo = animeObject.optString("title","Titulo no disponible");
                         String synopsis = animeObject.optString("synopsis", "Synopsis no disponible");
-                        double score = animeObject.optDouble("score", 0);
-                        String trailer = animeObject.getJSONObject("trailer").optString("url", "Trailer no disponible");
                         String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Foto no disponible");
                         String imagenMediana = animeObject.getJSONObject("images").getJSONObject("jpg").optString("image_url", "Foto no disponible");
-                        String imagenPeqenia =animeObject.getJSONObject("images").getJSONObject("jpg").optString("small_image_url", "Foto no disponible");
-                        String estado = animeObject.optString("status", "");
 
-                        // Obtencion de la lista de géneros
-                        JSONArray datosGeneros = animeObject.optJSONArray("genres");
-                        List<String> listaGeneros = new ArrayList<>(); // Reiniciar la lista en cada iteración
-
-                        if (datosGeneros != null) {
-                            for (int l = 0; l < datosGeneros.length(); l++) {
-                                JSONObject generoObj = datosGeneros.getJSONObject(l);
-                                listaGeneros.add(generoObj.optString("name", "Género no disponible"));
-
-                            }
-                        }
-
-                        // Crear objeto Anime
-                        boolean enEmision = !estado.equals("Finished Airing");
-                        Anime anime = new Anime(id, titulo,synopsis, score,trailer,imagenGrande,imagenMediana,imagenPeqenia,null, listaGeneros, enEmision, 0, "");
+                        Anime anime = new Anime(id, titulo,synopsis, 0,"",imagenGrande,imagenMediana,"",null, null, false, 0, "");
 
                         if (!listaAnimeTemporada.contains(anime)) {
                             listaAnimeTemporada.add(anime);
