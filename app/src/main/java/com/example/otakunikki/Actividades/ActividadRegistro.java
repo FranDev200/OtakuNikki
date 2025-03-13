@@ -55,7 +55,7 @@ public class ActividadRegistro extends AppCompatActivity {
     private EditText etNombreCompleto, etNombreUsuario, etEmail, etPwd, etPwdConfirmacion;
     private CheckBox chkTerminos;
     private String fotoSeleccionada;
-
+    private Uri uriImagen;
     // Declarar un ActivityResultLauncher
     private ActivityResultLauncher<Intent> pickImageLauncher;
 
@@ -72,6 +72,9 @@ public class ActividadRegistro extends AppCompatActivity {
         etPwd = findViewById(R.id.etPwd);
         etPwdConfirmacion = findViewById(R.id.etPwdConfirmacion);
         chkTerminos = findViewById(R.id.chkTerminos);
+
+        imgBtnAgregar = findViewById(R.id.imgBtnAgregar);
+        imgIconoUser = findViewById(R.id.imgIconoUser);
 
         spnRegion = findViewById(R.id.spnRegion);
         btnConfirmar = findViewById(R.id.btnConfirmar);
@@ -107,6 +110,18 @@ public class ActividadRegistro extends AppCompatActivity {
         FirebaseFirestore baseDatos = FirebaseFirestore.getInstance();
         /***************************************/
 
+        /**LOGICA PARA SELECCIONAR LA FOTO**/
+        imgBtnAgregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 1);
+            }
+        });
+
+
+        /***************************************/
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,7 +164,7 @@ public class ActividadRegistro extends AppCompatActivity {
                                     /**ID QUE GENERA FIREBASE**/
                                     String userId = firebaseUser.getUid();
                                     List<Perfil> userProfiles = new ArrayList<>();
-                                    userProfiles.add(new Perfil(nombreUsuario + "_Perfil1", R.drawable.terror));
+                                    userProfiles.add(new Perfil(nombreUsuario + "_Perfil1", "https://i.ytimg.com/vi/ZTA77U48F2E/maxresdefault.jpg"));
 
                                     // Crear el objeto de usuario
                                     Usuario newUser = new Usuario(userId, nombreCompleto, nombreUsuario, email, tvPaisSeleccionado.getText().toString(), userProfiles);
@@ -183,6 +198,22 @@ public class ActividadRegistro extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+            uriImagen = selectedImageUri;
+
+            if (selectedImageUri != null) {
+                imgIconoUser.setImageURI(selectedImageUri);
+
+            }
+        }
+    }
+
 
     public void abrirSeleccion(Usuario user) {
         Intent intent = new Intent(getApplicationContext(), SeleccionPerfil.class);

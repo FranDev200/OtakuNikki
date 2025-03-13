@@ -55,4 +55,5 @@ dependencies {
 
     implementation ("com.firebaseui:firebase-ui-auth:7.2.0") //Autentificacion de usuario
     implementation ("com.google.firebase:firebase-firestore:24.8.1") //Base de datos
+
 }
