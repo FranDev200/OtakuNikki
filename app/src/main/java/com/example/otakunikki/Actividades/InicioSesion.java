@@ -62,10 +62,6 @@ public class InicioSesion extends AppCompatActivity {
     }
 
 
-    private void restaurarSesion() {
-
-    }
-
     private void iniciarSesion() {
         String email = etEmail.getText().toString().trim();
         String pwd = etContrasenya.getText().toString().trim();

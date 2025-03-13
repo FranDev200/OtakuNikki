@@ -77,7 +77,7 @@ public class FragmentInfoUsuario extends Fragment {
                 // Eliminar la preferencia de recordar sesión
                 SharedPreferences.Editor editor = requireContext().getSharedPreferences("PreferenciaSesion", Context.MODE_PRIVATE).edit();
                 editor.putBoolean("rememberMe", false);
-                editor.remove("userId"); // Guardar UID
+                editor.remove("userId"); // Eliminar UID
                 editor.apply();
 
                 // Redirigir al usuario al LoginActivity
