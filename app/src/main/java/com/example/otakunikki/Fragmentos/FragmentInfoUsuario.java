@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class FragmentInfoUsuario extends Fragment {
     private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil;
     private EditText etNombreUsuario, etCorreoUsuario, etContraseniaUsuario;
-    TextView tvRegion;
+    TextView tvRegion, tvNomPerfil;
     private Spinner spRegion;
     private String[] regiones = {"España", "Estados Unidos", "Japón"};
     private ImageButton imgPerfil;
@@ -50,40 +51,20 @@ public class FragmentInfoUsuario extends Fragment {
         spRegion = vista.findViewById(R.id.spRegion);
         imgPerfil = vista.findViewById(R.id.imgPerfil);
         tvRegion = vista.findViewById(R.id.tvRegionSeleccionada);
+        tvNomPerfil = vista.findViewById(R.id.tvNomPerfil);
+
+        // Recuperar el nombre del perfil desde SharedPreferences
+        SharedPreferences preferences = requireContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
+        String nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
+
+        Log.i("DEBUG", "Perfil recibido en FragmentInfoUsuario: " + nombrePerfil);
+        tvNomPerfil.setText(nombrePerfil);
+
 
         btnCambioPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-                if (auth.getCurrentUser() == null) {
-                    return;  // No hacer nada si no hay usuario autenticado
-                }
-
-                String userId = auth.getCurrentUser().getUid();
-
-                // Mostrar un mensaje de carga para indicar que se está procesando la información
-                Toast.makeText(requireContext(), "Cargando perfiles...", Toast.LENGTH_SHORT).show();
-
-                // Obtener la información del usuario desde Firestore
-                db.collection("Usuarios").document(userId).get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                        if (usuario != null) {
-                            Intent intent = new Intent(requireActivity(), SeleccionPerfil.class);
-                            intent.putExtra("Usuario", usuario);
-                            startActivity(intent);
-
-                            // Cerrar el fragmento después de cambiar de actividad
-                            requireActivity().getSupportFragmentManager().beginTransaction().remove(FragmentInfoUsuario.this).commit();
-                        }
-                    } else {
-                        Toast.makeText(requireContext(), "No se encontró el usuario", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(requireContext(), "Error al obtener usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                CambioPerfil();
             }
         });
 
@@ -109,10 +90,7 @@ public class FragmentInfoUsuario extends Fragment {
         btnEliminarPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), SeleccionPerfil.class);
-                startActivity(intent);
-
-                // Aquí puedes implementar la lógica para eliminar el perfil del usuario
+                EliminarPerfil(nombrePerfil);
 
             }
         });
@@ -122,16 +100,16 @@ public class FragmentInfoUsuario extends Fragment {
         spRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(regiones[position].contentEquals("--Seleccion una región--")){
+                if (regiones[position].contentEquals("--Seleccion una región--")) {
                     tvRegion.setText(regiones[position]);
                 }
-                if(regiones[position].contentEquals("España")){
+                if (regiones[position].contentEquals("España")) {
                     tvRegion.setText((regiones[position]));
                 }
-                if(regiones[position].contentEquals("Estados Unidos")){
+                if (regiones[position].contentEquals("Estados Unidos")) {
                     tvRegion.setText((regiones[position]));
                 }
-                if(regiones[position].contentEquals("Japón")){
+                if (regiones[position].contentEquals("Japón")) {
                     tvRegion.setText((regiones[position]));
                 }
             }
@@ -144,4 +122,82 @@ public class FragmentInfoUsuario extends Fragment {
 
         return vista;
     }
+
+    private void EliminarPerfil(String nombrePerfil){
+        /**LOGICA PARA LA ELIMINACION DE UN PERFIL DE USUARIO**/
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (auth.getCurrentUser() == null) {
+            Toast.makeText(requireContext(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = auth.getCurrentUser().getUid();
+
+
+
+        // Obtener la lista de perfiles del usuario en Firestore
+        db.collection("Usuarios").document(userId).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                if (usuario != null) {
+                    // Filtrar la lista para eliminar el perfil seleccionado
+                    usuario.getListaPerfiles().removeIf(perfil -> perfil.getNombrePerfil().equals(nombrePerfil));
+
+                    // Actualizar en Firestore
+                    db.collection("Usuarios").document(userId)
+                            .update("listaPerfiles", usuario.getListaPerfiles())
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(requireContext(), "Perfil eliminado correctamente", Toast.LENGTH_SHORT).show();
+
+                                // Redirigir a SeleccionPerfil
+                                CambioPerfil();
+
+
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(requireContext(), "Error al eliminar perfil: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                }
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(requireContext(), "Error al obtener usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+
+    }
+
+    private void CambioPerfil(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (auth.getCurrentUser() == null) {
+            return;  // No hacer nada si no hay usuario autenticado
+        }
+
+        String userId = auth.getCurrentUser().getUid();
+
+        // Mostrar un mensaje de carga para indicar que se está procesando la información
+        Toast.makeText(requireContext(), "Cargando perfiles...", Toast.LENGTH_SHORT).show();
+
+        // Obtener la información del usuario desde Firestore
+        db.collection("Usuarios").document(userId).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                if (usuario != null) {
+                    Intent intent = new Intent(requireActivity(), SeleccionPerfil.class);
+                    intent.putExtra("Usuario", usuario);
+                    startActivity(intent);
+
+                    // Cerrar el fragmento después de cambiar de actividad
+                    requireActivity().getSupportFragmentManager().beginTransaction().remove(FragmentInfoUsuario.this).commit();
+                }
+            } else {
+                Toast.makeText(requireContext(), "No se encontró el usuario", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(requireContext(), "Error al obtener usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+    }
+
 }
