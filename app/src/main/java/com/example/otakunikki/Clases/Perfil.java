@@ -15,27 +15,27 @@ public class Perfil implements Parcelable {
     private int imagenPerfilR;
     private List<ListaAnime> listasAnimes;
 
-    public Perfil(){
+    public Perfil() {
 
     }
 
-    public Perfil(String nombrePerfil,int imagenPerfilR){
+    public Perfil(String nombrePerfil, int imagenPerfilR) {
         this.nombrePerfil = nombrePerfil;
         this.imagenPerfilR = imagenPerfilR;
     }
 
-    public Perfil(String nombrePerfil, String imagenPerfil ){
+    public Perfil(String nombrePerfil, String imagenPerfil) {
         this.nombrePerfil = nombrePerfil;
         this.imagenPerfil = imagenPerfil;
     }
 
-    public Perfil(String nombrePerfil, String imagenPerfil,  List<ListaAnime> listasAnimes) {
+    public Perfil(String nombrePerfil, String imagenPerfil, List<ListaAnime> listasAnimes) {
         this.nombrePerfil = nombrePerfil;
         this.imagenPerfil = imagenPerfil;
         this.listasAnimes = listasAnimes;
     }
 
-    public Perfil(String nombrePerfil,int imagenPerfilR,  List<ListaAnime> listasAnimes) {
+    public Perfil(String nombrePerfil, int imagenPerfilR, List<ListaAnime> listasAnimes) {
         this.nombrePerfil = nombrePerfil;
         this.imagenPerfilR = imagenPerfilR;
         this.listasAnimes = listasAnimes;
@@ -60,6 +60,27 @@ public class Perfil implements Parcelable {
         }
     };
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Perfil perfil = (Perfil) o;
+        return Objects.equals(nombrePerfil, perfil.nombrePerfil) && Objects.equals(listasAnimes, perfil.listasAnimes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombrePerfil, listasAnimes);
+    }
+
+    public String getNombrePerfil() {
+        return nombrePerfil;
+    }
+
+    public void setNombrePerfil(String nombrePerfil) {
+        this.nombrePerfil = nombrePerfil;
+    }
+
     public String getImagenPerfil() {
         return imagenPerfil;
     }
@@ -74,14 +95,6 @@ public class Perfil implements Parcelable {
 
     public void setImagenPerfilR(int imagenPerfilR) {
         this.imagenPerfilR = imagenPerfilR;
-    }
-
-    public String getNombrePerfil() {
-        return nombrePerfil;
-    }
-
-    public void setNombrePerfil(String nombrePerfil) {
-        this.nombrePerfil = nombrePerfil;
     }
 
     public List<ListaAnime> getListasAnimes() {
