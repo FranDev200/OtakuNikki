@@ -29,10 +29,10 @@
                 android:id="@+id/imgBtnAgregar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_launcher_foreground"
+                android:layout_marginTop="10dp"
                 android:background="@null"
                 android:contentDescription="Botón para añadir"
-                android:layout_marginTop="10dp"/>
+                android:src="@drawable/ic_launcher_foreground" />
         </LinearLayout>
 
         <!--  Form Fields  -->

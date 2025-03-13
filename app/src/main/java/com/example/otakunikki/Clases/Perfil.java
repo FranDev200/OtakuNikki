@@ -1,5 +1,6 @@
 package com.example.otakunikki.Clases;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,17 +13,9 @@ public class Perfil implements Parcelable {
 
     private String nombrePerfil;
     private String imagenPerfil;
-    private int imagenPerfilR;
     private List<ListaAnime> listasAnimes;
 
-    public Perfil() {
-
-    }
-
-    public Perfil(String nombrePerfil, int imagenPerfilR) {
-        this.nombrePerfil = nombrePerfil;
-        this.imagenPerfilR = imagenPerfilR;
-    }
+    public Perfil(){}
 
     public Perfil(String nombrePerfil, String imagenPerfil) {
         this.nombrePerfil = nombrePerfil;
@@ -35,16 +28,9 @@ public class Perfil implements Parcelable {
         this.listasAnimes = listasAnimes;
     }
 
-    public Perfil(String nombrePerfil, int imagenPerfilR, List<ListaAnime> listasAnimes) {
-        this.nombrePerfil = nombrePerfil;
-        this.imagenPerfilR = imagenPerfilR;
-        this.listasAnimes = listasAnimes;
-    }
-
     protected Perfil(Parcel in) {
         nombrePerfil = in.readString();
         imagenPerfil = in.readString();
-        imagenPerfilR = in.readInt();
         listasAnimes = in.createTypedArrayList(ListaAnime.CREATOR);
     }
 
@@ -60,19 +46,6 @@ public class Perfil implements Parcelable {
         }
     };
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Perfil perfil = (Perfil) o;
-        return Objects.equals(nombrePerfil, perfil.nombrePerfil) && Objects.equals(listasAnimes, perfil.listasAnimes);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nombrePerfil, listasAnimes);
-    }
-
     public String getNombrePerfil() {
         return nombrePerfil;
     }
@@ -87,14 +60,6 @@ public class Perfil implements Parcelable {
 
     public void setImagenPerfil(String imagenPerfil) {
         this.imagenPerfil = imagenPerfil;
-    }
-
-    public int getImagenPerfilR() {
-        return imagenPerfilR;
-    }
-
-    public void setImagenPerfilR(int imagenPerfilR) {
-        this.imagenPerfilR = imagenPerfilR;
     }
 
     public List<ListaAnime> getListasAnimes() {
@@ -114,7 +79,6 @@ public class Perfil implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(nombrePerfil);
         dest.writeString(imagenPerfil);
-        dest.writeInt(imagenPerfilR);
         dest.writeTypedList(listasAnimes);
     }
 }
