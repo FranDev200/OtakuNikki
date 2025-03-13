@@ -1,16 +1,69 @@
 package com.example.otakunikki.Actividades;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AnyadirPerfil extends AppCompatActivity {
 
+    private EditText etNombrePerfil;
+    private Button btnConfirmarPerfil;
+    private ImageView imgIconoPerfil;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anyadir_perfil);
+
+        etNombrePerfil = findViewById(R.id.etNombrePerfil);
+        btnConfirmarPerfil = findViewById(R.id.btnConfirmarPerfil);
+        imgIconoPerfil = findViewById(R.id.imgIconoPerfil);
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Obtener usuario actual
+        FirebaseUser usuario = mAuth.getCurrentUser();
+
+        Object resourceId = imgIconoPerfil.getTag();
+        Log.i("RECURSOIMAGEN", resourceId + "");
+
+
+        btnConfirmarPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (usuario != null) {
+                    String userId = usuario.getUid(); // ID del usuario en Firestore
+
+                    // Crear el nuevo perfil
+                    Perfil nuevoPerfil = new Perfil(etNombrePerfil.getText().toString() , R.drawable.accion);
+
+                    // Agregarlo a Firestore
+                    db.collection("Usuarios").document(userId)
+                            .update("listaPerfiles", FieldValue.arrayUnion(nuevoPerfil))
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(getApplicationContext(), "Perfil agregado correctamente", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getApplicationContext(), "Error al agregar perfil: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                } else {
+                    Toast.makeText(getApplicationContext(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

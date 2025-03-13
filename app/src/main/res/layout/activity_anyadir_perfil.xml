@@ -35,7 +35,7 @@
             android:layout_weight="2">
 
             <ImageView
-                android:id="@+id/imagen_fondo"
+                android:id="@+id/imgImagenFondo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -48,6 +48,7 @@
                 android:layout_centerInParent="true"
                 android:scaleType="centerCrop"
                 android:background="?android:selectableItemBackgroundBorderless"
+                android:tag="@drawable/user"
                 android:src="@drawable/user"/>
 
             <ImageButton
@@ -86,7 +87,7 @@
             android:textSize="20dp"/>
 
         <Button
-            android:id="@+id/BtnInicioSesion"
+            android:id="@+id/btnConfirmarPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

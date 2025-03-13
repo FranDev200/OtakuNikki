@@ -44,9 +44,6 @@
             android:exported="false" />
         <activity
             android:name=".Actividades.InicioSesion"
-            android:exported="false" />
-        <activity
-            android:name=".Actividades.ActividadInicial"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

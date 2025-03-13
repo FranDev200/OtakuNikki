@@ -2,6 +2,7 @@ package com.example.otakunikki.Actividades;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.otakunikki.Adaptadores.AdaptadorPerfilesGridView;
 import com.example.otakunikki.Clases.Perfil;
+import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class SeleccionPerfil extends AppCompatActivity {
     private ImageButton btnAnyadir;
     private GridView miGridView;
     private AdaptadorPerfilesGridView miAdaptadorPerfilesGridView;
-    private List<Perfil> miListaPerfiles;
+    private List<Perfil> listaperfiles;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +30,24 @@ public class SeleccionPerfil extends AppCompatActivity {
 
         btnAnyadir = findViewById(R.id.btnAnyadir);
         miGridView = findViewById(R.id.gvListaUsuarios);
-        miListaPerfiles = new ArrayList<Perfil>();
-        miAdaptadorPerfilesGridView = new AdaptadorPerfilesGridView(getApplicationContext(), R.layout.item_perfiles, miListaPerfiles );
-        miGridView.setAdapter(miAdaptadorPerfilesGridView);
 
-        miListaPerfiles.add(new Perfil("Mario", "https://i.blogs.es/0f7b87/solo-leveling/500_333.webp",  null));
+        miGridView.setAdapter(miAdaptadorPerfilesGridView);
+        listaperfiles = new ArrayList<Perfil>();
+
+        /**RECOGEMOS EL INTENT DE LA CLASE REGISTRO**/
+        Usuario usuario = getIntent().getParcelableExtra("Usuario");
+        if (usuario != null && usuario.getListaPerfiles() != null) {
+            for (Perfil aux : usuario.getListaPerfiles()) {
+                Log.i("LISTA PERFILES", aux.getNombrePerfil());
+            }
+        } else {
+            Log.e("SeleccionPerfil", "Usuario o lista de perfiles es null");
+        }
+
+
+        miAdaptadorPerfilesGridView = new AdaptadorPerfilesGridView(getApplicationContext(), R.layout.item_perfiles,usuario.getListaPerfiles() );
+
+        miGridView.setAdapter(miAdaptadorPerfilesGridView);
         miAdaptadorPerfilesGridView.notifyDataSetChanged();
 
         miGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

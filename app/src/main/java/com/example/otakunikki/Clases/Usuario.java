@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import java.util.List;
 import java.util.Objects;
 
-public class Usuario implements Parcelable {
+public class Usuario  implements Parcelable{
 
     private String idUsuario;
     private String nombreCompleto;
@@ -28,12 +28,14 @@ public class Usuario implements Parcelable {
         this.listaPerfiles = listaPerfiles;
     }
 
+
     protected Usuario(Parcel in) {
         idUsuario = in.readString();
         nombreCompleto = in.readString();
         userName = in.readString();
         email = in.readString();
         region = in.readString();
+        listaPerfiles = in.createTypedArrayList(Perfil.CREATOR);
     }
 
     public static final Creator<Usuario> CREATOR = new Creator<Usuario>() {
@@ -108,6 +110,7 @@ public class Usuario implements Parcelable {
         return Objects.hash(getIdUsuario(), getUserName(), getEmail());
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -120,5 +123,6 @@ public class Usuario implements Parcelable {
         dest.writeString(userName);
         dest.writeString(email);
         dest.writeString(region);
+        dest.writeTypedList(listaPerfiles);
     }
 }

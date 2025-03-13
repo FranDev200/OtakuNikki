@@ -18,7 +18,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.otakunikki.Actividades.ActividadInicial;
+import com.example.otakunikki.Actividades.ActividadRegistro;
+import com.example.otakunikki.Actividades.InicioSesion;
 import com.example.otakunikki.R;
 import com.example.otakunikki.Actividades.SeleccionPerfil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,7 +67,7 @@ public class FragmentInfoUsuario extends Fragment {
                 editor.apply();
 
                 // Redirigir al usuario al LoginActivity
-                Intent intent = new Intent(requireActivity(), ActividadInicial.class);
+                Intent intent = new Intent(requireActivity(), ActividadRegistro.class);
                 startActivity(intent);
                 requireActivity().finish();
             }

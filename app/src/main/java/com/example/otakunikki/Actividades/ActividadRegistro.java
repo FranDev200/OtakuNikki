@@ -159,7 +159,7 @@ public class ActividadRegistro extends AppCompatActivity {
                                             .set(newUser)
                                             .addOnSuccessListener(aVoid -> {
                                                 Log.d("Firebase", "Usuario creado correctamente");
-                                                abrirSeleccion(); // Abrir la siguiente actividad después de guardar el usuario
+                                                abrirSeleccion(newUser); // Abrir la siguiente actividad después de guardar el usuario
                                             })
                                             .addOnFailureListener(e -> {
                                                 Log.e("Firebase", "Error guardando al usuario: " + e.getMessage());
@@ -184,8 +184,12 @@ public class ActividadRegistro extends AppCompatActivity {
 
     }
 
-    public void abrirSeleccion() {
+    public void abrirSeleccion(Usuario user) {
         Intent intent = new Intent(getApplicationContext(), SeleccionPerfil.class);
+        intent.putExtra("Usuario", user);
+
+        Log.i("Perfiles", user.getListaPerfiles().size() + " perfiles");
+
         startActivity(intent);
     }
 }
