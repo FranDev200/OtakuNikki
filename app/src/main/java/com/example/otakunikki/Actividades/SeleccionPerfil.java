@@ -1,6 +1,8 @@
 package com.example.otakunikki.Actividades;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.otakunikki.Adaptadores.AdaptadorPerfilesGridView;
 import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.Clases.Usuario;
+import com.example.otakunikki.Fragmentos.FragmentInfoUsuario;
 import com.example.otakunikki.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,6 +51,15 @@ public class SeleccionPerfil extends AppCompatActivity {
         miGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String nombrePerfil = usuario.getListaPerfiles().get(position).getNombrePerfil();
+
+                // Guardar en SharedPreferences
+                SharedPreferences preferences = getApplicationContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("PerfilSeleccionado", nombrePerfil);
+                editor.apply();
+
+                Log.i("DEBUG", "Perfil seleccionado guardado: " + nombrePerfil);
                 AbrirMenuPrincipal();
             }
         });
