@@ -1,10 +1,12 @@
 package com.example.otakunikki.Fragmentos;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -20,7 +22,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.otakunikki.Actividades.ActividadRegistro;
 import com.example.otakunikki.Actividades.InicioSesion;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
@@ -30,8 +31,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FragmentInfoUsuario extends Fragment {
     private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil;
-    private EditText etNombreUsuario, etCorreoUsuario, etContraseniaUsuario;
-    TextView tvRegion, tvNomPerfil;
+    private EditText etNombreUsuario, etContraseniaUsuario;
+    TextView tvRegion, tvNomPerfil, tvCorreoUsuario;
     private Spinner spRegion;
     private String[] regiones = {"España", "Estados Unidos", "Japón"};
     private ImageButton imgPerfil;
@@ -46,7 +47,7 @@ public class FragmentInfoUsuario extends Fragment {
         btnDesconexion = vista.findViewById(R.id.btnDesconexion);
         btnCambioPerfil = vista.findViewById(R.id.btnCambioPerfil);
         etNombreUsuario = vista.findViewById(R.id.etNombreUsuario);
-        etCorreoUsuario = vista.findViewById(R.id.etCorreoUsuario);
+        tvCorreoUsuario = vista.findViewById(R.id.tvCorreoUsuario);
         etContraseniaUsuario = vista.findViewById(R.id.etContraseniaUsuario);
         spRegion = vista.findViewById(R.id.spRegion);
         imgPerfil = vista.findViewById(R.id.imgPerfil);
@@ -72,26 +73,76 @@ public class FragmentInfoUsuario extends Fragment {
         btnDesconexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
 
-                // Eliminar la preferencia de recordar sesión
-                SharedPreferences.Editor editor = requireContext().getSharedPreferences("PreferenciaSesion", Context.MODE_PRIVATE).edit();
-                editor.putBoolean("rememberMe", false);
-                editor.remove("userId"); // Eliminar UID
-                editor.apply();
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
-                // Redirigir al usuario al LoginActivity
-                Intent intent = new Intent(requireActivity(), InicioSesion.class);
-                startActivity(intent);
-                requireActivity().finish();
+                builder.setTitle("¿Estás seguro de desconectarte?\n")
+                        .setIcon(R.drawable.logout);
+
+
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        Toast.makeText(requireContext(), "Has elegido no salir", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(requireContext(), "Has cerrado sesión en: " + nombrePerfil, Toast.LENGTH_LONG).show();
+
+                        FirebaseAuth.getInstance().signOut();
+
+                        // Eliminar la preferencia de recordar sesión
+                        SharedPreferences.Editor editor = requireContext().getSharedPreferences("PreferenciaSesion", Context.MODE_PRIVATE).edit();
+                        editor.putBoolean("rememberMe", false);
+                        editor.remove("userId"); // Eliminar UID
+                        editor.apply();
+
+                        // Redirigir al usuario al LoginActivity
+                        Intent intent = new Intent(requireActivity(), InicioSesion.class);
+                        startActivity(intent);
+                        requireActivity().finish();
+
+                    }
+                });
+
+                builder.create();
+                builder.show();
+
             }
         });
 
         btnEliminarPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EliminarPerfil(nombrePerfil);
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+                builder.setTitle("¿Estás seguro de borrar el perfil " + nombrePerfil + "?\n")
+                        .setIcon(R.drawable.eliminar);
+
+
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        Toast.makeText(requireContext(), "Has elegido no borrar", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(requireContext(), "Perfil: " + nombrePerfil + " eliminado.", Toast.LENGTH_LONG).show();
+                        EliminarPerfil(nombrePerfil);
+                    }
+                });
+
+                builder.create();
+                builder.show();
             }
         });
 

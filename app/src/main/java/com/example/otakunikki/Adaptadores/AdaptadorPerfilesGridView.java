@@ -32,10 +32,11 @@ public class AdaptadorPerfilesGridView extends ArrayAdapter<Perfil> {
         nombrePerfil.setText(getItem(i).getNombrePerfil());
         if(getItem(i).getImagenPerfil() != null){
             Picasso.get().load(getItem(i).getImagenPerfil()).resize(750, 750).into(imgView);
-        }else{
+        }if(getItem(i).getImagenPerfilR() != 0){
             Picasso.get().load(getItem(i).getImagenPerfilR()).resize(750, 750).into(imgView);
+        }else{
+            Picasso.get().load(R.drawable.imgperfil).resize(750, 750).into(imgView);
         }
-
 
         return convertView;
     }

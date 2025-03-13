@@ -1,7 +1,7 @@
 package com.example.otakunikki.Actividades;
 
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,12 +19,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
 
 public class AnyadirPerfil extends AppCompatActivity {
 
+    private final String TAG = "Añadir Perfil";
     private EditText etNombrePerfil;
     private Button btnConfirmarPerfil;
     private ImageView imgIconoPerfil;
+    private String uriImagenPerfil;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,15 @@ public class AnyadirPerfil extends AppCompatActivity {
         // Obtener usuario actual
         FirebaseUser usuario = mAuth.getCurrentUser();
 
+        imgIconoPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 1);
+            }
+        });
+
         Object resourceId = imgIconoPerfil.getTag();
         Log.i("RECURSOIMAGEN", resourceId + "");
 
@@ -50,7 +62,7 @@ public class AnyadirPerfil extends AppCompatActivity {
                 if (usuario != null) {
                     String userId = usuario.getUid();
 
-                    Perfil nuevoPerfil = new Perfil(etNombrePerfil.getText().toString(), R.drawable.accion);
+                    Perfil nuevoPerfil = new Perfil(etNombrePerfil.getText().toString(), uriImagenPerfil);
 
                     db.collection("Usuarios").document(userId)
                             .update("listaPerfiles", FieldValue.arrayUnion(nuevoPerfil))
@@ -85,4 +97,20 @@ public class AnyadirPerfil extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+            uriImagenPerfil = selectedImageUri.toString();
+
+            if (selectedImageUri != null) {
+                imgIconoPerfil.setImageURI(selectedImageUri);
+
+            }
+        }
+    }
+
 }
