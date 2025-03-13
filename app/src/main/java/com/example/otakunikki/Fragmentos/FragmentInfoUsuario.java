@@ -17,12 +17,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.otakunikki.Actividades.ActividadRegistro;
 import com.example.otakunikki.Actividades.InicioSesion;
+import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 import com.example.otakunikki.Actividades.SeleccionPerfil;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FragmentInfoUsuario extends Fragment {
     private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil;
@@ -51,10 +54,39 @@ public class FragmentInfoUsuario extends Fragment {
         btnCambioPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), SeleccionPerfil.class);
-                startActivity(intent);
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                if (auth.getCurrentUser() == null) {
+                    return;  // No hacer nada si no hay usuario autenticado
+                }
+
+                String userId = auth.getCurrentUser().getUid();
+
+                // Mostrar un mensaje de carga para indicar que se está procesando la información
+                Toast.makeText(requireContext(), "Cargando perfiles...", Toast.LENGTH_SHORT).show();
+
+                // Obtener la información del usuario desde Firestore
+                db.collection("Usuarios").document(userId).get().addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                        if (usuario != null) {
+                            Intent intent = new Intent(requireActivity(), SeleccionPerfil.class);
+                            intent.putExtra("Usuario", usuario);
+                            startActivity(intent);
+
+                            // Cerrar el fragmento después de cambiar de actividad
+                            requireActivity().getSupportFragmentManager().beginTransaction().remove(FragmentInfoUsuario.this).commit();
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "No se encontró el usuario", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Error al obtener usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
             }
         });
+
 
         btnDesconexion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,10 +96,11 @@ public class FragmentInfoUsuario extends Fragment {
                 // Eliminar la preferencia de recordar sesión
                 SharedPreferences.Editor editor = requireContext().getSharedPreferences("PreferenciaSesion", Context.MODE_PRIVATE).edit();
                 editor.putBoolean("rememberMe", false);
+                editor.remove("userId"); // Guardar UID
                 editor.apply();
 
                 // Redirigir al usuario al LoginActivity
-                Intent intent = new Intent(requireActivity(), ActividadRegistro.class);
+                Intent intent = new Intent(requireActivity(), InicioSesion.class);
                 startActivity(intent);
                 requireActivity().finish();
             }

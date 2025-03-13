@@ -1,5 +1,6 @@
 package com.example.otakunikki.Actividades;
 
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.otakunikki.Clases.Perfil;
+import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,16 +48,32 @@ public class AnyadirPerfil extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (usuario != null) {
-                    String userId = usuario.getUid(); // ID del usuario en Firestore
+                    String userId = usuario.getUid();
 
-                    // Crear el nuevo perfil
-                    Perfil nuevoPerfil = new Perfil(etNombrePerfil.getText().toString() , R.drawable.accion);
+                    Perfil nuevoPerfil = new Perfil(etNombrePerfil.getText().toString(), R.drawable.accion);
 
-                    // Agregarlo a Firestore
                     db.collection("Usuarios").document(userId)
                             .update("listaPerfiles", FieldValue.arrayUnion(nuevoPerfil))
                             .addOnSuccessListener(aVoid -> {
                                 Toast.makeText(getApplicationContext(), "Perfil agregado correctamente", Toast.LENGTH_SHORT).show();
+
+                                // Obtener datos actualizados del usuario antes de redirigir
+                                db.collection("Usuarios").document(userId)
+                                        .get()
+                                        .addOnSuccessListener(documentSnapshot -> {
+                                            Usuario usuarioActualizado = documentSnapshot.toObject(Usuario.class);
+                                            if (usuarioActualizado != null) {
+                                                Intent intent = new Intent(getApplicationContext(), SeleccionPerfil.class);
+                                                intent.putExtra("Usuario", usuarioActualizado);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Error al cargar usuario", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(getApplicationContext(), "Error obteniendo usuario", Toast.LENGTH_SHORT).show();
+                                        });
                             })
                             .addOnFailureListener(e -> {
                                 Toast.makeText(getApplicationContext(), "Error al agregar perfil: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -65,5 +83,6 @@ public class AnyadirPerfil extends AppCompatActivity {
                 }
             }
         });
+
     }
 }
