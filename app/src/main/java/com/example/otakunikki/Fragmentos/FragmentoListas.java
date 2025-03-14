@@ -125,7 +125,6 @@ public class FragmentoListas extends Fragment {
                                 List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
                                 for (Perfil perfil : listaPerfiles) {
                                     if (perfil.getNombrePerfil().equals(nombrePerfil)) {
-
                                         // Crear una nueva lista de anime (vacía por ahora)
                                         ListaAnime nuevaListaAnime = new ListaAnime(nombreLista);
 
@@ -177,7 +176,9 @@ public class FragmentoListas extends Fragment {
                                     if (perfil.getNombrePerfil().equals(nombrePerfil)) {
                                         lista_de_listasAnimes.clear();
                                         lista_de_listasAnimes.addAll(perfil.getListasAnimes());
-
+                                        getActivity().runOnUiThread(() -> {
+                                            miAdaptador.notifyDataSetChanged();
+                                        });
                                         if (lista_de_listasAnimes.isEmpty()) {
                                             tvNroListas.setText("No tienes listas de animes.");
                                         } else {

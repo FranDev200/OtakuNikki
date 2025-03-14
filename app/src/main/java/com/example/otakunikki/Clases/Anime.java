@@ -25,6 +25,8 @@ public class Anime implements Parcelable {
     private int nroEpisodios;
     private String duracionEp;
 
+    public Anime(){}
+
     public Anime(int id, String titulo, String synopsis, double puntuacion, String trailer, String imagenGrande,
                  String imagenMediana, String imagenPequenia, List<Episodio> listaEpisodios, List<String> generos,
                  boolean enEmision, int nroEpisodios, String duracionEp) {
@@ -45,34 +47,34 @@ public class Anime implements Parcelable {
     }
 
 
-
-    public String getTrailer() {
-        return trailer;
+    protected Anime(Parcel in) {
+        id = in.readInt();
+        titulo = in.readString();
+        synopsis = in.readString();
+        puntuacion = in.readDouble();
+        trailer = in.readString();
+        imagenGrande = in.readString();
+        imagenMediana = in.readString();
+        imagenPequenia = in.readString();
+        listaEpisodios = in.createTypedArrayList(Episodio.CREATOR);
+        generos = in.createStringArrayList();
+        enEmision = in.readByte() != 0;
+        favorito = in.readByte() != 0;
+        nroEpisodios = in.readInt();
+        duracionEp = in.readString();
     }
 
-    public void setTrailer(String trailer) {
-        this.trailer = trailer;
-    }
+    public static final Creator<Anime> CREATOR = new Creator<Anime>() {
+        @Override
+        public Anime createFromParcel(Parcel in) {
+            return new Anime(in);
+        }
 
-    public boolean isFavorito() {
-        return favorito;
-    }
-
-    public List<String> getGeneros() {
-        return generos;
-    }
-
-    public void setGeneros(List<String> generos) {
-        this.generos = generos;
-    }
-
-    public boolean isEnEmision() {
-        return enEmision;
-    }
-
-    public void setEnEmision(boolean enEmision) {
-        this.enEmision = enEmision;
-    }
+        @Override
+        public Anime[] newArray(int size) {
+            return new Anime[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -106,48 +108,97 @@ public class Anime implements Parcelable {
         this.puntuacion = puntuacion;
     }
 
+    public String getTrailer() {
+        return trailer;
+    }
+
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
+    }
+
+    public String getImagenGrande() {
+        return imagenGrande;
+    }
+
+    public void setImagenGrande(String imagenGrande) {
+        this.imagenGrande = imagenGrande;
+    }
+
+    public String getImagenMediana() {
+        return imagenMediana;
+    }
+
+    public void setImagenMediana(String imagenMediana) {
+        this.imagenMediana = imagenMediana;
+    }
+
+    public String getImagenPequenia() {
+        return imagenPequenia;
+    }
+
+    public void setImagenPequenia(String imagenPequenia) {
+        this.imagenPequenia = imagenPequenia;
+    }
+
     public List<Episodio> getListaEpisodios() {
         return listaEpisodios;
     }
 
-    public void setListaEpisodios(List<Episodio> listaEpisodios) { this.listaEpisodios = listaEpisodios; }
+    public void setListaEpisodios(List<Episodio> listaEpisodios) {
+        this.listaEpisodios = listaEpisodios;
+    }
 
-    public int getNroEpisodios(){
+    public List<String> getGeneros() {
+        return generos;
+    }
+
+    public void setGeneros(List<String> generos) {
+        this.generos = generos;
+    }
+
+    public boolean isEnEmision() {
+        return enEmision;
+    }
+
+    public void setEnEmision(boolean enEmision) {
+        this.enEmision = enEmision;
+    }
+
+    public boolean isFavorito() {
+        return favorito;
+    }
+
+    public void setFavorito(boolean favorito) {
+        this.favorito = favorito;
+    }
+
+    public int getNroEpisodios() {
         return nroEpisodios;
     }
-    public String getImagenGrande() { return imagenGrande; }
 
-    public void setImagenGrande(String imagenGrande) { this.imagenGrande = imagenGrande; }
+    public void setNroEpisodios(int nroEpisodios) {
+        this.nroEpisodios = nroEpisodios;
+    }
 
-    public String getImagenMediana() { return imagenMediana; }
+    public String getDuracionEp() {
+        return duracionEp;
+    }
 
-    public void setImagenMediana(String imagenMediana) { this.imagenMediana = imagenMediana; }
-
-    public String getImagenPequenia() { return imagenPequenia; }
-
-    public void setImagenPequenia(String imagenPequenia) { this.imagenPequenia = imagenPequenia; }
-
-    public boolean getFavorito() {return favorito;}
-
-    public void setFavorito(boolean favorito) {this.favorito = favorito;}
-
-    public void setNroEpisodios(int nroEpisodios) { this.nroEpisodios = nroEpisodios; }
-
-    public String getDuracionEp() { return duracionEp;  }
-
-    public void setDuracionEp(String duracionEp) { this.duracionEp = duracionEp; }
+    public void setDuracionEp(String duracionEp) {
+        this.duracionEp = duracionEp;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Anime)) return false;
         Anime anime = (Anime) o;
-        return getId() == anime.getId() && Double.compare(getPuntuacion(), anime.getPuntuacion()) == 0 && isEnEmision() == anime.isEnEmision() && isFavorito() == anime.isFavorito() && getNroEpisodios() == anime.getNroEpisodios() && getDuracionEp() == anime.getDuracionEp() && Objects.equals(getTitulo(), anime.getTitulo()) && Objects.equals(getSynopsis(), anime.getSynopsis()) && Objects.equals(getTrailer(), anime.getTrailer()) && Objects.equals(getImagenGrande(), anime.getImagenGrande()) && Objects.equals(getImagenMediana(), anime.getImagenMediana()) && Objects.equals(getImagenPequenia(), anime.getImagenPequenia()) && Objects.equals(getListaEpisodios(), anime.getListaEpisodios()) && Objects.equals(getGeneros(), anime.getGeneros());
+        return getId() == anime.getId();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitulo(), getSynopsis(), getPuntuacion(), getTrailer(), getImagenGrande(), getImagenMediana(), getImagenPequenia(), getListaEpisodios(), getGeneros(), isEnEmision(), isFavorito(), getNroEpisodios(), getDuracionEp());
+        return Objects.hashCode(getId());
     }
 
     @Override
@@ -156,7 +207,7 @@ public class Anime implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(titulo);
         dest.writeString(synopsis);
@@ -172,34 +223,4 @@ public class Anime implements Parcelable {
         dest.writeInt(nroEpisodios);
         dest.writeString(duracionEp);
     }
-
-    public static final Parcelable.Creator<Anime> CREATOR = new Parcelable.Creator<Anime>() {
-        @Override
-        public Anime createFromParcel(Parcel in) {
-            return new Anime(in);
-        }
-
-        @Override
-        public Anime[] newArray(int size) {
-            return new Anime[size];
-        }
-    };
-
-    protected Anime(Parcel in) {
-        id = in.readInt();
-        titulo = in.readString();
-        synopsis = in.readString();
-        puntuacion = in.readDouble();
-        trailer = in.readString();
-        imagenGrande = in.readString();
-        imagenMediana = in.readString();
-        imagenPequenia = in.readString();
-        listaEpisodios = in.createTypedArrayList(Episodio.CREATOR);
-        generos = in.createStringArrayList();
-        enEmision = in.readByte() != 0;
-        favorito = in.readByte() != 0;
-        nroEpisodios = in.readInt();
-        duracionEp = in.readString();
-    }
-
 }

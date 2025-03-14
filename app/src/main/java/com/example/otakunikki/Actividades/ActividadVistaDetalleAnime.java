@@ -1,17 +1,22 @@
 package com.example.otakunikki.Actividades;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,10 +28,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.otakunikki.Adaptadores.AdaptadorLVAlertDialog;
 import com.example.otakunikki.Adaptadores.AdaptadorVistaDetalleLV;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Episodio;
+import com.example.otakunikki.Clases.ListaAnime;
+import com.example.otakunikki.Clases.Perfil;
+import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -38,6 +51,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,11 +70,27 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
     AdaptadorVistaDetalleLV miAdaptadorEp; //El adaptador que usuamos para el lv de episodios
     List<Episodio> listaEpisodios = new ArrayList<Episodio>();
     //-------------------------------------------------------------------------
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private AdaptadorLVAlertDialog miAdaptadorAlertDialog;
+    private List<ListaAnime> listaAnimes;
+    Anime anime = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividad_vista_detalle_anime);
+
+        /**********************************************************************************************************/
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        // Obtener usuario actual
+        FirebaseUser usuario = mAuth.getCurrentUser();
+
+        // Recuperar el nombre del perfil desde SharedPreferences
+        SharedPreferences preferences = getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
+        String nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
+        /**********************************************************************************************************/
 
         imgAnime = findViewById(R.id.imgAnime);
         imgMostrarTexto = findViewById(R.id.imgMostrarTexto);
@@ -83,15 +113,17 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         youTubePlayerView = findViewById(R.id.youtube_player_view);
         getLifecycle().addObserver(youTubePlayerView);
 
+
         tvSinopsisAnime.setOnClickListener(new View.OnClickListener() {
             boolean flag = false;
+
             @Override
             public void onClick(View v) {
-                if(flag){
+                if (flag) {
                     tvSinopsisAnime.setMaxLines(4);
                     flag = false;
                     imgMostrarTexto.setImageResource(R.drawable.flecha_abajo);
-                }else{
+                } else {
                     tvSinopsisAnime.setMaxLines(Integer.MAX_VALUE);
                     flag = true;
                     imgMostrarTexto.setImageResource(R.drawable.flecha_arriba);
@@ -128,7 +160,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         });
 
         //RECOGEMOS TODA LA INFORMACION DEL ANIME MANDADO DESDE LOS FRAGMENTOS
-        Anime anime = null;
+
         anime = getIntent().getParcelableExtra("Anime");
         tvTituloAnime.setText(anime.getTitulo());
         Picasso.get().load(anime.getImagenGrande()).into(imgAnime);
@@ -145,10 +177,42 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
             }
         });
 
+
+        btnAnyadirAnime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ActividadVistaDetalleAnime.this);
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.alert_personalizado_listas, null);
+                builder.setView(dialogView);
+
+
+                ListView listView = dialogView.findViewById(R.id.lvListasAnimesDialog);
+
+                listaAnimes = new ArrayList<>();
+                miAdaptadorAlertDialog = new AdaptadorLVAlertDialog(getApplicationContext(), listaAnimes);
+                listView.setAdapter(miAdaptadorAlertDialog);
+
+                RecuperarListas(usuario, nombrePerfil);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                // Manejar clics en los elementos del ListView
+                listView.setOnItemClickListener((parent, view, position, id) -> {
+                    AgregarAnimeLista(usuario, nombrePerfil, position, anime);
+                    dialog.dismiss(); // Cerrar el diálogo al seleccionar un ítem
+                });
+
+            }
+        });
+
+
     }
 
-
-    /**PENDIENTE DE SI LLEGAREMOS A USAR LA SINOPSIS DEL EPISODIO**/
+    /**
+     * PENDIENTE DE SI LLEGAREMOS A USAR LA SINOPSIS DEL EPISODIO
+     **/
     private void AgregarSinopsisEpisodios(List<Episodio> episodios, int idAnime) {
         RequestQueue rqSynopsis = Volley.newRequestQueue(getApplicationContext());
         for (Episodio aux : episodios) {
@@ -292,9 +356,9 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                             anime.setNroEpisodios(numEpisodios);
                             anime.setDuracionEp(duracionEp);
 
-                            if(status.contentEquals("Finished Airing")){
+                            if (status.contentEquals("Finished Airing")) {
                                 anime.setEnEmision(false);
-                            }else{
+                            } else {
                                 anime.setEnEmision(true);
                             }
 
@@ -312,9 +376,9 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                                 tvEmision.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.moradoDifuminadoIcono)); // Usa ContextCompat
                             }
 
-                            if(anime.getNroEpisodios() == 1){
+                            if (anime.getNroEpisodios() == 1) {
                                 tvNumEpisodios.setText(anime.getNroEpisodios() + " ep");
-                            }else{
+                            } else {
                                 tvNumEpisodios.setText(anime.getNroEpisodios() + " eps");
                             }
 
@@ -358,4 +422,114 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         return videoId;
     }
 
+    /**
+     * RECUPERAMOS LAS LISTAS QUE POSEE ESE PERFIL
+     **/
+    public void RecuperarListas(FirebaseUser usuario, String nombrePerfil) {
+        if (usuario != null) {
+            String userId = usuario.getUid();
+
+            db.collection("Usuarios").document(userId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
+                            if (usuarioActual != null) {
+                                List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
+                                for (Perfil perfil : listaPerfiles) {
+                                    if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+                                        listaAnimes.clear();
+                                        listaAnimes.addAll(perfil.getListasAnimes());
+
+                                        miAdaptadorAlertDialog.notifyDataSetChanged();
+                                        return;
+                                    }
+                                }
+                                Toast.makeText(getApplicationContext(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error: No se encontró el usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getApplicationContext(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(getApplicationContext(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void AgregarAnimeLista(FirebaseUser usuario, String nombrePerfil, int position, Anime anime) {
+        if (usuario == null) {
+            Toast.makeText(getApplicationContext(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = usuario.getUid();
+
+        db.collection("Usuarios").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (!documentSnapshot.exists()) {
+                        Toast.makeText(getApplicationContext(), "Error: No se encontró el usuario", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
+                    if (usuarioActual == null || usuarioActual.getListaPerfiles() == null) {
+                        Toast.makeText(getApplicationContext(), "Error al obtener usuario", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
+                    Perfil perfilSeleccionado = null;
+
+                    // 🔍 Buscar el perfil correcto
+                    for (Perfil perfil : listaPerfiles) {
+                        if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+                            perfilSeleccionado = perfil;
+                            break;
+                        }
+                    }
+
+                    if (perfilSeleccionado == null) {
+                        Toast.makeText(getApplicationContext(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // 🔍 Verificar que la lista de animes existe
+                    if (perfilSeleccionado.getListasAnimes() == null || position < 0 || position >= perfilSeleccionado.getListasAnimes().size()) {
+                        Toast.makeText(getApplicationContext(), "Índice inválido", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // ⚡ Llamar a la función que actualiza Firestore
+                    actualizarFirestore(userId, listaPerfiles, perfilSeleccionado, position, anime);
+
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getApplicationContext(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void actualizarFirestore(String userId, List<Perfil> listaPerfiles, Perfil perfilSeleccionado, int position, Anime anime) {
+        // ⚡ Modificar la lista en memoria antes de subirla a Firestore
+        ListaAnime listaAnime = perfilSeleccionado.getListasAnimes().get(position);
+        if (listaAnime.getListaAnimes() == null) {
+            listaAnime.setListaAnimes(new ArrayList<>());
+        }
+
+        listaAnime.getListaAnimes().add(anime); // Agregamos el anime a la lista
+
+        //Subir los cambios a Firestore de forma segura
+        db.collection("Usuarios").document(userId)
+                .update("listaPerfiles", listaPerfiles)  // Asegurar que la estructura se mantenga
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getApplicationContext(), "Anime agregado exitosamente", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getApplicationContext(), "Error al actualizar Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+
 }
+

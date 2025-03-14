@@ -1,12 +1,10 @@
 package com.example.otakunikki.Adaptadores;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +14,6 @@ import com.example.otakunikki.Clases.Episodio;
 import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdaptadorListaAnimeDetalle extends BaseAdapter {

@@ -15,6 +15,8 @@ public class Episodio implements Parcelable {
     private String fecha;
     private boolean estaVisto;
 
+    public Episodio(){}
+
     public Episodio(int idEpisodio, String titulo, String sinopsis, String fecha, boolean estaVisto) {
         setIdEpisodio(idEpisodio);
         setTitulo(titulo);
