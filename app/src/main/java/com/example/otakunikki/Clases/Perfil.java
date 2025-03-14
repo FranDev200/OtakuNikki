@@ -16,7 +16,8 @@ public class Perfil implements Parcelable {
     private String imagenPerfil;
     private List<ListaAnime> listasAnimes;
 
-    public Perfil(){}
+    public Perfil(){
+    }
 
     public Perfil(String nombrePerfil, String imagenPerfil) {
         this.nombrePerfil = nombrePerfil;

@@ -21,10 +21,6 @@ public class Genero implements Parcelable {
 
     /*Constructor vacío*/
     public Genero() {
-        this.idGenero = 0;
-        this.nombreGenero = "";
-        this.numAnimes = 0;
-        this.imgGenero = 0;
     }
 
     protected Genero(Parcel in) {

@@ -17,7 +17,6 @@ public class ListaAnime implements Parcelable {
     private String fechaModificacion;
 
     public ListaAnime(){
-
     }
 
     public ListaAnime(String nombreLista) {
@@ -66,25 +65,20 @@ public class ListaAnime implements Parcelable {
         this.listaAnimes = listaAnimes;
     }
 
-    public int getNroAnimes() { return getListaAnimes().size(); }
-
-    public void setNroAnimes(int nroAnimes) { this.nroAnimes = nroAnimes; }
-
-    public String getFechaModificacion() { return fechaModificacion;}
-
-    public void setFechaModificacion(String fechaModificacion) { this.fechaModificacion = fechaModificacion; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ListaAnime)) return false;
-        ListaAnime that = (ListaAnime) o;
-        return Objects.equals(getNombreLista(), that.getNombreLista()) && Objects.equals(getListaAnimes(), that.getListaAnimes());
+    public int getNroAnimes() {
+        return nroAnimes;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getNombreLista(), getListaAnimes());
+    public void setNroAnimes(int nroAnimes) {
+        this.nroAnimes = nroAnimes;
+    }
+
+    public String getFechaModificacion() {
+        return fechaModificacion;
+    }
+
+    public void setFechaModificacion(String fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
     }
 
     @Override

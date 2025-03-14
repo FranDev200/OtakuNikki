@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +18,9 @@ public class Usuario  implements Parcelable{
     private String region;
     private List<Perfil> listaPerfiles;
 
-    public Usuario(){}
+    public Usuario(){
+
+    }
 
     public Usuario(String idUsuario, String nombreCompleto, String userName, String email, String region, List<Perfil> listaPerfiles) {
         this.idUsuario = idUsuario;
