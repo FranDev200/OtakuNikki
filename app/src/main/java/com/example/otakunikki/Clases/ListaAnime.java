@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,6 +15,15 @@ public class ListaAnime implements Parcelable {
     private List<Anime> listaAnimes;
     private int nroAnimes;
     private String fechaModificacion;
+
+    public ListaAnime(){
+
+    }
+
+    public ListaAnime(String nombreLista) {
+        this.nombreLista = nombreLista;
+        this.listaAnimes = new ArrayList<>();
+    }
 
     public ListaAnime(String nombreLista, List<Anime> listaAnimes) {
         setNombreLista(nombreLista);
