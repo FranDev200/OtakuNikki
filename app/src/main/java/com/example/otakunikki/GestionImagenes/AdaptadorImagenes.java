@@ -1,4 +1,4 @@
-package com.example.otakunikki.Adaptadores;
+package com.example.otakunikki.GestionImagenes;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -37,7 +37,7 @@ public class AdaptadorImagenes extends RecyclerView.Adapter<AdaptadorImagenes.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int imagenResId = listaImagenes.get(position);
-                
+
         holder.imageView.setOnClickListener(v -> listener.onItemClick(imagenResId));
         Picasso.get().load(imagenResId).into(holder.imageView);
     }

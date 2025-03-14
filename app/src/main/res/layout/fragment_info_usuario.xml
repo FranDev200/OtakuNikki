@@ -26,8 +26,17 @@
                 android:layout_height="120dp"
                 app:cardCornerRadius="40dp"
                 app:cardElevation="4dp"
-                android:layout_gravity="center"
-                >
+                android:layout_gravity="center">
+
+                <!--Lo utilizo para el fondo de la imagen porque  si no no se puede-->
+                <ImageView
+                    android:id="@+id/imgFondoPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@color/moradoClaroIcono"
+                    />
+
                 <ImageButton
                     android:layout_gravity="center"
                     android:id="@+id/imgPerfil"
@@ -36,8 +45,9 @@
                     android:background="?android:selectableItemBackgroundBorderless"
                     android:contentDescription="Imagen de perfil"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/imgperfil" />
+                    android:src="@drawable/imgperfil"/>
             </androidx.cardview.widget.CardView>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -192,6 +202,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/blancoIcono"
                     android:backgroundTint="@color/moradoClaroIcono"
                     android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
                     android:text="Guardar cambios"
@@ -204,6 +215,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="50px"
                     android:layout_weight="1"
+                    android:textColor="@color/blancoIcono"
                     android:backgroundTint="@color/moradoClaroIcono"
                     android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
                     android:text="Desconectarse"
@@ -216,6 +228,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textColor="@color/blancoIcono"
             android:backgroundTint="@color/moradoClaroIcono"
             android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
             android:text="Eliminar Perfil"
