@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,6 +21,7 @@ public class Perfil implements Parcelable {
     public Perfil(String nombrePerfil, String imagenPerfil) {
         this.nombrePerfil = nombrePerfil;
         this.imagenPerfil = imagenPerfil;
+        this.listasAnimes = new ArrayList<>();
     }
 
     public Perfil(String nombrePerfil, String imagenPerfil, List<ListaAnime> listasAnimes) {

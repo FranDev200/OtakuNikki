@@ -1,6 +1,10 @@
 package com.example.otakunikki.Fragmentos;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,15 +14,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.otakunikki.Actividades.ActividadVistaDetalleListaAnime;
+import com.example.otakunikki.Actividades.SeleccionPerfil;
 import com.example.otakunikki.Adaptadores.AdaptadorListas;
 import com.example.otakunikki.Clases.Anime;
-import com.example.otakunikki.Clases.Episodio;
 import com.example.otakunikki.Clases.ListaAnime;
+import com.example.otakunikki.Clases.Perfil;
+import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,75 +41,164 @@ import java.util.List;
 public class FragmentoListas extends Fragment {
 
     List<ListaAnime> lista_de_listasAnimes;
-    List<Anime> animesLista1;
-    List<Anime> animesLista2;
-    List<Episodio> listaEpisodios;
-    List<String> listaGeneros;
     AdaptadorListas miAdaptador;
     ListaAnime listaSeleccionada;
     private ListView miListView;
     private TextView tvNroListas;
+    private ImageButton imgBtnAgregarLista;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.fragmento_listas, container, false);
 
-        tvNroListas = (TextView) vista.findViewById(R.id.tvNroListas);
-        miListView = (ListView) vista.findViewById(R.id.lvListasAnimes);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        listaEpisodios = new ArrayList<>();
-        listaEpisodios.add(new Episodio(0, "Episodio1", "", "", false));
-        listaEpisodios.add(new Episodio(1, "Episodio2", "", "", false));
-        listaEpisodios.add(new Episodio(2, "Episodio3", "", "", false));
-        listaEpisodios.add(new Episodio(3, "Episodio4", "", "", false));
-        listaEpisodios.add(new Episodio(4, "Episodio5", "", "", false));
+        // Obtener usuario actual
+        FirebaseUser usuario = mAuth.getCurrentUser();
 
-        listaGeneros = new ArrayList<>();
-        listaGeneros.add("Acción");
-        listaGeneros.add("Aventura");
-        listaGeneros.add("Drama");
-        listaGeneros.add("Fantasía");
-        listaGeneros.add("Supernatural");
+        // Recuperar el nombre del perfil desde SharedPreferences
+        SharedPreferences preferences = requireContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
+        String nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
 
-        animesLista1 = new ArrayList<>();
-        animesLista1.add(new Anime(0, "Solo Leveling", "", 0, "","https://cdn.myanimelist.net/images/anime/1448/147351l.jpg", "", "", listaEpisodios, listaGeneros,false, 0, ""));
-        animesLista1.add(new Anime(1, "Sakamoto Days", "", 0, "","https://cdn.myanimelist.net/images/anime/1026/146459l.jpg", "", "", listaEpisodios, listaGeneros,false, 0, ""));
-        animesLista1.add(new Anime(2, "Kusuriya no Hitorigoto 2nd Season", "", 0, "","https://cdn.myanimelist.net/images/anime/1025/147458l.jpg", "", "", listaEpisodios, listaGeneros,false, 0, ""));
-        animesLista1.add(new Anime(3, "Dr. Stone: Science Future", "", 0, "","https://cdn.myanimelist.net/images/anime/1403/146479l.jpg", "", "", listaEpisodios, listaGeneros,false, 0, ""));
-        animesLista1.add(new Anime(4, "Salaryman ga Isekai ni Ittara Shitennou ni Natta Hanashi", "", 0, "","https://cdn.myanimelist.net/images/anime/1668/144352l.jpg", "", "", listaEpisodios, listaGeneros,false, 0, ""));
+        tvNroListas = vista.findViewById(R.id.tvNroListas);
+        miListView = vista.findViewById(R.id.lvListasAnimes);
+        imgBtnAgregarLista = vista.findViewById(R.id.imgBtnAgregarLista);
 
-        animesLista2 = new ArrayList<>();
-        //animesLista2.add(new Anime(5, "Solo Leveling", "", 0, "","https://cdn.myanimelist.net/images/anime/1448/147351l.jpg", "", "", listaEpisodios, listaGeneros,false));
-        //animesLista2.add(new Anime(6, "Sakamoto Days", "", 0, "","https://cdn.myanimelist.net/images/anime/1026/146459l.jpg", "", "", listaEpisodios, listaGeneros,false));
-
-        // Agregar la lista de animes a la lista principal
-        lista_de_listasAnimes = new ArrayList<ListaAnime>();
-        lista_de_listasAnimes.add(new ListaAnime("Mi lista 1", animesLista1));
-        lista_de_listasAnimes.add(new ListaAnime("Mi lista 2", animesLista2));
-
+        lista_de_listasAnimes = new ArrayList<>();
         miAdaptador = new AdaptadorListas(getActivity().getApplicationContext(), lista_de_listasAnimes);
         miListView.setAdapter(miAdaptador);
-        miAdaptador.notifyDataSetChanged();
 
-        tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
+        CargarDatos(usuario, db, nombrePerfil);
 
-        miListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        miListView.setOnItemClickListener((parent, view, position, id) -> {
+            listaSeleccionada = lista_de_listasAnimes.get(position);
+            Intent intent = new Intent(getActivity().getApplicationContext(), ActividadVistaDetalleListaAnime.class);
+            intent.putExtra("ListaAnimeSeleccionada", listaSeleccionada);
+            startActivity(intent);
+        });
 
-                listaSeleccionada = lista_de_listasAnimes.get(position);
+        imgBtnAgregarLista.setOnClickListener(v -> {
+            // Inflar el diseño personalizado del diálogo
+            LayoutInflater inflater1 = LayoutInflater.from(getActivity());
+            View view = inflater1.inflate(R.layout.alert_personalizado, null);
 
-                Log.i("LISTA", "Nombre de la lista: " + listaSeleccionada.getNombreLista());
-                Log.i("LISTA", "Numero de animes (con el atributo): " + listaSeleccionada.getNroAnimes());
-                Log.i("LISTA", "Numero de animes (con el .size): " + listaSeleccionada.getListaAnimes().size());
+            EditText etNombreLista = view.findViewById(R.id.etNombreLista);
+            Button btnAceptarLista = view.findViewById(R.id.btnAceptarLista);
+            Button btnCancelarLista = view.findViewById(R.id.btnCancelarLista);
 
-                Intent intent = new Intent(getActivity().getApplicationContext(), ActividadVistaDetalleListaAnime.class);
-                intent.putExtra("ListaAnimeSeleccionada", listaSeleccionada);
-                startActivity(intent);
+            // Crear el AlertDialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setView(view);
 
-            }
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            btnAceptarLista.setOnClickListener(v1 -> {
+                String nombreLista = etNombreLista.getText().toString().trim();
+                if (!nombreLista.isEmpty()) {
+                    AgregarListaAnime(nombreLista, usuario, nombrePerfil);
+                    dialog.dismiss();
+                } else {
+                    etNombreLista.setError("El nombre no puede estar vacío");
+                }
+            });
+
+            btnCancelarLista.setOnClickListener(v1 -> dialog.dismiss());
         });
 
         return vista;
+    }
+
+    private void AgregarListaAnime(String nombreLista, FirebaseUser usuario, String nombrePerfil) {
+        if (usuario != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = usuario.getUid();
+
+            // Buscar el usuario en Firestore
+            db.collection("Usuarios").document(userId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
+                            if (usuarioActual != null) {
+                                // Buscar el perfil que coincida con el nombre seleccionado
+                                List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
+                                for (Perfil perfil : listaPerfiles) {
+                                    if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+
+                                        // Crear una nueva lista de anime (vacía por ahora)
+                                        ListaAnime nuevaListaAnime = new ListaAnime(nombreLista);
+
+                                        // Agregar la nueva lista al perfil
+                                        perfil.getListasAnimes().add(nuevaListaAnime);  // Agrega la nueva lista al perfil
+
+                                        // Actualizar Firestore con la lista modificada
+                                        db.collection("Usuarios").document(userId)
+                                                .update("listaPerfiles", listaPerfiles)
+                                                .addOnSuccessListener(aVoid -> {
+                                                    Toast.makeText(getActivity(), "Lista agregada correctamente", Toast.LENGTH_SHORT).show();
+
+                                                    // Agregar la nueva lista a la interfaz gráfica también
+                                                    lista_de_listasAnimes.add(nuevaListaAnime);
+                                                    miAdaptador.notifyDataSetChanged();
+                                                })
+                                                .addOnFailureListener(e -> {
+                                                    Toast.makeText(getActivity(), "Error al agregar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                });
+
+                                        return; // Salimos del bucle una vez encontrado el perfil correcto
+                                    }
+                                }
+
+                                // Si no encontró el perfil
+                                Toast.makeText(getActivity(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getActivity(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(getActivity(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void CargarDatos(FirebaseUser usuario, FirebaseFirestore db, String nombrePerfil) {
+        if (usuario != null) {
+            String userId = usuario.getUid();
+
+            db.collection("Usuarios").document(userId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
+                            if (usuarioActual != null) {
+                                List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
+                                for (Perfil perfil : listaPerfiles) {
+                                    if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+                                        lista_de_listasAnimes.clear();
+                                        lista_de_listasAnimes.addAll(perfil.getListasAnimes());
+
+                                        if (lista_de_listasAnimes.isEmpty()) {
+                                            tvNroListas.setText("No tienes listas de animes.");
+                                        } else {
+                                            tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
+                                        }
+
+                                        miAdaptador.notifyDataSetChanged();
+                                        return;
+                                    }
+                                }
+                                Toast.makeText(getActivity(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), "Error: No se encontró el usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getActivity(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(getActivity(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+        }
     }
 }
