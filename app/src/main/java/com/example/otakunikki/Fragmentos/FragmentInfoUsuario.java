@@ -26,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.otakunikki.Actividades.InicioSesion;
-import com.example.otakunikki.Adaptadores.AdaptadorImagenes;
+import com.example.otakunikki.Adaptadores.AdaptadorFilasImagenes;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 import com.example.otakunikki.Actividades.SeleccionPerfil;
@@ -34,7 +34,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 import android.view.Gravity;
 
 public class FragmentInfoUsuario extends Fragment {
@@ -44,6 +47,7 @@ public class FragmentInfoUsuario extends Fragment {
     private Spinner spRegion;
     private String[] regiones = {"España", "Estados Unidos", "Japón"};
     private ImageButton imgPerfil;
+    private String  TAG ="InfoUsuario";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,27 +70,34 @@ public class FragmentInfoUsuario extends Fragment {
         SharedPreferences preferences = requireContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
         String nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
 
-        Log.i("DEBUG", "Perfil recibido en FragmentInfoUsuario: " + nombrePerfil);
+        Log.i(TAG, "Perfil recibido en FragmentInfoUsuario: " + nombrePerfil);
         tvNomPerfil.setText(nombrePerfil);
 
         imgPerfil.setOnClickListener(v -> {
-            View popupView = LayoutInflater.from(requireContext()).inflate(R.layout.popup_selector_imagen, null);
+            View popupView = LayoutInflater.from(requireContext()).inflate(R.layout.popup_seleccion_imagenes, null);
             PopupWindow popupWindow = new PopupWindow(popupView, RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT, true);
 
-            RecyclerView recyclerView = popupView.findViewById(R.id.recyclerViewImagenes);
-            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+            RecyclerView rvSeleccionImagenes = popupView.findViewById(R.id.rvSeleccionImagenes);
+            rvSeleccionImagenes.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-            List<Integer> imagenes = Arrays.asList(R.drawable.drama, R.drawable.aventura, R.drawable.fantasia, R.drawable.comedia);
-            AdaptadorImagenes adapter = new AdaptadorImagenes(requireContext(), imagenes, imagenResId -> {
+            // Creo la lista de imágenes para los diferentes animes
+            Map<String, List<Integer>> secciones = new LinkedHashMap<>(); //Ordeno por orden de inserccion en el mapa para que sea más fácil de ver
+            secciones.put("One piece", Arrays.asList(R.drawable.luffychibi, R.drawable.zorochibi, R.drawable.namichibi));
+            secciones.put("Jujutsu Kaisen", Arrays.asList(R.drawable.itadorichibi, R.drawable.satoruchibi));
+            secciones.put("Frieren", Arrays.asList(R.drawable.frierenchibi, R.drawable.fernchibi, R.drawable.himmelchibi));
+            secciones.put("Haikyū", Arrays.asList(R.drawable.tobiochibi, R.drawable.shoyochibi));
+
+            AdaptadorFilasImagenes seccionAdapter = new AdaptadorFilasImagenes(requireContext(), secciones, imagenResId -> {
                 imgPerfil.setImageResource(imagenResId);
                 popupWindow.dismiss();
             });
 
-            recyclerView.setAdapter(adapter);
+            rvSeleccionImagenes.setAdapter(seccionAdapter);
 
             popupWindow.setElevation(10f);
             popupWindow.showAtLocation(imgPerfil, Gravity.CENTER, 0, 0);
         });
+
 
         btnCambioPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
