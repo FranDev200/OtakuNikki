@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,16 +20,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.otakunikki.Actividades.InicioSesion;
+import com.example.otakunikki.Adaptadores.AdaptadorImagenes;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 import com.example.otakunikki.Actividades.SeleccionPerfil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Arrays;
+import java.util.List;
+import android.view.Gravity;
 
 public class FragmentInfoUsuario extends Fragment {
     private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil;
@@ -61,6 +69,24 @@ public class FragmentInfoUsuario extends Fragment {
         Log.i("DEBUG", "Perfil recibido en FragmentInfoUsuario: " + nombrePerfil);
         tvNomPerfil.setText(nombrePerfil);
 
+        imgPerfil.setOnClickListener(v -> {
+            View popupView = LayoutInflater.from(requireContext()).inflate(R.layout.popup_selector_imagen, null);
+            PopupWindow popupWindow = new PopupWindow(popupView, RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT, true);
+
+            RecyclerView recyclerView = popupView.findViewById(R.id.recyclerViewImagenes);
+            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+
+            List<Integer> imagenes = Arrays.asList(R.drawable.drama, R.drawable.aventura, R.drawable.fantasia, R.drawable.comedia);
+            AdaptadorImagenes adapter = new AdaptadorImagenes(requireContext(), imagenes, imagenResId -> {
+                imgPerfil.setImageResource(imagenResId);
+                popupWindow.dismiss();
+            });
+
+            recyclerView.setAdapter(adapter);
+
+            popupWindow.setElevation(10f);
+            popupWindow.showAtLocation(imgPerfil, Gravity.CENTER, 0, 0);
+        });
 
         btnCambioPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
