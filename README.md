@@ -41,11 +41,13 @@ Vista detalle lista:
 - Dar funcionalidad al imageButton del + para añadir animes
 - Al clickar en alguno de los animes del la lista, que te lleve a la vista en detalle de ese anime.
 
-Vista de Añadir perfil: 
+Vista de añadir perfil: 
 - Dar la opción de ir para atrás.(Boton cancelar)
 - Cambiar lo de la selección de imagen, por seleccionar los monigotes que habrá seleccionado alma seguramente.
 Para esto último podríamos hacer como en la parte de la info del usuario, quitar la foto de la imagen y tener que clickar en el muñeco donde se guarda la imagen
 
+Vista de crear usuario:
+- Mejorar la interfaz y los datos a pedir. 
 
 General: 
 - Lo del idioma
