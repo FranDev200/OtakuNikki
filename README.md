@@ -51,6 +51,6 @@ General:
 - Lo del idioma
 
 --- COSAS QUE NO HE PODIDO COMPROBAR --- 
-Si se guardan los episodios vistos de los animes
-Si se guarda la edición del nombre del perfil, imagen, etc.
-Si se guardan los animes que tengo como favoritos, tanto en la lista como si sale el corazón relleno.
+- Si se guardan los episodios vistos de los animes
+- Si se guarda la edición del nombre del perfil, imagen, etc.
+- Si se guardan los animes que tengo como favoritos, tanto en la lista como si sale el corazón relleno.
