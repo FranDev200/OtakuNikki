@@ -165,9 +165,34 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         tvTituloAnime.setText(anime.getTitulo());
         Picasso.get().load(anime.getImagenGrande()).into(imgAnime);
 
+        if(anime.isFavorito()){
+            btnFavoritos.setImageResource(R.drawable.heart);
+        }else{
+            btnFavoritos.setImageResource(R.drawable.corazon_vacio);
+        }
 
         CompletarInfoAnimeIndividual(anime);
         AgregarListaEpisodios(anime);
+
+        /**BOTON DE FAVORITO**/
+        btnFavoritos.setOnClickListener(new View.OnClickListener() {
+            boolean flag = false;
+            @Override
+            public void onClick(View v) {
+                if(flag == false){
+                    btnFavoritos.setImageResource(R.drawable.heart);
+                    Toast.makeText(getApplicationContext(), "Añadido a favoritos", Toast.LENGTH_SHORT).show();
+                    flag = true;
+                    anime.setFavorito(false);
+                }else{
+                    btnFavoritos.setImageResource(R.drawable.corazon_vacio);
+                    Toast.makeText(getApplicationContext(), "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
+                    flag = false;
+                    anime.setFavorito(false);
+
+                }
+            }
+        });
 
         /**BOTON DE RETROCESO**/
         btnRetroceso.setOnClickListener(new View.OnClickListener() {

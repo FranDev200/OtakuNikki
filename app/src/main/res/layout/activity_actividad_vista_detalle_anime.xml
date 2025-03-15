@@ -183,7 +183,7 @@
                                 android:layout_gravity="end|bottom"
                                 android:background="@android:color/transparent"
                                 android:scaleType="fitCenter"
-                                android:src="@drawable/heart" />
+                                android:src="@drawable/corazon_vacio" />
                             </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

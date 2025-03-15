@@ -38,105 +38,107 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="40px"
+            >
 
             <androidx.cardview.widget.CardView
-                android:layout_width="25dp"
+                android:layout_width="0dp"
                 android:layout_height="250dp"
-                android:layout_weight="1"
+                android:layout_weight="1.3"
                 app:cardCornerRadius="16dp"
+                android:minWidth="15dp"
                 >
-            <ImageView
+            <ImageButton
                 android:id="@+id/imgFotoPrincipal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"/>
+                android:background="@color/fui_transparent"
+                />
             </androidx.cardview.widget.CardView>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:orientation="vertical">
-                <TextView
-                    android:paddingLeft="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Titulo:"
-                    android:textColor="@color/moradoClaroIcono"
-                    android:textSize="20dp"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:id="@+id/tvTituloInicio"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/blancoIcono"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:id="@+id/tvTituloInicio"
+                    android:textSize="23dp"
+                    android:paddingLeft="5dp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/blancoIcono"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    />
+
+                <TextView
+                    android:layout_marginTop="30px"
                     android:paddingLeft="15dp"
                     android:textSize="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/moradoClaroIcono"
+                    android:textColor="@color/moradoMuyClaroIcono"
                     android:text="Synopsis:"
                     android:textStyle="bold"/>
                 <TextView
                     android:id="@+id/tvSinopsisInicio"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="15dp"
+                    android:textSize="18dp"
+                    android:layout_marginTop="20px"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blancoIcono"
                     android:maxLines="4"
                     android:ellipsize="end"
                     android:clickable="true"/>
-                <ImageButton
+                <ImageView
                     android:id="@+id/imgMostrarTexto"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/plus"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/flecha_abajo"
                     android:scaleType="fitCenter"
-                    android:backgroundTint="@color/moradoDifuminadoIcono"
-                    android:layout_gravity="end"/>
+                    android:layout_gravity="center"/>
             </LinearLayout>
         </LinearLayout>
 
         <TextView
+            android:layout_marginTop="30px"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="2dp"
-            android:text="Animes Recomendados:"
+            android:paddingLeft="10dp"
+            android:text="@string/animes_recomendados"
             android:textColor="@color/blancoIcono"
-            android:textSize="15dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lvRecomendaciones"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:orientation="horizontal"
-            android:padding="0dp" />
+            android:layout_marginTop="20px"
+            android:orientation="horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="2dp"
-            android:text="Ultimos añadidos:"
+            android:layout_marginTop="30px"
+            android:paddingLeft="10dp"
+            android:text="@string/animes_temporada"
             android:textColor="@color/blancoIcono"
-            android:textSize="15dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lvAnimesTemporada"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:orientation="horizontal"
-            android:padding="0dp" />
+            android:layout_marginTop="20px"
+            android:orientation="horizontal"/>
     </LinearLayout>
 </FrameLayout>

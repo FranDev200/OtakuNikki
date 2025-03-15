@@ -41,10 +41,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentInicio extends Fragment {
-    private ImageView imgFotoPrincipal;
-    private ImageButton imgMostrarTexto;
+    private ImageView imgMostrarTexto;
     private EditText etNombreAnimeBusqueda;
-    private ImageButton ibNombreAnimeBusqueda;
+    private ImageButton imgFotoPrincipal, ibNombreAnimeBusqueda;
 
     private RecyclerView lvhAnimeRecomendaciones;
     private AdaptadorLVHorAnimeMenuPrincipal adpatdorAnimeRecomendado;
@@ -84,23 +83,23 @@ public class FragmentInicio extends Fragment {
             }
         });
 
-
         /**METODO PARA EXPANDIR EL TEXT VIEW DE SINOPSIS PARA QUE PODAMOS CONTRAER Y EXPANDIR EL CONTROL**/
-        imgMostrarTexto.setOnClickListener(new View.OnClickListener() {
+        tvSinopsisInicio.setOnClickListener(new View.OnClickListener() {
             boolean flag = false;
             @Override
             public void onClick(View v) {
                 if(flag){
                     tvSinopsisInicio.setMaxLines(4);
                     flag = false;
-                    imgMostrarTexto.setImageResource(R.drawable.plus);
+                    imgMostrarTexto.setImageResource(R.drawable.flecha_abajo);
                 }else{
                     tvSinopsisInicio.setMaxLines(Integer.MAX_VALUE);
                     flag = true;
-                    imgMostrarTexto.setImageResource(R.drawable.menos);
+                    imgMostrarTexto.setImageResource(R.drawable.flecha_arriba);
                 }
             }
         });
+
 
         imgFotoPrincipal = vista.findViewById(R.id.imgFotoPrincipal);
         /**ADAPTADOR Y LISTVIEW PARA RECOMENDACIONES**/
@@ -116,6 +115,21 @@ public class FragmentInicio extends Fragment {
         listaAnimeTemporada = new ArrayList<Anime>();
         adaptadorAnimeTemporada = new AdaptadorLVHorAnimeMenuPrincipal(getActivity(), listaAnimeTemporada);
         lvhAnimesTemporada.setAdapter(adaptadorAnimeTemporada);
+
+        /**METODO PARA ABRIR EL DETALLE DEL ANIME  DE ARRIBA**/
+        imgFotoPrincipal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Anime animeEnviar = null;
+                for (Anime anime : listaAnimeTemporada) {
+                    if (anime.getTitulo().equals(tvTituloInicio.getText().toString())){
+                        animeEnviar = anime;
+                        break;
+                    }
+                }
+                EnvioInformacionVistaDetalle(animeEnviar);
+            }
+        });
 
         /**DESARROLLAR EL METODO PARA RECOGER LOS CAPITULOS**/
         adpatdorAnimeRecomendado.setOnClickListener(new View.OnClickListener() {
@@ -142,8 +156,6 @@ public class FragmentInicio extends Fragment {
 
         CargarAnimesTemporada();
         CargarAnimesRecomendados();
-
-
 
         /**RETRASO LA EJECUCION DEL CODIGO PARA QUE LOS METODOS DE ARRIBA TENGAN TIEMPO DE CARGAR
          * LA INFO DE LA PETICION A LA API YA QUE SE EJECUTA DE FORMA ASINCRONA Y SI SE HACE ALGO CON
@@ -187,7 +199,7 @@ public class FragmentInicio extends Fragment {
                     JSONArray dataArray = jsonResponse.getJSONArray("data");
 
                     if (dataArray.length() == 0) {
-                        //Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
                         return;
                     }
 
