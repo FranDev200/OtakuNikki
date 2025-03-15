@@ -1,7 +1,5 @@
 Pestaña de Inicio: 
 - En animes recomendados filtrar para no ver animes hentai.
-- Editar un poco la interfaz. (Tamaño de letras, alineación...) 
-- Al clickar en la imagen del anime de arriba del todo, que te lleve a la info en detalle de ese anime.
 - En la búsqueda de animes por nombre, no mostrar los hentai.
 - Mejorar la interfaz de los animes que te muestra cuando buscas por nombre. (Tamaños de letras, alineamiento)
 
