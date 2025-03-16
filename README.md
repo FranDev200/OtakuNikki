@@ -10,8 +10,6 @@ Pestaña de Explorar:
 Pestaña de Mis Listas: 
 - Cambiar interfaz. (Fondo y colores)
 - Al añadir una lista, cambiar un poco el alertDialog, del nombre de la lista. (Separacion de botones, colores...)
-- Al añadir una lista, actualizar el numero de listas cuando la creo.
-- Dar la opción de eliminar listas. (Click largo por ejemplo)
 - Cambiar la fecha de ultima edición de la lista. (Si se complica lo quitamos y podemos añadir otra cosa)
 
 Pestaña de la info del Usuario: 
