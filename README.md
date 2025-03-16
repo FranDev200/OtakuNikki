@@ -22,8 +22,6 @@ Vista detalle anime:
 - Marcar episodios vistos.
 - Al añadir un anime a una lista, en caso de no tener listas indicarlo.
 - Controlar del imageButton de favorito o no.(Cuando de a algún anime como favorito, se creará una lista automáticamente para estos animes)
-- AlertDialog de las listas disponibles, al dar en añadir a lista, mejorarlo. (Sobre todo la interfaz o las funcionalidades)
-- Controlar que no se puedan añadir un anime dos veces a una misma lista.
 - Si en el anime pone 0ep, mejor poner una ?. (Hay casos que hay episodios, pero en el json del anime el num de episodios pone null, por ejemplo en One Piece)
 
 Vista detalle lista: 
