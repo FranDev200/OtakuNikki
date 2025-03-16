@@ -29,7 +29,6 @@ Vista detalle anime:
 - Si en el anime pone 0ep, mejor poner una ?. (Hay casos que hay episodios, pero en el json del anime el num de episodios pone null, por ejemplo en One Piece)
 
 Vista detalle lista: 
-- Poner el numero de animes de la lista.
 - Editar la interfaz. (Fondo y colores)
 - Cambiar el diseño de los ítems de los animes de la lista
 - Dar la opción de eliminar los animes.
