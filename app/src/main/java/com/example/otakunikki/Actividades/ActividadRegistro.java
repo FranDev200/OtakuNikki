@@ -60,8 +60,7 @@ public class ActividadRegistro extends AppCompatActivity {
     private Spinner spnRegion;
     private TextView tvPaisSeleccionado;
     private Button btnConfirmar;
-    private ImageView imgIconoUser;
-    private ImageButton imgBtnAgregar;
+    private ImageButton imgIconoUser;
     private EditText etNombreCompleto, etNombreUsuario, etEmail, etPwd, etPwdConfirmacion;
     private CheckBox chkTerminos;
     private String fotoSeleccionada;
@@ -75,7 +74,7 @@ public class ActividadRegistro extends AppCompatActivity {
         setContentView(R.layout.actividad_registro);
         /**ATRIBUTOS PARA EL REGISTRO DE USUARIO**/
         imgIconoUser = findViewById(R.id.imgIconoUser);
-        imgBtnAgregar = findViewById(R.id.imgBtnAgregar);
+
         etNombreCompleto = findViewById(R.id.etNombreCompleto);
         etNombreUsuario = findViewById(R.id.etNombreUsuario);
         etEmail = findViewById(R.id.etEmail);
@@ -83,7 +82,7 @@ public class ActividadRegistro extends AppCompatActivity {
         etPwdConfirmacion = findViewById(R.id.etPwdConfirmacion);
         chkTerminos = findViewById(R.id.chkTerminos);
 
-        imgBtnAgregar = findViewById(R.id.imgBtnAgregar);
+
         imgIconoUser = findViewById(R.id.imgIconoUser);
 
         spnRegion = findViewById(R.id.spnRegion);
@@ -121,7 +120,7 @@ public class ActividadRegistro extends AppCompatActivity {
         /***************************************/
 
         /**LOGICA PARA SELECCIONAR LA FOTO**/
-        imgBtnAgregar.setOnClickListener(v -> {
+        imgIconoUser.setOnClickListener(v -> {
             View popupView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.popup_seleccion_imagenes, null);
             PopupWindow popupWindow = new PopupWindow(popupView, RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT, true);
 

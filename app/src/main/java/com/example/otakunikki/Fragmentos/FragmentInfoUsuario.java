@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.otakunikki.Actividades.InicioSesion;
 import com.example.otakunikki.Adaptadores.AdaptadorFilasImagenes;
+import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 import com.example.otakunikki.Actividades.SeleccionPerfil;
@@ -41,8 +42,8 @@ import java.util.Map;
 import android.view.Gravity;
 
 public class FragmentInfoUsuario extends Fragment {
-    private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil;
-    private EditText etNombreUsuario, etContraseniaUsuario;
+    private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil, btnGuardarCambios;
+    private EditText etNombreUsuario;
     TextView tvRegion, tvNomPerfil, tvCorreoUsuario;
     private Spinner spRegion;
     private String[] regiones = {"España", "Estados Unidos", "Japón"};
@@ -58,6 +59,7 @@ public class FragmentInfoUsuario extends Fragment {
         btnEliminarPerfil = vista.findViewById(R.id.btnEliminarPerfil);
         btnDesconexion = vista.findViewById(R.id.btnDesconexion);
         btnCambioPerfil = vista.findViewById(R.id.btnCambioPerfil);
+        btnGuardarCambios = vista.findViewById(R.id.btnGuardarCambios);
         etNombreUsuario = vista.findViewById(R.id.etNombreUsuario);
         tvCorreoUsuario = vista.findViewById(R.id.tvCorreoUsuario);
         spRegion = vista.findViewById(R.id.spRegion);
@@ -74,11 +76,11 @@ public class FragmentInfoUsuario extends Fragment {
         // Recuperar el nombre del perfil desde SharedPreferences
         SharedPreferences preferences = requireContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
         String nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
-
+        int imagenPerfil = preferences.getInt("ImagenPerfil", R.drawable.fernchibi);
 
         tvNomPerfil.setText(nombrePerfil);
         etNombreUsuario.setText(nombrePerfil);
-
+        imgPerfil.setImageResource(imagenPerfil);
         imgPerfil.setOnClickListener(v -> {
             View popupView = LayoutInflater.from(requireContext()).inflate(R.layout.popup_seleccion_imagenes, null);
             PopupWindow popupWindow = new PopupWindow(popupView, RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT, true);
@@ -95,6 +97,7 @@ public class FragmentInfoUsuario extends Fragment {
 
             AdaptadorFilasImagenes seccionAdapter = new AdaptadorFilasImagenes(requireContext(), secciones, imagenResId -> {
                 imgPerfil.setImageResource(imagenResId);
+                imgPerfil.setTag(imagenResId);
                 popupWindow.dismiss();
             });
 
@@ -188,6 +191,12 @@ public class FragmentInfoUsuario extends Fragment {
             }
         });
 
+        btnGuardarCambios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActualizarPerfil(nombrePerfil);
+            }
+        });
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, regiones);
         spRegion.setAdapter(adapter);
 
@@ -299,4 +308,48 @@ public class FragmentInfoUsuario extends Fragment {
         });
     }
 
+    private void ActualizarPerfil(String nombrePerfil){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (auth.getCurrentUser() == null) {
+            Toast.makeText(requireContext(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = auth.getCurrentUser().getUid();
+
+
+        // Obtener la lista de perfiles del usuario en Firestore
+        db.collection("Usuarios").document(userId).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                if (usuario != null) {
+                    // Filtrar la lista para actualizar el perfil seleccionado
+                    for(Perfil aux: usuario.getListaPerfiles()){
+                        if(aux.getNombrePerfil().equals(nombrePerfil)){
+                            aux.setNombrePerfil(etNombreUsuario.getText().toString());
+                            int imagen = (int) imgPerfil.getTag();
+                            aux.setImagenPerfil(imagen);
+                        }
+
+                    }
+
+                    // Actualizar en Firestore
+                    db.collection("Usuarios").document(userId)
+                            .update("listaPerfiles", usuario.getListaPerfiles())
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(requireContext(), "Perfil actualizado correctamente", Toast.LENGTH_SHORT).show();
+                                // Redirigir a SeleccionPerfil
+                                CambioPerfil();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(requireContext(), "Error al actualizar perfil: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                }
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(requireContext(), "Error al obtener usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+    }
 }

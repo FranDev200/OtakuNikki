@@ -61,15 +61,16 @@ public class SeleccionPerfil extends AppCompatActivity {
         miGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String nombrePerfil = usuario.getListaPerfiles().get(position).getNombrePerfil();
+                Perfil perfil = usuario.getListaPerfiles().get(position);
 
                 // Guardar en SharedPreferences
                 SharedPreferences preferences = getApplicationContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("PerfilSeleccionado", nombrePerfil);
+                editor.putString("PerfilSeleccionado", perfil.getNombrePerfil());
+                editor.putInt("ImagenPerfil", perfil.getImagenPerfil());
                 editor.apply();
 
-                Log.i("DEBUG", "Perfil seleccionado guardado: " + nombrePerfil);
+
                 AbrirMenuPrincipal();
                 finish();
             }
