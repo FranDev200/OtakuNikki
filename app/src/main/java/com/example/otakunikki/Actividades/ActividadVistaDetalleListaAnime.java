@@ -41,7 +41,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         imgRetroceso = findViewById(R.id.imgRetroceso);
 
         etTituloLista.setText(listaSeleccionada.getNombreLista());
-        tvNroAnimesLista.setText(listaSeleccionada.getNroAnimes() + " animes");
+        tvNroAnimesLista.setText(listaSeleccionada.getListaAnimes().size() + " animes");
 
 
 

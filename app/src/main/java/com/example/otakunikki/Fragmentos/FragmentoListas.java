@@ -46,7 +46,7 @@ public class FragmentoListas extends Fragment {
     private ListView miListView;
     private TextView tvNroListas;
     private ImageButton imgBtnAgregarLista;
-
+    private ListaAnime listaAEliminar = null;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.fragmento_listas, container, false);
@@ -78,6 +78,38 @@ public class FragmentoListas extends Fragment {
             startActivity(intent);
         });
 
+        miListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                listaSeleccionada = lista_de_listasAnimes.get(position);
+                String nombreLista = listaSeleccionada.getNombreLista();
+                builder.setTitle("¿Estás seguro de borrar la lista " +  nombreLista + "?\n")
+                        .setIcon(R.drawable.eliminar);
+
+
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        Toast.makeText(requireContext(), "Has elegido no borrar", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(requireContext(), "Lista: " +  nombreLista + " eliminada.", Toast.LENGTH_SHORT).show();
+                        EliminarLista(nombreLista, usuario, nombrePerfil);
+                    }
+                });
+
+                builder.create();
+                builder.show();
+                return true;
+            }
+        });
+
         imgBtnAgregarLista.setOnClickListener(v -> {
             // Inflar el diseño personalizado del diálogo
             LayoutInflater inflater1 = LayoutInflater.from(getActivity());
@@ -98,17 +130,77 @@ public class FragmentoListas extends Fragment {
                 String nombreLista = etNombreLista.getText().toString().trim();
                 if (!nombreLista.isEmpty()) {
                     AgregarListaAnime(nombreLista, usuario, nombrePerfil);
+
                     dialog.dismiss();
                 } else {
                     etNombreLista.setError("El nombre no puede estar vacío");
                 }
             });
-
             btnCancelarLista.setOnClickListener(v1 -> dialog.dismiss());
         });
 
         return vista;
     }
+
+    private void EliminarLista(String nombreLista, FirebaseUser usuario, String nombrePerfil) {
+        if (usuario != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = usuario.getUid();
+
+            db.collection("Usuarios").document(userId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
+                            if (usuarioActual != null) {
+                                List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
+                                for (Perfil perfil : listaPerfiles) {
+                                    if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+                                        List<ListaAnime> listasAnimes = perfil.getListasAnimes();
+
+
+                                        for (ListaAnime lista : listasAnimes) {
+                                            if (lista.getNombreLista().equals(nombreLista)) {
+                                                listaAEliminar = lista;
+                                                break;
+                                            }
+                                        }
+
+                                        if (listaAEliminar != null) {
+                                            listasAnimes.remove(listaAEliminar); // Eliminar de Firestore
+
+                                            db.collection("Usuarios").document(userId)
+                                                    .update("listaPerfiles", listaPerfiles)
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        Toast.makeText(getActivity(), "Lista eliminada correctamente", Toast.LENGTH_SHORT).show();
+
+                                                        // Eliminar de la lista local
+                                                        lista_de_listasAnimes.remove(listaAEliminar);
+
+                                                        // Recargar datos desde Firebase para asegurar sincronización
+                                                        CargarDatos(usuario, db, nombrePerfil);
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        Toast.makeText(getActivity(), "Error al eliminar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    });
+                                        } else {
+                                            Toast.makeText(getActivity(), "Lista no encontrada", Toast.LENGTH_SHORT).show();
+                                        }
+                                        return;
+                                    }
+                                }
+                                Toast.makeText(getActivity(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getActivity(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(getActivity(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     private void AgregarListaAnime(String nombreLista, FirebaseUser usuario, String nombrePerfil) {
         if (usuario != null) {
@@ -140,6 +232,7 @@ public class FragmentoListas extends Fragment {
                                                     // Agregar la nueva lista a la interfaz gráfica también
                                                     lista_de_listasAnimes.add(nuevaListaAnime);
                                                     miAdaptador.notifyDataSetChanged();
+                                                    tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
                                                 })
                                                 .addOnFailureListener(e -> {
                                                     Toast.makeText(getActivity(), "Error al agregar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show();

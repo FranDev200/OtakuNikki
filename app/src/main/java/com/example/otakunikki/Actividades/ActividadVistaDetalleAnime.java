@@ -235,39 +235,6 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
     }
 
-    /**
-     * PENDIENTE DE SI LLEGAREMOS A USAR LA SINOPSIS DEL EPISODIO
-     **/
-    private void AgregarSinopsisEpisodios(List<Episodio> episodios, int idAnime) {
-        RequestQueue rqSynopsis = Volley.newRequestQueue(getApplicationContext());
-        for (Episodio aux : episodios) {
-            String urlSynopsis = "https://api.jikan.moe/v4/anime/" + idAnime + "/episodes/" + aux.getIdEpisodio();
-
-            StringRequest mrqSynopsis = new StringRequest(Request.Method.GET, urlSynopsis, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject respuesta = new JSONObject(response);
-                        JSONObject synopsisEpisodio = respuesta.getJSONObject("data");
-                        String synopsis = synopsisEpisodio.optString("synopsis", "No dispone de synopsis el episodio");
-                        aux.setSinopsis(synopsis);
-
-                        Log.i("INFO SYNOPSIS", aux.getTitulo() + " -> " + synopsis);
-                    } catch (JSONException e) {
-                        Log.e("ERROR JSON", "Error JSON en la synopsis del episodio", e);
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("ERROR VOLLEY", "Error en la petición de synopsis del episodio", error);
-                }
-            });
-
-            rqSynopsis.add(mrqSynopsis);
-        }
-    }
-
     private void AgregarListaEpisodios(Anime anime) {
         RequestQueue rqEpisodio = Volley.newRequestQueue(getApplicationContext());
         String urlEpisodios = "https://api.jikan.moe/v4/anime/" + anime.getId() + "/episodes";
@@ -541,14 +508,17 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         if (listaAnime.getListaAnimes() == null) {
             listaAnime.setListaAnimes(new ArrayList<>());
         }
-
-        listaAnime.getListaAnimes().add(anime); // Agregamos el anime a la lista
-
+        if (listaAnime.getListaAnimes().contains(anime)){
+            Toast.makeText(getApplicationContext(),"El anime ya esta en la lista", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(getApplicationContext(),"Anime agregado a la lista", Toast.LENGTH_SHORT).show();
+            listaAnime.getListaAnimes().add(anime); // Agregamos el anime a la lista
+        }
         //Subir los cambios a Firestore de forma segura
         db.collection("Usuarios").document(userId)
                 .update("listaPerfiles", listaPerfiles)  // Asegurar que la estructura se mantenga
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(getApplicationContext(), "Anime agregado exitosamente", Toast.LENGTH_SHORT).show();
+
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getApplicationContext(), "Error al actualizar Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
