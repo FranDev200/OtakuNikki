@@ -13,19 +13,18 @@ import java.util.Objects;
 public class Perfil implements Parcelable {
 
     private String nombrePerfil;
-    private String imagenPerfil;
+    private int imagenPerfil;
     private List<ListaAnime> listasAnimes;
 
-    public Perfil(){
-    }
+    public Perfil(){}
 
-    public Perfil(String nombrePerfil, String imagenPerfil) {
+    public Perfil(String nombrePerfil, int imagenPerfil){
         this.nombrePerfil = nombrePerfil;
         this.imagenPerfil = imagenPerfil;
         this.listasAnimes = new ArrayList<>();
     }
 
-    public Perfil(String nombrePerfil, String imagenPerfil, List<ListaAnime> listasAnimes) {
+    public Perfil(String nombrePerfil, int imagenPerfil, List<ListaAnime> listasAnimes) {
         this.nombrePerfil = nombrePerfil;
         this.imagenPerfil = imagenPerfil;
         this.listasAnimes = listasAnimes;
@@ -33,7 +32,7 @@ public class Perfil implements Parcelable {
 
     protected Perfil(Parcel in) {
         nombrePerfil = in.readString();
-        imagenPerfil = in.readString();
+        imagenPerfil = in.readInt();
         listasAnimes = in.createTypedArrayList(ListaAnime.CREATOR);
     }
 
@@ -57,11 +56,11 @@ public class Perfil implements Parcelable {
         this.nombrePerfil = nombrePerfil;
     }
 
-    public String getImagenPerfil() {
+    public int getImagenPerfil() {
         return imagenPerfil;
     }
 
-    public void setImagenPerfil(String imagenPerfil) {
+    public void setImagenPerfil(int imagenPerfil) {
         this.imagenPerfil = imagenPerfil;
     }
 
@@ -81,7 +80,7 @@ public class Perfil implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(nombrePerfil);
-        dest.writeString(imagenPerfil);
+        dest.writeInt(imagenPerfil);
         dest.writeTypedList(listasAnimes);
     }
 }

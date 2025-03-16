@@ -47,7 +47,7 @@ public class FragmentInfoUsuario extends Fragment {
     private Spinner spRegion;
     private String[] regiones = {"España", "Estados Unidos", "Japón"};
     private ImageButton imgPerfil;
-    private String  TAG ="InfoUsuario";
+    private String TAG = "InfoUsuario";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,18 +60,24 @@ public class FragmentInfoUsuario extends Fragment {
         btnCambioPerfil = vista.findViewById(R.id.btnCambioPerfil);
         etNombreUsuario = vista.findViewById(R.id.etNombreUsuario);
         tvCorreoUsuario = vista.findViewById(R.id.tvCorreoUsuario);
-        etContraseniaUsuario = vista.findViewById(R.id.etContraseniaUsuario);
         spRegion = vista.findViewById(R.id.spRegion);
         imgPerfil = vista.findViewById(R.id.imgPerfil);
         tvRegion = vista.findViewById(R.id.tvRegionSeleccionada);
         tvNomPerfil = vista.findViewById(R.id.tvNomPerfil);
 
+        SharedPreferences pref = requireActivity().getSharedPreferences("DatosUsuario", Context.MODE_PRIVATE);
+        String email = pref.getString("email", "Sin email"); // Valor por defecto
+        String region = pref.getString("region", "No disponible");
+        tvCorreoUsuario.setText(email);
+
+
         // Recuperar el nombre del perfil desde SharedPreferences
         SharedPreferences preferences = requireContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
         String nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
 
-        Log.i(TAG, "Perfil recibido en FragmentInfoUsuario: " + nombrePerfil);
+
         tvNomPerfil.setText(nombrePerfil);
+        etNombreUsuario.setText(nombrePerfil);
 
         imgPerfil.setOnClickListener(v -> {
             View popupView = LayoutInflater.from(requireContext()).inflate(R.layout.popup_seleccion_imagenes, null);
@@ -105,7 +111,6 @@ public class FragmentInfoUsuario extends Fragment {
                 CambioPerfil();
             }
         });
-
 
         btnDesconexion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,33 +190,43 @@ public class FragmentInfoUsuario extends Fragment {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, regiones);
         spRegion.setAdapter(adapter);
+
+        // Buscar la posición de la región del usuario en el array de regiones
+        int posicionInicial = 0;
+        for (int i = 0; i < regiones.length; i++) {
+            if (regiones[i].equals(region)) {
+                posicionInicial = i;
+                break;
+            }
+        }
+
+        // Establecer el Spinner en la posición de la región del usuario
+        spRegion.setSelection(posicionInicial);
+
         spRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (regiones[position].contentEquals("--Seleccion una región--")) {
-                    tvRegion.setText(regiones[position]);
-                }
-                if (regiones[position].contentEquals("España")) {
-                    tvRegion.setText((regiones[position]));
-                }
-                if (regiones[position].contentEquals("Estados Unidos")) {
-                    tvRegion.setText((regiones[position]));
-                }
-                if (regiones[position].contentEquals("Japón")) {
-                    tvRegion.setText((regiones[position]));
+                String seleccion = regiones[position]; // Obtiene la selección actual
+
+                if (seleccion.equals("España") || seleccion.equals("Estados Unidos") || seleccion.equals("Japón")) {
+                    tvRegion.setText(seleccion);
+                } else {
+                    // Si la selección no está en la lista, mantener la región del usuario
+                    tvRegion.setText(region);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // Si no se selecciona nada, mantener la región actual
+                tvRegion.setText(region);
             }
         });
 
         return vista;
     }
 
-    private void EliminarPerfil(String nombrePerfil){
+    private void EliminarPerfil(String nombrePerfil) {
         /**LOGICA PARA LA ELIMINACION DE UN PERFIL DE USUARIO**/
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -222,7 +237,6 @@ public class FragmentInfoUsuario extends Fragment {
         }
 
         String userId = auth.getCurrentUser().getUid();
-
 
 
         // Obtener la lista de perfiles del usuario en Firestore
@@ -238,11 +252,8 @@ public class FragmentInfoUsuario extends Fragment {
                             .update("listaPerfiles", usuario.getListaPerfiles())
                             .addOnSuccessListener(aVoid -> {
                                 Toast.makeText(requireContext(), "Perfil eliminado correctamente", Toast.LENGTH_SHORT).show();
-
                                 // Redirigir a SeleccionPerfil
                                 CambioPerfil();
-
-
                             })
                             .addOnFailureListener(e -> {
                                 Toast.makeText(requireContext(), "Error al eliminar perfil: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -255,7 +266,7 @@ public class FragmentInfoUsuario extends Fragment {
 
     }
 
-    private void CambioPerfil(){
+    private void CambioPerfil() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
