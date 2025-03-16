@@ -183,58 +183,78 @@ public class FragmentInicio extends Fragment {
 
     }
 
-
-
     private void CargarAnimesTemporada() {
         rqAnimesTemporada = Volley.newRequestQueue(getActivity().getApplicationContext());
         int numeroAleatorio = (int) (Math.random() * 3) + 1;
 
-        mrqAnimesTemporada = new StringRequest(Request.Method.GET, urlAnimeTemporada+"?page="+numeroAleatorio, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    Log.i("INFO INICIO", response); // Ver la respuesta JSON
+        mrqAnimesTemporada = new StringRequest(Request.Method.GET, urlAnimeTemporada + "?page=" + numeroAleatorio,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Log.i("INFO INICIO", response); // Ver la respuesta JSON
 
-                    JSONObject jsonResponse = new JSONObject(response);
-                    JSONArray dataArray = jsonResponse.getJSONArray("data");
+                            JSONObject jsonResponse = new JSONObject(response);
+                            JSONArray dataArray = jsonResponse.getJSONArray("data");
 
-                    if (dataArray.length() == 0) {
-                        Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
-                        return;
-                    }
+                            if (dataArray.length() == 0) {
+                                Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
+                                return;
+                            }
 
-                    for (int i = 0; i < dataArray.length(); i++) {
-                        if(listaAnimeTemporada.size() == 10){
-                            int nroAleatorio = (int) (Math.random() * 10);
-                            Picasso.get().load(listaAnimeTemporada.get(nroAleatorio).getImagenMediana()).into(imgFotoPrincipal);
-                            tvTituloInicio.setText(listaAnimeTemporada.get(nroAleatorio).getTitulo());
-                            tvSinopsisInicio.setText(listaAnimeTemporada.get(nroAleatorio).getSynopsis());
-                            //break;
+                            for (int i = 0; i < dataArray.length(); i++) {
+                                JSONObject animeObject = dataArray.getJSONObject(i);
+
+                                // Extraer géneros y verificar si es hentai
+                                JSONArray genresArray = animeObject.getJSONArray("genres");
+                                boolean esHentai = false;
+
+                                for (int j = 0; j < genresArray.length(); j++) {
+                                    JSONObject genre = genresArray.getJSONObject(j);
+                                    String genreName = genre.optString("name", "").toLowerCase();
+
+                                    if (genreName.equalsIgnoreCase("hentai")) {
+                                        esHentai = true;
+                                        break;
+                                    }
+                                }
+
+                                // Si es hentai, lo omitimos
+                                if (esHentai) {
+                                    Log.i("Filtro", "Anime omitido por ser Hentai: " + animeObject.optString("title", "Desconocido"));
+                                    continue;
+                                }
+
+                                int id = animeObject.getInt("mal_id");
+                                String titulo = animeObject.optString("title", "Título no disponible");
+                                String synopsis = animeObject.optString("synopsis", "Sinopsis no disponible");
+                                String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Foto no disponible");
+                                String imagenMediana = animeObject.getJSONObject("images").getJSONObject("jpg").optString("image_url", "Foto no disponible");
+
+                                Anime anime = new Anime(id, titulo, synopsis, 0, "", imagenGrande, imagenMediana, "", null, null, false, 0, "");
+
+                                if (!listaAnimeTemporada.contains(anime)) {
+                                    listaAnimeTemporada.add(anime);
+                                }
+                            }
+
+                            // Si ya hay 10 animes en la lista, mostrar uno aleatorio en la UI
+                            if (listaAnimeTemporada.size() >= 10) {
+                                int nroAleatorio = (int) (Math.random() * 10);
+                                Picasso.get().load(listaAnimeTemporada.get(nroAleatorio).getImagenMediana()).into(imgFotoPrincipal);
+                                tvTituloInicio.setText(listaAnimeTemporada.get(nroAleatorio).getTitulo());
+                                tvSinopsisInicio.setText(listaAnimeTemporada.get(nroAleatorio).getSynopsis());
+                            }
+
+                            // Notificar al adaptador después de agregar los datos
+                            adaptadorAnimeTemporada.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("ERROR JSON", "Error procesando el JSON de temporada: " + e.getMessage());
                         }
-
-                        JSONObject animeObject = dataArray.getJSONObject(i);
-                        int id = animeObject.getInt("mal_id");
-                        String titulo = animeObject.optString("title","Titulo no disponible");
-                        String synopsis = animeObject.optString("synopsis", "Synopsis no disponible");
-                        String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Foto no disponible");
-                        String imagenMediana = animeObject.getJSONObject("images").getJSONObject("jpg").optString("image_url", "Foto no disponible");
-
-                        Anime anime = new Anime(id, titulo,synopsis, 0,"",imagenGrande,imagenMediana,"",null, null, false, 0, "");
-
-                        if (!listaAnimeTemporada.contains(anime)) {
-                            listaAnimeTemporada.add(anime);
-                        }
                     }
-
-                    // Notificar al adaptador después de agregar los datos
-                    adaptadorAnimeTemporada.notifyDataSetChanged();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    //Toast.makeText(getActivity().getApplicationContext(), "Error procesando el JSON de temporada", Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("ERROR", "Error al obtener animes de temporada: " + error.getMessage());
@@ -242,70 +262,68 @@ public class FragmentInicio extends Fragment {
         });
 
         rqAnimesTemporada.add(mrqAnimesTemporada);
-
     }
 
     private void CargarAnimesRecomendados() {
         rqAnimesRecomendados = Volley.newRequestQueue(getActivity().getApplicationContext());
-        int numeroAleatorio = (int) (Math.random() * 10) + 1;
-        mrqAnimesRecomendados = new StringRequest(Request.Method.GET, urlRecomendados+"?page="+numeroAleatorio, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    Log.i("INFO INICIO", response.toString());
+        int numeroAleatorio = (int) (Math.random() * 7) + 1; // Página aleatoria
 
-                    JSONObject jsonResponse = new JSONObject(response);
-                    JSONArray dataArray = jsonResponse.getJSONArray("data");
+        mrqAnimesRecomendados = new StringRequest(Request.Method.GET,
+                "https://api.jikan.moe/v4/recommendations/anime?page=" + numeroAleatorio,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Log.i("INFO INICIO", response);
 
-                    if (dataArray.length() == 0) {
-                        //Toast.makeText(getActivity().getApplicationContext(), "No hay datos disponibles", Toast.LENGTH_LONG).show();
-                        return;
-                    }
+                            JSONObject jsonResponse = new JSONObject(response);
+                            JSONArray dataArray = jsonResponse.getJSONArray("data");
 
-                    for (int i = 0; i < dataArray.length(); i++) {
-                        if (listaAnimesRecomendados.size() == 25) {
-                            break;  // Si ya tenemos 10 animes, salimos del ciclo.
-                        }
+                            if (dataArray.length() == 0) {
+                                return;
+                            }
 
-                        JSONObject animeObject = dataArray.getJSONObject(i);
-                        JSONArray entryArray = animeObject.getJSONArray("entry");
+                            for (int i = 0; i < dataArray.length() && listaAnimesRecomendados.size() < 25; i++) {
+                                JSONObject animeObject = dataArray.getJSONObject(i);
+                                JSONArray entryArray = animeObject.getJSONArray("entry");
 
-                        for (int j = 0; j < entryArray.length(); j++) {
-                            JSONObject animeEntry = entryArray.getJSONObject(j);
+                                for (int j = 0; j < entryArray.length() && listaAnimesRecomendados.size() < 25; j++) {
+                                    JSONObject animeEntry = entryArray.getJSONObject(j);
 
-                            int id = animeEntry.getInt("mal_id");
-                            String titulo = animeEntry.getString("title");
-                            String imagenGrande = animeEntry.getJSONObject("images").getJSONObject("jpg").getString("large_image_url");
-                            String estado = animeObject.optString("status", "");
+                                    int id = animeEntry.getInt("mal_id");
+                                    String titulo = animeEntry.getString("title");
+                                    String imagenGrande = animeEntry.getJSONObject("images")
+                                            .getJSONObject("jpg")
+                                            .getString("large_image_url");
 
+                                    // Usar la descripción ("content") como posible filtro
+                                    String contenido = animeObject.optString("content", "").toLowerCase();
 
-                            // Crear objeto Anime
-                            boolean enEmision = !estado.equals("Finished Airing");
-                            Anime anime = new Anime(id, titulo, "", 0, "",imagenGrande, "", "", null, null, enEmision, 0, "");
+                                    // Si la descripción menciona hentai, lo omitimos
+                                    if (contenido.contains("hentai")) {
+                                        Log.i("ANIME OMITIDO", "Omitido por contenido hentai: " + titulo);
+                                        continue; // Saltamos este anime
+                                    }
 
-                            // Verificación de duplicados
-                            if (!listaAnimesRecomendados.contains(anime)) {
-                                listaAnimesRecomendados.add(anime);
-                                if (listaAnimesRecomendados.size() == 25) {
-                                    break; // Si ya tenemos 10 elementos, salimos del bucle
+                                    // Crear el objeto Anime
+                                    Anime anime = new Anime(id, titulo, "", 0, "", imagenGrande, "", "", null, null, false, 0, "");
+
+                                    // Verificación de duplicados
+                                    if (!listaAnimesRecomendados.contains(anime)) {
+                                        listaAnimesRecomendados.add(anime);
+                                    }
                                 }
                             }
-                        }
 
-                        if (listaAnimesRecomendados.size() == 25) {
-                            break; // Salir del primer bucle también
+                            // Notificar cambios al adaptador
+                            adpatdorAnimeRecomendado.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("ERROR JSON", "Error procesando el JSON de recomendaciones: " + e.getMessage());
                         }
                     }
-
-                    // Llamar a notifyDataSetChanged() UNA VEZ después de procesar toda la información
-                    adpatdorAnimeRecomendado.notifyDataSetChanged();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    //Toast.makeText(getActivity().getApplicationContext(), "Error procesando el JSON de recomendaciones", Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("ERROR", "Error al obtener recomendaciones: " + error.getMessage());

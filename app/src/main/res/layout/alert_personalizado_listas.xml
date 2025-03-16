@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/moradoYAzulIcono"
-    app:circularflow_defaultRadius="10dp"
-    android:gravity="center">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/black">
 
-    <ListView
-        android:id="@+id/lvListasAnimesDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+    <!-- Contenedor con bordes redondeados y sombra -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/moradoYAzulIcono">
+
+        <ListView
+            android:id="@+id/lvListasAnimesDialog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp"
+            android:background="@color/moradoYAzulIcono"/>
+
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

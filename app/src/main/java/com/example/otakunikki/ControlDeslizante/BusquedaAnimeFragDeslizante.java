@@ -70,13 +70,13 @@ public class BusquedaAnimeFragDeslizante extends BottomSheetDialogFragment {
 
     private void CargarAnimesBusqueda() {
         rqAnimes = Volley.newRequestQueue(getActivity().getApplicationContext());
-        String url = "https://api.jikan.moe/v4/anime?q="+animeBuscado;
+        String url = "https://api.jikan.moe/v4/anime?q=" + animeBuscado;
 
         mrqAnimes = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    Log.i("INFO INICIO", response.toString());
+                    Log.i("INFO INICIO", response);
 
                     JSONObject jsonResponse = new JSONObject(response);
                     JSONArray dataArray = jsonResponse.getJSONArray("data");
@@ -87,44 +87,61 @@ public class BusquedaAnimeFragDeslizante extends BottomSheetDialogFragment {
                     }
 
                     for (int i = 0; i < dataArray.length(); i++) {
-
                         JSONObject animeObject = dataArray.getJSONObject(i);
 
+                        int id = animeObject.getInt("mal_id");
+                        String titulo = animeObject.getString("title");
+                        String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").getString("large_image_url");
+                        String estado = animeObject.optString("status", "");
 
-                            int id = animeObject.getInt("mal_id");
-                            String titulo = animeObject.getString("title");
-                            String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").getString("large_image_url");
-                            String estado = animeObject.optString("status", "");
+                        // Obtener géneros
+                        JSONArray datosGeneros = animeObject.optJSONArray("genres");
+                        boolean esHentai = false;
 
+                        if (datosGeneros != null) {
+                            for (int j = 0; j < datosGeneros.length(); j++) {
+                                JSONObject generoObj = datosGeneros.getJSONObject(j);
+                                String generoNombre = generoObj.optString("name", "").toLowerCase();
 
-                            // Crear objeto Anime
-                            boolean enEmision = !estado.equals("Finished Airing");
-                            Anime anime = new Anime(id, titulo, "", 0, "",imagenGrande, "", "", null, null, enEmision, 0, "");
-
-                            // Verificación de duplicados
-                            if (!listaAnimes.contains(anime)) {
-                                listaAnimes.add(anime);
-
+                                if (generoNombre.equals("hentai")) {
+                                    esHentai = true;
+                                    break; // Si ya sabemos que es Hentai, salimos del bucle
+                                }
                             }
+                        }
 
+                        // Si el anime es Hentai, lo ignoramos
+                        if (esHentai) {
+                            Log.i("ANIME OMITIDO", "Omitido por género Hentai: " + titulo);
+                            continue;
+                        }
 
+                        // Crear objeto Anime
+                        boolean enEmision = !estado.equals("Finished Airing");
+                        Anime anime = new Anime(id, titulo, "", 0, "", imagenGrande, "", "", null, null, enEmision, 0, "");
+
+                        // Verificación de duplicados
+                        if (!listaAnimes.contains(anime)) {
+                            listaAnimes.add(anime);
+                        }
                     }
 
-                    // Llamar a notifyDataSetChanged() UNA VEZ después de procesar toda la información
+                    // Notificar cambios al adaptador
                     miAdaptador.notifyDataSetChanged();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    //Toast.makeText(getActivity().getApplicationContext(), "Error procesando el JSON de busqueda", Toast.LENGTH_LONG).show();
+                    Log.e("ERROR JSON", "Error procesando el JSON de búsqueda: " + e.getMessage());
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("ERROR", "Error al obtener la busqueda: " + error.getMessage());
+                Log.e("ERROR", "Error al obtener la búsqueda: " + error.getMessage());
             }
         });
 
         rqAnimes.add(mrqAnimes);
     }
+
 }
