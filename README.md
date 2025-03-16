@@ -1,6 +1,4 @@
 Pestaña de Inicio: 
-- En animes recomendados filtrar para no ver animes hentai.
-- En la búsqueda de animes por nombre, no mostrar los hentai.
 - Mejorar la interfaz de los animes que te muestra cuando buscas por nombre. (Tamaños de letras, alineamiento)
 
 Pestaña de Foro:
