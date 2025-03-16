@@ -8,7 +8,6 @@ Pestaña de Explorar:
 - Editar un poco la interfaz. (Tamaño de letras, alineación...) 
 
 Pestaña de Mis Listas: 
-- Cambiar interfaz. (Fondo y colores)
 - Al añadir una lista, cambiar un poco el alertDialog, del nombre de la lista. (Separacion de botones, colores...)
 - Cambiar la fecha de ultima edición de la lista. (Si se complica lo quitamos y podemos añadir otra cosa)
 
