@@ -14,7 +14,6 @@ Pestaña de Mis Listas:
 
 Pestaña de la info del Usuario: 
 - Editar la interfaz. (Por ejemplo, al clickar en el editText del nombre del usuario, se ve cortado con el teclado abierto)
-- Cargar la info del usuario. (Imagen del perfil, correo...)
 - Dar funcionalidad al botón de guardar cambios.
 
 Vista detalle anime: 
@@ -34,7 +33,6 @@ Vista detalle lista:
 
 Vista de añadir perfil: 
 - Dar la opción de ir para atrás.(Boton cancelar)
-- Cambiar lo de la selección de imagen, por seleccionar los monigotes que habrá seleccionado alma seguramente.
 Para esto último podríamos hacer como en la parte de la info del usuario, quitar la foto de la imagen y tener que clickar en el muñeco donde se guarda la imagen
 
 Vista de crear usuario:
