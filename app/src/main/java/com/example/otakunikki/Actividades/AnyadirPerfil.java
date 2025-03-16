@@ -37,9 +37,8 @@ public class AnyadirPerfil extends AppCompatActivity {
     private final String TAG = "Añadir Perfil";
     private EditText etNombrePerfil;
     private Button btnConfirmarPerfil;
-    private ImageView imgIconoPerfil;
-    private String uriImagenPerfil;
-    private ImageButton imgBtnAgregarFoto;
+
+    private ImageView imgAgregarFoto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +46,7 @@ public class AnyadirPerfil extends AppCompatActivity {
 
         etNombrePerfil = findViewById(R.id.etNombrePerfil);
         btnConfirmarPerfil = findViewById(R.id.btnConfirmarPerfil);
-        imgIconoPerfil = findViewById(R.id.imgIconoPerfil);
-        imgBtnAgregarFoto = findViewById(R.id.imgBtnAgregarFoto);
+        imgAgregarFoto = findViewById(R.id.imgAgregarFoto);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -56,7 +54,7 @@ public class AnyadirPerfil extends AppCompatActivity {
         // Obtener usuario actual
         FirebaseUser usuario = mAuth.getCurrentUser();
 
-        imgBtnAgregarFoto.setOnClickListener(v -> {
+        imgAgregarFoto.setOnClickListener(v -> {
             View popupView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.popup_seleccion_imagenes, null);
             PopupWindow popupWindow = new PopupWindow(popupView, RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT, true);
 
@@ -71,15 +69,15 @@ public class AnyadirPerfil extends AppCompatActivity {
             secciones.put("Haikyū", Arrays.asList(R.drawable.tobiochibi, R.drawable.shoyochibi));
 
             AdaptadorFilasImagenes seccionAdapter = new AdaptadorFilasImagenes(getApplicationContext(), secciones, imagenResId -> {
-                imgIconoPerfil.setImageResource(imagenResId);
-                imgIconoPerfil.setTag(imagenResId);
+                imgAgregarFoto.setImageResource(imagenResId);
+                imgAgregarFoto.setTag(imagenResId);
                 popupWindow.dismiss();
             });
 
             rvSeleccionImagenes.setAdapter(seccionAdapter);
 
             popupWindow.setElevation(10f);
-            popupWindow.showAtLocation(imgIconoPerfil, Gravity.CENTER, 0, 0);
+            popupWindow.showAtLocation(imgAgregarFoto, Gravity.CENTER, 0, 0);
         });
 
 
@@ -89,7 +87,7 @@ public class AnyadirPerfil extends AppCompatActivity {
             public void onClick(View v) {
                 if (usuario != null) {
                     String userId = usuario.getUid();
-                    int fotoPerfil = (int) imgIconoPerfil.getTag();
+                    int fotoPerfil = (int) imgAgregarFoto.getTag();
                     Perfil nuevoPerfil = new Perfil(etNombrePerfil.getText().toString(), fotoPerfil);
 
                     db.collection("Usuarios").document(userId)
@@ -125,20 +123,4 @@ public class AnyadirPerfil extends AppCompatActivity {
         });
 
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            Uri selectedImageUri = data.getData();
-            uriImagenPerfil = selectedImageUri.toString();
-
-            if (selectedImageUri != null) {
-                imgIconoPerfil.setImageURI(selectedImageUri);
-
-            }
-        }
-    }
-
 }
