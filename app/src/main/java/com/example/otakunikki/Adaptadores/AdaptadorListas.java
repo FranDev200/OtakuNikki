@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+
 public class AdaptadorListas extends BaseAdapter {
 
     private List<ListaAnime> listadelistasAnimes;
