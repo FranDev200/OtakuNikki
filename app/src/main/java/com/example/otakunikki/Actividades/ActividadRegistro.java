@@ -8,6 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,9 +31,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.otakunikki.Adaptadores.AdaptadorFilasImagenes;
 import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.Clases.Usuario;
+import com.example.otakunikki.Fragmentos.FragmentInfoUsuario;
 import com.example.otakunikki.R;
 
 //FIREBASE
@@ -43,7 +50,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ActividadRegistro extends AppCompatActivity {
     private String[] paises = {"--Seleccion un pais--", "España", "Estados Unidos", "Japón"};
@@ -111,13 +121,30 @@ public class ActividadRegistro extends AppCompatActivity {
         /***************************************/
 
         /**LOGICA PARA SELECCIONAR LA FOTO**/
-        imgBtnAgregar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, 1);
-            }
+        imgBtnAgregar.setOnClickListener(v -> {
+            View popupView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.popup_seleccion_imagenes, null);
+            PopupWindow popupWindow = new PopupWindow(popupView, RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT, true);
+
+            RecyclerView rvSeleccionImagenes = popupView.findViewById(R.id.rvSeleccionImagenes);
+            rvSeleccionImagenes.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+            // Creo la lista de imágenes para los diferentes animes
+            Map<String, List<Integer>> secciones = new LinkedHashMap<>(); //Ordeno por orden de inserccion en el mapa para que sea más fácil de ver
+            secciones.put("One piece", Arrays.asList(R.drawable.luffychibi, R.drawable.zorochibi, R.drawable.namichibi));
+            secciones.put("Jujutsu Kaisen", Arrays.asList(R.drawable.itadorichibi, R.drawable.satoruchibi));
+            secciones.put("Frieren", Arrays.asList(R.drawable.frierenchibi, R.drawable.fernchibi, R.drawable.himmelchibi));
+            secciones.put("Haikyū", Arrays.asList(R.drawable.tobiochibi, R.drawable.shoyochibi));
+
+            AdaptadorFilasImagenes seccionAdapter = new AdaptadorFilasImagenes(getApplicationContext(), secciones, imagenResId -> {
+                imgIconoUser.setImageResource(imagenResId);
+                imgIconoUser.setTag(imagenResId);
+                popupWindow.dismiss();
+            });
+
+            rvSeleccionImagenes.setAdapter(seccionAdapter);
+
+            popupWindow.setElevation(10f);
+            popupWindow.showAtLocation(imgIconoUser, Gravity.CENTER, 0, 0);
         });
 
 
@@ -164,7 +191,8 @@ public class ActividadRegistro extends AppCompatActivity {
                                     /**ID QUE GENERA FIREBASE**/
                                     String userId = firebaseUser.getUid();
                                     List<Perfil> userProfiles = new ArrayList<>();
-                                    userProfiles.add(new Perfil(nombreUsuario + "_Perfil1", "https://i.ytimg.com/vi/ZTA77U48F2E/maxresdefault.jpg"));
+                                    int imagen = (int) imgIconoUser.getTag();
+                                    userProfiles.add(new Perfil(nombreUsuario + "_Perfil1", imagen));
 
                                     // Crear el objeto de usuario
                                     Usuario newUser = new Usuario(userId, nombreCompleto, nombreUsuario, email, tvPaisSeleccionado.getText().toString(), userProfiles);
@@ -199,28 +227,12 @@ public class ActividadRegistro extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            Uri selectedImageUri = data.getData();
-            uriImagen = selectedImageUri;
-
-            if (selectedImageUri != null) {
-                imgIconoUser.setImageURI(selectedImageUri);
-
-            }
-        }
-    }
 
 
     public void abrirSeleccion(Usuario user) {
         Intent intent = new Intent(getApplicationContext(), SeleccionPerfil.class);
         intent.putExtra("Usuario", user);
-
-        Log.i("Perfiles", user.getListaPerfiles().size() + " perfiles");
-
         startActivity(intent);
     }
 }

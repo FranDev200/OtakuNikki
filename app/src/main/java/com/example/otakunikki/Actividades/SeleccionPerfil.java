@@ -43,6 +43,15 @@ public class SeleccionPerfil extends AppCompatActivity {
         /**RECOGEMOS EL INTENT DE LA CLASE REGISTRO**/
         Usuario usuario = getIntent().getParcelableExtra("Usuario");
 
+        SharedPreferences preferences = getSharedPreferences("DatosUsuario", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        if(usuario.getEmail() != null){
+            editor.putString("email", usuario.getEmail());
+            editor.putString("region", usuario.getRegion());
+        }
+        editor.apply();
+
+
         miAdaptadorPerfilesGridView = new AdaptadorPerfilesGridView(getApplicationContext(), R.layout.item_perfiles,usuario.getListaPerfiles());
 
         miGridView.setAdapter(miAdaptadorPerfilesGridView);
@@ -62,6 +71,7 @@ public class SeleccionPerfil extends AppCompatActivity {
 
                 Log.i("DEBUG", "Perfil seleccionado guardado: " + nombrePerfil);
                 AbrirMenuPrincipal();
+                finish();
             }
         });
 
