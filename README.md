@@ -5,7 +5,6 @@ Pestaña de Foro:
 - Hacerlo todo.
 
 Pestaña de Explorar: 
-- Editar un poco la interfaz. (Tamaño de letras, alineación...) 
 
 Pestaña de Mis Listas: 
 - Al añadir una lista, cambiar un poco el alertDialog, del nombre de la lista. (Separacion de botones, colores...)
@@ -35,7 +34,6 @@ Vista de añadir perfil:
 Para esto último podríamos hacer como en la parte de la info del usuario, quitar la foto de la imagen y tener que clickar en el muñeco donde se guarda la imagen
 
 Vista de crear usuario:
-- Mejorar la interfaz y los datos a pedir. 
 
 General: 
 - Lo del idioma
