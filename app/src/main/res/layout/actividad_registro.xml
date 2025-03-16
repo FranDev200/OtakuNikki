@@ -18,22 +18,14 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/imgIconoUser"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:scaleType="fitCenter"
+                android:background="@android:color/transparent"
                 android:contentDescription="Icono de usuario"/>
 
-            <ImageButton
-                android:id="@+id/imgBtnAgregar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:scaleType="fitCenter"
-                android:background="@android:color/transparent"
-                android:contentDescription="Botón para añadir"
-                android:src="@drawable/plus" />
         </LinearLayout>
 
         <!--  Form Fields  -->
@@ -133,16 +125,39 @@
             android:layout_height="wrap_content"
             android:text="Acepto los términos y condiciones"
             android:textColor="@color/blancoIcono"
+            android:textSize="18dp"
             android:layout_marginBottom="16dp"/>
 
         <!--  Botón de confirmación  -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+
         <Button
             android:id="@+id/btnConfirmar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
             android:layout_height="wrap_content"
             android:text="Confirmar"
+            android:textSize="20dp"
+            android:backgroundTint="@color/moradoDifuminadoIcono"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/btnCancelar"
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
             android:backgroundTint="@color/moradoDifuminadoIcono"
             android:textColor="@color/white"
-            android:padding="12dp"/>
+            android:layout_marginLeft="50px"
+            android:textSize="20dp"
+            />
+
+    </LinearLayout>
 
     </LinearLayout>
