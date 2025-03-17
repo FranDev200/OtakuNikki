@@ -165,6 +165,11 @@ public class FragmentoListas extends Fragment {
                                             }
                                         }
 
+                                        if(listaAEliminar.getNombreLista() == "Favoritos"){
+                                            Toast.makeText(getActivity().getApplicationContext(), "Esta lista no se puede eliminar", Toast.LENGTH_LONG).show();
+                                            return;
+                                        }
+
                                         if (listaAEliminar != null) {
                                             listasAnimes.remove(listaAEliminar); // Eliminar de Firestore
 

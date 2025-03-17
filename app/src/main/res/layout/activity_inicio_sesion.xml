@@ -24,6 +24,7 @@
             android:layout_weight="1"
             android:textAlignment="center"
             android:padding="10dp"
+            android:textSize="20dp"
             android:layout_margin="20dp"
             android:hint="@string/introduce_nombre"
             android:textColor="@color/blancoIcono"
@@ -38,8 +39,10 @@
             android:layout_weight="1"
             android:textAlignment="center"
             android:padding="10dp"
+            android:textSize="20dp"
             android:layout_margin="20dp"
             android:hint="@string/introduce_contrasenya"
+            android:inputType="textPassword"
             android:textColor="@color/blancoIcono"
             android:background="@color/moradoDifuminadoIcono"
             >
@@ -50,6 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
+            android:textSize="16dp"
+            android:background="@color/negro_difuminado"
             android:text="Mantener sesion iniciada."/>
 
         <Button
@@ -60,10 +65,9 @@
             android:layout_gravity="center"
             android:text="INICIAR SESIÓN"
             android:textColor="@color/blancoIcono"
-
             android:textStyle="bold"
-            android:textSize="15dp"
-            android:padding="10dp"
+            android:textSize="20dp"
+            android:padding="15dp"
             android:backgroundTint="#7733C8"
             android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
             android:layout_margin="20dp"
@@ -83,8 +87,10 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:text="@string/registrar"
-            android:textStyle="italic"
+            android:textStyle="italic|bold"
             android:paddingRight="10dp"
+            android:textSize="16dp"
+
             />
 
         <ImageButton

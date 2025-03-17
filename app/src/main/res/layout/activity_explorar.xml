@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Actividades.Explorar"
-    android:background="@color/moradoOscuroIcono">
+    android:background="@color/moradoYNegroIcono">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +29,8 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/moradoOscuroIcono"
+            android:background="@color/moradoYNegroIcono"
+            app:tabTextAppearance="@style/CustomTabTextAppearance"
             app:tabTextColor="@color/blancoIcono"
             app:tabSelectedTextColor="@color/moradoMuyClaroIcono">
 

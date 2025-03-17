@@ -1,4 +1,4 @@
-package com.example.otakunikki.Adaptadores;
+package com.example.otakunikki.GestionImagenes;
 
 import android.content.Context;
 import android.view.LayoutInflater;
