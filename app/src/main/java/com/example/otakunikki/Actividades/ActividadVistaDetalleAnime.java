@@ -51,6 +51,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -148,9 +149,13 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
                 if (filtros[position].contentEquals("Más antiguo")) {
                     tvSeleccionSpinner.setText("Más antiguo");
+                    Collections.reverse(listaEpisodios);
+                    miAdaptadorEp.notifyDataSetChanged();
                 }
                 if (filtros[position].contentEquals("Más reciente")) {
                     tvSeleccionSpinner.setText("Más reciente");
+                    Collections.reverse(listaEpisodios);
+                    miAdaptadorEp.notifyDataSetChanged();
                 }
             }
 
