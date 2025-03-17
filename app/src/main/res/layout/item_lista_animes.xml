@@ -68,7 +68,7 @@
                 android:id="@+id/imgAnime0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#2A023A"
+                android:background="#380350"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop" />
         </androidx.cardview.widget.CardView>
@@ -84,7 +84,7 @@
                 android:id="@+id/imgAnime1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#2A023A"
+                android:background="#380350"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop" />
 
@@ -101,7 +101,7 @@
                 android:id="@+id/imgAnime2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#2A023A"
+                android:background="#380350"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop" />
 
@@ -117,7 +117,7 @@
                 android:id="@+id/imgAnime3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#2A023A"
+                android:background="#380350"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop" />
 
