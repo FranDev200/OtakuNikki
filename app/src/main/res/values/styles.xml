@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18dp</item> <!-- Tamaño de la letra -->
+        <item name="android:textAllCaps">true</item> <!-- Opcional: convertir texto a mayúsculas -->
+    </style>
+
+</resources>
