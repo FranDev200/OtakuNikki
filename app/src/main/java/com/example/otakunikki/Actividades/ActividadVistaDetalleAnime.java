@@ -195,7 +195,6 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
         //RECOGEMOS TODA LA INFORMACION DEL ANIME MANDADO DESDE LOS FRAGMENTOS
 
-
         VerificarFavorito(usuario, nombrePerfil, anime.getTitulo());
         VerificarVitos(nombreLista, usuario, nombrePerfil, anime);
 
@@ -268,6 +267,19 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                 listView.setAdapter(miAdaptadorAlertDialog);
 
                 RecuperarListas(usuario, nombrePerfil);
+
+
+                if(!listaAnimes.isEmpty()){
+                    for (ListaAnime lista : listaAnimes) {
+                        if (lista.getNombreLista().equalsIgnoreCase("Favoritos")) {
+                            Toast.makeText(getApplicationContext(), "No hay listas disponibles", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(), "No hay listas disponibles", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -416,9 +428,11 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                                 tvEmision.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.moradoDifuminadoIcono)); // Usa ContextCompat
                             }
 
-                            if (anime.getNroEpisodios() == 1) {
+                            if(anime.getNroEpisodios() == 0){
+                                tvNumEpisodios.setText("? ep");
+                            } else if (anime.getNroEpisodios() == 1) {
                                 tvNumEpisodios.setText(anime.getNroEpisodios() + " ep");
-                            } else {
+                            }else {
                                 tvNumEpisodios.setText(anime.getNroEpisodios() + " eps");
                             }
 
