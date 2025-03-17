@@ -36,6 +36,7 @@ import com.example.otakunikki.Clases.ListaAnime;
 import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
@@ -75,7 +76,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
     private AdaptadorLVAlertDialog miAdaptadorAlertDialog;
     private List<ListaAnime> listaAnimes;
     Anime anime = null;
-
+    private boolean flag = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,20 +183,32 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         btnFavoritos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!anime.isFavorito()) {
-                    btnFavoritos.setImageResource(R.drawable.heart);
-
-                    AgregarAnimeFav("Favoritos", usuario, nombrePerfil, anime);
-
-
-                } else {
+                if (flag) {
                     btnFavoritos.setImageResource(R.drawable.corazon_vacio);
+                    flag = false; // 🔹 Asegurar que flag se actualice correctamente
+                    // Si ya es favorito, eliminar de favoritos
+                    EliminarAnimeFav("Favoritos", usuario, nombrePerfil, anime, new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
 
-                    EliminarAnimeFav("Favoritos", usuario, nombrePerfil, anime);
 
+                        }
+                    });
+                } else {
+                    btnFavoritos.setImageResource(R.drawable.heart);
+                    flag = true; // 🔹 Asegurar que flag se actualice correctamente
+                    // Si no es favorito, agregarlo
+                    AgregarAnimeFav("Favoritos", usuario, nombrePerfil, anime, new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+
+
+                        }
+                    });
                 }
             }
         });
+
 
         /**BOTON DE RETROCESO**/
         btnRetroceso.setOnClickListener(new View.OnClickListener() {
@@ -528,7 +541,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                 });
     }
 
-    private void AgregarAnimeFav(String nombreLista, FirebaseUser usuario, String nombrePerfil, Anime anime) {
+    private void AgregarAnimeFav(String nombreLista, FirebaseUser usuario, String nombrePerfil, Anime anime, OnSuccessListener<Void> listener) {
         if (usuario != null) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             String userId = usuario.getUid();
@@ -603,7 +616,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         }
     }
 
-    private void EliminarAnimeFav(String nombreLista, FirebaseUser usuario, String nombrePerfil, Anime anime) {
+    private void EliminarAnimeFav(String nombreLista, FirebaseUser usuario, String nombrePerfil, Anime anime, OnSuccessListener<Void> listener) {
         if (usuario != null) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             String userId = usuario.getUid();
@@ -681,18 +694,21 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
                             Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
-                            // Buscar el perfil del usuario
-                            for (Perfil perfil : usuarioActual.getListaPerfiles()) {
-                                if (perfil.getNombrePerfil().equals(nombrePerfil)) {
-                                    // Buscar en la lista de favoritos
-                                    for (ListaAnime lista : perfil.getListasAnimes()) {
-                                        if (lista.getNombreLista().equalsIgnoreCase("Favoritos")) {
-                                            for (Anime anime : lista.getListaAnimes()) {
-                                                if (anime.getTitulo().equalsIgnoreCase(tituloAnime)) {
-                                                    // Si está en favoritos, marcar el corazón
-                                                    btnFavoritos.setImageResource(R.drawable.heart);
-                                                    anime.setFavorito(true);
-                                                    return;
+                            if (usuarioActual != null) {
+                                // Buscar el perfil del usuario
+                                for (Perfil perfil : usuarioActual.getListaPerfiles()) {
+                                    if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+                                        // Buscar en la lista de favoritos
+                                        for (ListaAnime lista : perfil.getListasAnimes()) {
+                                            if (lista.getNombreLista().equalsIgnoreCase("Favoritos")) {
+                                                for (Anime anime : lista.getListaAnimes()) {
+                                                    if (anime.getTitulo().equalsIgnoreCase(tituloAnime)) {
+                                                        // Si está en favoritos, marcar el corazón
+                                                        flag = true;
+                                                        anime.setFavorito(true);
+                                                        btnFavoritos.setImageResource(R.drawable.heart); // 🔹 Actualiza el icono aquí
+                                                        return;
+                                                    }
                                                 }
                                             }
                                         }
@@ -701,10 +717,13 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                             }
                         }
                         // Si no está en favoritos, dejar el corazón vacío
-                        btnFavoritos.setImageResource(R.drawable.corazon_vacio);
+                        flag = false;
+                        anime.setFavorito(false);
+                        btnFavoritos.setImageResource(R.drawable.corazon_vacio); // 🔹 También actualiza aquí
                     })
                     .addOnFailureListener(e -> Log.e("Firebase", "Error obteniendo favoritos", e));
         }
     }
+
 
 }
