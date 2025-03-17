@@ -99,7 +99,6 @@ public class FragmentoListas extends Fragment {
                 builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(requireContext(), "Lista: " +  nombreLista + " eliminada.", Toast.LENGTH_SHORT).show();
                         EliminarLista(nombreLista, usuario, nombrePerfil);
                     }
                 });
@@ -165,30 +164,30 @@ public class FragmentoListas extends Fragment {
                                             }
                                         }
 
-                                        if(listaAEliminar.getNombreLista() == "Favoritos"){
-                                            Toast.makeText(getActivity().getApplicationContext(), "Esta lista no se puede eliminar", Toast.LENGTH_LONG).show();
+                                        if(listaAEliminar.getNombreLista().equalsIgnoreCase("Favoritos")){
+                                            Toast.makeText(getActivity().getApplicationContext(), "Esta lista no se puede eliminar", Toast.LENGTH_SHORT).show();
                                             return;
-                                        }
+                                        }else{
+                                            if (listaAEliminar != null) {
+                                                listasAnimes.remove(listaAEliminar); // Eliminar de Firestore
 
-                                        if (listaAEliminar != null) {
-                                            listasAnimes.remove(listaAEliminar); // Eliminar de Firestore
+                                                db.collection("Usuarios").document(userId)
+                                                        .update("listaPerfiles", listaPerfiles)
+                                                        .addOnSuccessListener(aVoid -> {
+                                                            Toast.makeText(getActivity(), "Lista eliminada correctamente", Toast.LENGTH_SHORT).show();
 
-                                            db.collection("Usuarios").document(userId)
-                                                    .update("listaPerfiles", listaPerfiles)
-                                                    .addOnSuccessListener(aVoid -> {
-                                                        Toast.makeText(getActivity(), "Lista eliminada correctamente", Toast.LENGTH_SHORT).show();
+                                                            // Eliminar de la lista local
+                                                            lista_de_listasAnimes.remove(listaAEliminar);
 
-                                                        // Eliminar de la lista local
-                                                        lista_de_listasAnimes.remove(listaAEliminar);
-
-                                                        // Recargar datos desde Firebase para asegurar sincronización
-                                                        CargarDatos(usuario, db, nombrePerfil);
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Toast.makeText(getActivity(), "Error al eliminar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    });
-                                        } else {
-                                            Toast.makeText(getActivity(), "Lista no encontrada", Toast.LENGTH_SHORT).show();
+                                                            // Recargar datos desde Firebase para asegurar sincronización
+                                                            CargarDatos(usuario, db, nombrePerfil);
+                                                        })
+                                                        .addOnFailureListener(e -> {
+                                                            Toast.makeText(getActivity(), "Error al eliminar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        });
+                                            } else {
+                                                Toast.makeText(getActivity(), "Lista no encontrada", Toast.LENGTH_SHORT).show();
+                                            }
                                         }
                                         return;
                                     }
