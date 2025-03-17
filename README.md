@@ -9,10 +9,8 @@ Pestaña de Mis Listas:
 - Cambiar la fecha de ultima edición de la lista. (Si se complica lo quitamos y podemos añadir otra cosa)
 
 Pestaña de la info del Usuario: 
-- Editar la interfaz. (Por ejemplo, al clickar en el editText del nombre del usuario, se ve cortado con el teclado abierto)
 
 Vista detalle anime: 
-- Ordenar por mas antiguo o reciente.
 - Marcar episodios vistos.
 - Al añadir un anime a una lista, en caso de no tener listas indicarlo.
 - Si en el anime pone 0ep, mejor poner una ?. (Hay casos que hay episodios, pero en el json del anime el num de episodios pone null, por ejemplo en One Piece)
