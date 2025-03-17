@@ -159,15 +159,23 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
             }
         });
 
+
         //RECOGEMOS TODA LA INFORMACION DEL ANIME MANDADO DESDE LOS FRAGMENTOS
 
         anime = getIntent().getParcelableExtra("Anime");
+        /**PARA MANTENER SI ES FAV O NO EL ANIME**/
+        SharedPreferences datosAnime = getSharedPreferences("DatosAnime", MODE_PRIVATE);
+        SharedPreferences.Editor editor = datosAnime.edit();
+
+        boolean favorito = datosAnime.getBoolean(anime.getTitulo(), false);
+        anime.setFavorito(favorito);
+        /**********************************************/
         tvTituloAnime.setText(anime.getTitulo());
         Picasso.get().load(anime.getImagenGrande()).into(imgAnime);
 
-        if(anime.isFavorito()){
+        if (anime.isFavorito()) {
             btnFavoritos.setImageResource(R.drawable.heart);
-        }else{
+        } else {
             btnFavoritos.setImageResource(R.drawable.corazon_vacio);
         }
 
@@ -176,19 +184,26 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
         /**BOTON DE FAVORITO**/
         btnFavoritos.setOnClickListener(new View.OnClickListener() {
-            boolean flag = false;
             @Override
             public void onClick(View v) {
-                if(flag == false){
+                if (!anime.isFavorito()) {
                     btnFavoritos.setImageResource(R.drawable.heart);
-                    Toast.makeText(getApplicationContext(), "Añadido a favoritos", Toast.LENGTH_SHORT).show();
-                    flag = true;
-                    anime.setFavorito(false);
-                }else{
+                    // Guardar en SharedPreferences
+                    SharedPreferences preferences = getApplicationContext().getSharedPreferences("DatosAnime", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean(anime.getTitulo(), true);
+                    editor.apply();
+                    AgregarAnimeFav("Favoritos", usuario, nombrePerfil, anime);
+
+
+                } else {
                     btnFavoritos.setImageResource(R.drawable.corazon_vacio);
-                    Toast.makeText(getApplicationContext(), "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
-                    flag = false;
-                    anime.setFavorito(false);
+                    // Guardar en SharedPreferences
+                    SharedPreferences preferences = getApplicationContext().getSharedPreferences("DatosAnime", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean(anime.getTitulo(), false);
+                    editor.apply();
+                    EliminarAnimeFav("Favoritos", usuario,nombrePerfil,anime);
 
                 }
             }
@@ -508,10 +523,10 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         if (listaAnime.getListaAnimes() == null) {
             listaAnime.setListaAnimes(new ArrayList<>());
         }
-        if (listaAnime.getListaAnimes().contains(anime)){
-            Toast.makeText(getApplicationContext(),"El anime ya esta en la lista", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(getApplicationContext(),"Anime agregado a la lista", Toast.LENGTH_SHORT).show();
+        if (listaAnime.getListaAnimes().contains(anime)) {
+            Toast.makeText(getApplicationContext(), "El anime ya esta en la lista", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Anime agregado a la lista", Toast.LENGTH_SHORT).show();
             listaAnime.getListaAnimes().add(anime); // Agregamos el anime a la lista
         }
         //Subir los cambios a Firestore de forma segura
@@ -525,6 +540,147 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                 });
     }
 
+    private void AgregarAnimeFav(String nombreLista, FirebaseUser usuario, String nombrePerfil, Anime anime) {
+        if (usuario != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = usuario.getUid();
 
+            // Buscar el usuario en Firestore
+            db.collection("Usuarios").document(userId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
+                            if (usuarioActual != null) {
+                                // Buscar el perfil que coincida con el nombre seleccionado
+                                List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
+                                for (Perfil perfil : listaPerfiles) {
+                                    if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+
+                                        // Verificar si la lista de animes ya existe
+                                        boolean listaExiste = false;
+                                        for (ListaAnime lista : perfil.getListasAnimes()) {
+                                            if (lista.getNombreLista().equals(nombreLista)) {
+                                                listaExiste = true;
+
+                                                // Verificar si el anime ya está en la lista
+                                                boolean animeExiste = false;
+                                                for (Anime a : lista.getListaAnimes()) {
+                                                    if (a.getId() == anime.getId()) {
+                                                        animeExiste = true;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if (!animeExiste) {
+                                                    anime.setFavorito(true);
+                                                    lista.getListaAnimes().add(anime);
+                                                }
+
+                                                break;
+                                            }
+                                        }
+
+                                        // Si la lista no existe, crear una nueva y agregar el anime
+                                        if (!listaExiste) {
+                                            ListaAnime nuevaListaAnime = new ListaAnime(nombreLista);
+                                            anime.setFavorito(true);
+                                            nuevaListaAnime.getListaAnimes().add(anime);
+                                            perfil.getListasAnimes().add(nuevaListaAnime);
+                                        }
+
+                                        // Guardar la lista de perfiles actualizada en Firestore
+                                        db.collection("Usuarios").document(userId)
+                                                .update("listaPerfiles", listaPerfiles)
+                                                .addOnSuccessListener(aVoid ->
+                                                        Toast.makeText(getApplicationContext(), "Anime agregado a favoritos", Toast.LENGTH_SHORT).show()
+                                                )
+                                                .addOnFailureListener(e ->
+                                                        Toast.makeText(getApplicationContext(), "Error al actualizar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                                );
+
+                                        return; // Salimos después de encontrar y modificar el perfil correcto
+                                    }
+                                }
+
+                                // Si no encontró el perfil
+                                Toast.makeText(getApplicationContext(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getApplicationContext(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(getApplicationContext(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void EliminarAnimeFav(String nombreLista, FirebaseUser usuario, String nombrePerfil, Anime anime){
+        if (usuario != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = usuario.getUid();
+
+            // Buscar el usuario en Firestore
+            db.collection("Usuarios").document(userId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
+                            if (usuarioActual != null) {
+                                // Buscar el perfil que coincida con el nombre seleccionado
+                                List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
+                                for (Perfil perfil : listaPerfiles) {
+                                    if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+
+                                        // Verificar si la lista de animes ya existe
+                                        boolean listaExiste = false;
+                                        for (ListaAnime lista : perfil.getListasAnimes()) {
+                                            if (lista.getNombreLista().equals(nombreLista)) {
+                                                listaExiste = true;
+
+                                                // Verificar si el anime ya está en la lista
+                                                boolean animeExiste = false;
+                                                for (Anime a : lista.getListaAnimes()) {
+                                                    if (a.getId() == anime.getId()) {
+                                                        animeExiste = true;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if (animeExiste) {
+                                                    anime.setFavorito(false);
+                                                    lista.getListaAnimes().remove(anime);
+                                                }
+
+                                                break;
+                                            }
+                                        }
+
+
+                                        // Guardar la lista de perfiles actualizada en Firestore
+                                        db.collection("Usuarios").document(userId)
+                                                .update("listaPerfiles", listaPerfiles)
+                                                .addOnSuccessListener(aVoid ->
+                                                        Toast.makeText(getApplicationContext(), "Anime eliminado de favoritos", Toast.LENGTH_SHORT).show()
+                                                )
+                                                .addOnFailureListener(e ->
+                                                        Toast.makeText(getApplicationContext(), "Error al actualizar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                                );
+
+                                        return; // Salimos después de encontrar y modificar el perfil correcto
+                                    }
+                                }
+
+                                // Si no encontró el perfil
+                                Toast.makeText(getApplicationContext(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getApplicationContext(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(getApplicationContext(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
 

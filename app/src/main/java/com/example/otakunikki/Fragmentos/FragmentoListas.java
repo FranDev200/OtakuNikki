@@ -205,14 +205,11 @@ public class FragmentoListas extends Fragment {
         }
     }
 
-
-
     private void AgregarListaAnime(String nombreLista, FirebaseUser usuario, String nombrePerfil) {
         if (usuario != null) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             String userId = usuario.getUid();
 
-            // Buscar el usuario en Firestore
             db.collection("Usuarios").document(userId).get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
@@ -222,28 +219,40 @@ public class FragmentoListas extends Fragment {
                                 List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
                                 for (Perfil perfil : listaPerfiles) {
                                     if (perfil.getNombrePerfil().equals(nombrePerfil)) {
-                                        // Crear una nueva lista de anime (vacía por ahora)
-                                        ListaAnime nuevaListaAnime = new ListaAnime(nombreLista);
 
-                                        // Agregar la nueva lista al perfil
-                                        perfil.getListasAnimes().add(nuevaListaAnime);  // Agrega la nueva lista al perfil
+                                        // Verificar si ya existe una lista con el mismo nombre
+                                        boolean listaExiste = false;
+                                        for (ListaAnime lista : perfil.getListasAnimes()) {
+                                            if (lista.getNombreLista().equalsIgnoreCase(nombreLista)) {
+                                                listaExiste = true;
+                                                break; // No es necesario seguir buscando
+                                            }
+                                        }
 
-                                        // Actualizar Firestore con la lista modificada
-                                        db.collection("Usuarios").document(userId)
-                                                .update("listaPerfiles", listaPerfiles)
-                                                .addOnSuccessListener(aVoid -> {
-                                                    Toast.makeText(getActivity(), "Lista agregada correctamente", Toast.LENGTH_SHORT).show();
+                                        if (listaExiste) {
+                                            Toast.makeText(getActivity(), "La lista ya existe", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            // Crear y agregar nueva lista
+                                            ListaAnime nuevaListaAnime = new ListaAnime(nombreLista);
+                                            perfil.getListasAnimes().add(nuevaListaAnime);
 
-                                                    // Agregar la nueva lista a la interfaz gráfica también
-                                                    lista_de_listasAnimes.add(nuevaListaAnime);
-                                                    miAdaptador.notifyDataSetChanged();
-                                                    tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
-                                                })
-                                                .addOnFailureListener(e -> {
-                                                    Toast.makeText(getActivity(), "Error al agregar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                });
+                                            // Guardar cambios en Firestore
+                                            db.collection("Usuarios").document(userId)
+                                                    .update("listaPerfiles", listaPerfiles)
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        Toast.makeText(getActivity(), "Lista agregada correctamente", Toast.LENGTH_SHORT).show();
 
-                                        return; // Salimos del bucle una vez encontrado el perfil correcto
+                                                        // Actualizar UI
+                                                        lista_de_listasAnimes.add(nuevaListaAnime);
+                                                        miAdaptador.notifyDataSetChanged();
+                                                        tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
+                                                    })
+                                                    .addOnFailureListener(e ->
+                                                            Toast.makeText(getActivity(), "Error al agregar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                                    );
+                                        }
+
+                                        return; // Salimos del bucle tras encontrar el perfil
                                     }
                                 }
 
@@ -252,13 +261,14 @@ public class FragmentoListas extends Fragment {
                             }
                         }
                     })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(getActivity(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
+                    .addOnFailureListener(e ->
+                            Toast.makeText(getActivity(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                    );
         } else {
             Toast.makeText(getActivity(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void CargarDatos(FirebaseUser usuario, FirebaseFirestore db, String nombrePerfil) {
         if (usuario != null) {
