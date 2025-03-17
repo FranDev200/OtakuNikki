@@ -1,61 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10px"
-    >
-
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="@color/moradoYAzulIcono"
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/imgPortadaAnimeDetalle"
         android:layout_width="100dp"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
+        android:focusable="false"
+        android:clickable="false"
         android:background="?android:selectableItemBackgroundBorderless"
-        android:src="@drawable/levi"
-        />
+        android:src="@drawable/levi"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:padding="25px"
-        android:orientation="vertical"
-        >
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvTituloAnimeDetalle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
             android:text="Blue Lock"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+            android:textColor="@color/blancoIcono"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/tvNumEpisodiosDetalle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:textSize="14sp"
             android:text="35 ep"
-            android:layout_marginLeft="20px"
-            android:layout_marginTop="20px"
-            />
+            android:textColor="@color/blancoIcono"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="bottom"
-            >
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvEnEmisionDetalle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="En emision ●"
+                android:text="En emisión ●"
                 android:textColor="@color/rojo"
-                android:textSize="23dp"
-                />
+                android:textSize="18sp"/>
 
             <ImageButton
                 android:id="@+id/imgFavoritoDetalle"
@@ -64,12 +63,10 @@
                 android:src="@drawable/heart"
                 android:scaleType="centerCrop"
                 android:background="@android:color/transparent"
-                />
+                android:focusable="false"
+                android:clickable="false"/>
         </LinearLayout>
 
-        
     </LinearLayout>
-
-
 
 </LinearLayout>

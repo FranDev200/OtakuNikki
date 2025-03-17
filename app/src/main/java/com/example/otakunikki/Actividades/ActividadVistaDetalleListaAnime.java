@@ -1,12 +1,16 @@
 package com.example.otakunikki.Actividades;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -43,12 +47,31 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         etTituloLista.setText(listaSeleccionada.getNombreLista());
         tvNroAnimesLista.setText(listaSeleccionada.getListaAnimes().size() + " animes");
 
-
-
-
         miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(),listaSeleccionada.getListaAnimes() );
         lvAnimesLista.setAdapter(miAdaptador);
         miAdaptador.notifyDataSetChanged();
+        lvAnimesLista.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d("DEBUG_TOUCH", "ListView tocado");
+                return false; // Asegura que el evento siga propagándose
+            }
+        });
+
+        lvAnimesLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("DEBUG_CLICK", "Item clickeado en posición: " + position); // Verificar en Logcat
+
+                Anime animeSeleccionado = listaSeleccionada.getListaAnimes().get(position);
+
+                if (animeSeleccionado != null) {
+                    abrirDetalleAnime(animeSeleccionado);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Error al seleccionar anime", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
         imgRetroceso.setOnClickListener(new View.OnClickListener() {
@@ -61,4 +84,15 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
 
 
     }
+
+    public void abrirDetalleAnime(Anime animeSeleccionado) {
+        if (animeSeleccionado != null) {
+            Intent intent = new Intent(ActividadVistaDetalleListaAnime.this, ActividadVistaDetalleAnime.class);
+            intent.putExtra("Anime", animeSeleccionado);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Error al abrir el anime", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
