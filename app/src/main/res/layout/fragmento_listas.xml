@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/moradoYNegroIcono"
     tools:context=".Fragmentos.FragmentoListas"
     android:padding="20px"
     android:orientation="vertical"
@@ -27,9 +28,8 @@
 
         <ImageButton
             android:id="@+id/imgBtnAgregarLista"
-            android:layout_width="0dp"
-            android:layout_height="47dp"
-            android:layout_weight="0.5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/plus"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"

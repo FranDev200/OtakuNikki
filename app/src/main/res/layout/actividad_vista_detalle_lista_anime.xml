@@ -5,14 +5,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/moradoYNegroIcono"
     tools:context=".Actividades.ActividadVistaDetalleListaAnime"
     android:orientation="vertical"
     >
 
     <LinearLayout
-        android:layout_margin="20px"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/imgRetroceso"
@@ -21,27 +23,30 @@
             android:src="@drawable/flechasalir"
             android:scaleType="centerCrop"
             android:background="@android:color/transparent"
-            android:layout_gravity="center_vertical"
-            />
+            android:layout_gravity="center_vertical"/>
 
         <EditText
             android:id="@+id/etTituloListaDetalle"
-            android:layout_marginLeft="30px"
+            android:layout_marginLeft="30dp"
             android:layout_width="match_parent"
+            android:textColor="@color/blancoIcono"
+            android:textColorHint="@color/blancoIcono"
+            android:backgroundTint="@color/blancoIcono"
             android:layout_height="60dp"
-            android:textSize="35dp"
-            android:hint="Titulo de la lista"
-            android:textStyle="bold"
-            />
-
+            android:textSize="24sp"
+            android:hint="Título de la lista"
+            android:focusable="false"
+            android:cursorVisible="false"
+            android:longClickable="false"
+            android:inputType="none"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="#404040"
-        android:layout_marginVertical="8dp"
-        />
+        android:layout_height="2dp"
+        android:background="@color/moradoClaroIcono"
+        android:layout_marginVertical="8dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +59,8 @@
             android:layout_height="wrap_content"
             android:text="5 animes"
             android:textStyle="bold"
-            android:textSize="25sp"
+            android:textSize="20sp"
+            android:textColor="@color/moradoClaroIcono"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"/>
 
@@ -68,14 +74,11 @@
             android:layout_marginRight="20dp"/>
     </LinearLayout>
 
-
     <ListView
         android:id="@+id/lvAnimesGuardadosLista"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="30px"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
         />
-
-
-
 </LinearLayout>

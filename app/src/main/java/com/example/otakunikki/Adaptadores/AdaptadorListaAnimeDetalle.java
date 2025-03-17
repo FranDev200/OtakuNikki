@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.otakunikki.Actividades.ActividadVistaDetalleListaAnime;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Episodio;
 import com.example.otakunikki.R;
@@ -44,29 +45,43 @@ public class AdaptadorListaAnimeDetalle extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater li = LayoutInflater.from(context);
+            convertView = li.inflate(R.layout.item_anime_lista_detalle, parent, false);
+        }
 
-        LayoutInflater li = LayoutInflater.from(context);
-        view = li.inflate(R.layout.item_anime_lista_detalle, null);
+        TextView tvTituloAnime = convertView.findViewById(R.id.tvTituloAnimeDetalle);
+        TextView tvNumEpisodios = convertView.findViewById(R.id.tvNumEpisodiosDetalle);
+        TextView tvEnEmision = convertView.findViewById(R.id.tvEnEmisionDetalle);
+        ImageView imgPortada = convertView.findViewById(R.id.imgPortadaAnimeDetalle);
+        ImageButton imgFavorito = convertView.findViewById(R.id.imgFavoritoDetalle);
 
-        TextView tvTituloAnime = view.findViewById(R.id.tvTituloAnimeDetalle);
-        TextView tvNumEpisodios = view.findViewById(R.id.tvNumEpisodiosDetalle);
-        TextView tvEnEmision = view.findViewById(R.id.tvEnEmisionDetalle);
-        ImageView imgPortada = view.findViewById(R.id.imgPortadaAnimeDetalle);
-        ImageButton imgFavorito = view.findViewById(R.id.imgFavoritoDetalle);
+        Anime anime = listaAnimes.get(position);
 
-        tvTituloAnime.setText(listaAnimes.get(position).getTitulo());
-        tvNumEpisodios.setText(listaAnimes.get(position).getNroEpisodios()+"");
+        tvTituloAnime.setText(anime.getTitulo());
+        tvNumEpisodios.setText(anime.getListaEpisodios().size() + "");
 
-        Picasso.get().load(listaAnimes.get(position).getImagenGrande()).into(imgPortada);
-        if(listaAnimes.get(position).isEnEmision()){
+        Picasso.get().load(anime.getImagenGrande()).into(imgPortada);
+
+        if (anime.isEnEmision()) {
             tvEnEmision.setText("En emisión ●");
-        }else{
+        } else {
             tvEnEmision.setText("Finalizado ●");
         }
 
+        // Permitir que los ítems sean clickeables en el ListView
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (context instanceof ActividadVistaDetalleListaAnime) {
+                    ((ActividadVistaDetalleListaAnime) context).abrirDetalleAnime(anime);
+                }
+            }
+        });
 
-        return view;
+        return convertView;
     }
+
 
 }
