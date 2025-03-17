@@ -32,8 +32,8 @@
         android:textStyle="bold"
         android:textAlignment="center"
         android:hint="Nombre Perfil"
-        android:textColorHint="@color/moradoClaroIcono"
-        android:textColor="@color/moradoClaroIcono"
-        android:textSize="24dp"
+        android:textColorHint="#B078C1"
+        android:textColor="#B078C1"
+        android:textSize="27dp"
         android:text=""/>
 </LinearLayout>

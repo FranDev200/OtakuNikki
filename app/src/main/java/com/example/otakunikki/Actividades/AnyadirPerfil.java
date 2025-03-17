@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.otakunikki.Adaptadores.AdaptadorFilasImagenes;
+import com.example.otakunikki.GestionImagenes.AdaptadorFilasImagenes;
 import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;

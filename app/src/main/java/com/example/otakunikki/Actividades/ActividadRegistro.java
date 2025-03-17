@@ -34,7 +34,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.otakunikki.Adaptadores.AdaptadorFilasImagenes;
+import com.example.otakunikki.GestionImagenes.AdaptadorFilasImagenes;
 import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.Fragmentos.FragmentInfoUsuario;
@@ -56,10 +56,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ActividadRegistro extends AppCompatActivity {
-    private String[] paises = {"--Seleccion un pais--", "España", "Estados Unidos", "Japón"};
+    private String[] paises = {"--Seleccion un idioma--", "Español (España)", "Inglés", "Japonés"};
     private Spinner spnRegion;
     private TextView tvPaisSeleccionado;
-    private Button btnConfirmar;
+    private Button btnConfirmar, btnCancelar;
     private ImageButton imgIconoUser;
     private EditText etNombreCompleto, etNombreUsuario, etEmail, etPwd, etPwdConfirmacion;
     private CheckBox chkTerminos;
@@ -87,6 +87,7 @@ public class ActividadRegistro extends AppCompatActivity {
 
         spnRegion = findViewById(R.id.spnRegion);
         btnConfirmar = findViewById(R.id.btnConfirmar);
+        btnCancelar = findViewById(R.id.btnCancelar);
         tvPaisSeleccionado = findViewById(R.id.tvPaisSeleccionado);
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(getApplicationContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, paises);
@@ -97,13 +98,13 @@ public class ActividadRegistro extends AppCompatActivity {
                 if (paises[position].contentEquals("--Seleccion un pais--")) {
                     tvPaisSeleccionado.setText(paises[position]);
                 }
-                if (paises[position].contentEquals("España")) {
+                if (paises[position].contentEquals("Español (España)")) {
                     tvPaisSeleccionado.setText((paises[position]));
                 }
-                if (paises[position].contentEquals("Estados Unidos")) {
+                if (paises[position].contentEquals("Inglés")) {
                     tvPaisSeleccionado.setText((paises[position]));
                 }
-                if (paises[position].contentEquals("Japón")) {
+                if (paises[position].contentEquals("Japonés")) {
                     tvPaisSeleccionado.setText((paises[position]));
                 }
             }
@@ -224,10 +225,14 @@ public class ActividadRegistro extends AppCompatActivity {
             }
         });
 
+        btnCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
-
-
-
 
     public void abrirSeleccion(Usuario user) {
         Intent intent = new Intent(getApplicationContext(), SeleccionPerfil.class);
