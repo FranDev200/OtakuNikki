@@ -73,7 +73,7 @@ public class FragmentoListas extends Fragment {
 
         miListView.setOnItemClickListener((parent, view, position, id) -> {
             listaSeleccionada = lista_de_listasAnimes.get(position);
-            Intent intent = new Intent(getActivity().getApplicationContext(), ActividadVistaDetalleListaAnime.class);
+            Intent intent = new Intent(requireContext(), ActividadVistaDetalleListaAnime.class);
             intent.putExtra("ListaAnimeSeleccionada", listaSeleccionada);
             startActivity(intent);
         });
@@ -267,7 +267,6 @@ public class FragmentoListas extends Fragment {
             Toast.makeText(getActivity(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     private void CargarDatos(FirebaseUser usuario, FirebaseFirestore db, String nombrePerfil) {
         if (usuario != null) {
