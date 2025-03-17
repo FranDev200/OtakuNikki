@@ -55,13 +55,18 @@ public class AdaptadorListaAnimeDetalle extends BaseAdapter {
         TextView tvNumEpisodios = convertView.findViewById(R.id.tvNumEpisodiosDetalle);
         TextView tvEnEmision = convertView.findViewById(R.id.tvEnEmisionDetalle);
         ImageView imgPortada = convertView.findViewById(R.id.imgPortadaAnimeDetalle);
-        ImageButton imgFavorito = convertView.findViewById(R.id.imgFavoritoDetalle);
+        ImageView imgFavorito = convertView.findViewById(R.id.imgFavoritoDetalle);
 
         Anime anime = listaAnimes.get(position);
 
         tvTituloAnime.setText(anime.getTitulo());
-        tvNumEpisodios.setText(anime.getListaEpisodios().size() + "");
+        tvNumEpisodios.setText(anime.getNroEpisodios() + "");
 
+        if (anime.isFavorito()) {
+            imgFavorito.setImageResource(R.drawable.heart);
+        } else {
+            imgFavorito.setImageResource(R.drawable.corazon_vacio);
+        }
         Picasso.get().load(anime.getImagenGrande()).into(imgPortada);
 
         if (anime.isEnEmision()) {
@@ -71,14 +76,14 @@ public class AdaptadorListaAnimeDetalle extends BaseAdapter {
         }
 
         // Permitir que los ítems sean clickeables en el ListView
-        convertView.setOnClickListener(new View.OnClickListener() {
+        /*convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (context instanceof ActividadVistaDetalleListaAnime) {
                     ((ActividadVistaDetalleListaAnime) context).abrirDetalleAnime(anime);
                 }
             }
-        });
+        });*/
 
         return convertView;
     }
