@@ -74,17 +74,6 @@ public class AdaptadorListaAnimeDetalle extends BaseAdapter {
         } else {
             tvEnEmision.setText("Finalizado ●");
         }
-
-        // Permitir que los ítems sean clickeables en el ListView
-        /*convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (context instanceof ActividadVistaDetalleListaAnime) {
-                    ((ActividadVistaDetalleListaAnime) context).abrirDetalleAnime(anime);
-                }
-            }
-        });*/
-
         return convertView;
     }
 

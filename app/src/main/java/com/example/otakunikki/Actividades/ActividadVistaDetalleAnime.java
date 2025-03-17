@@ -197,7 +197,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
 
         VerificarFavorito(usuario, nombrePerfil, anime.getTitulo());
-        VerificarVitos(nombreLista, usuario,nombrePerfil,anime);
+        VerificarVitos(nombreLista, usuario, nombrePerfil, anime);
 
         /**********************************************/
         tvTituloAnime.setText(anime.getTitulo());
@@ -899,10 +899,8 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                                                 /**ME RECORRO LOS ANIMES HASTA DAR CON EL SELECCIONADO**/
                                                 for (Anime a : lista.getListaAnimes()) {
                                                     if (a.getId() == anime.getId()) {
-                                                        for(int i = 0; a.getListaEpisodios().size() > i ; i++){
-                                                            boolean estado = a.getListaEpisodios().get(i).isEstaVisto();
-                                                            listaEpisodios.get(i).setEstaVisto(estado);
-                                                        }
+                                                        //listaEpisodios = new ArrayList<>();
+                                                        //listaEpisodios.addAll(a.getListaEpisodios());
                                                         break;
                                                     }
                                                     break;

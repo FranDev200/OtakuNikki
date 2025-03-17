@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,19 +48,25 @@ public class FragmentoListas extends Fragment {
     private TextView tvNroListas;
     private ImageButton imgBtnAgregarLista;
     private ListaAnime listaAEliminar = null;
+    private FirebaseUser usuario;
+    private String nombrePerfil;
+    private FirebaseFirestore db;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.fragmento_listas, container, false);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         // Obtener usuario actual
-        FirebaseUser usuario = mAuth.getCurrentUser();
+        usuario = mAuth.getCurrentUser();
 
         // Recuperar el nombre del perfil desde SharedPreferences
         SharedPreferences preferences = requireContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
-        String nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
+        nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
+
+
+        CargarDatos(usuario, db, nombrePerfil);
 
         tvNroListas = vista.findViewById(R.id.tvNroListas);
         miListView = vista.findViewById(R.id.lvListasAnimes);
@@ -69,7 +76,7 @@ public class FragmentoListas extends Fragment {
         miAdaptador = new AdaptadorListas(getActivity().getApplicationContext(), lista_de_listasAnimes);
         miListView.setAdapter(miAdaptador);
 
-        CargarDatos(usuario, db, nombrePerfil);
+
 
         miListView.setOnItemClickListener((parent, view, position, id) -> {
             listaSeleccionada = lista_de_listasAnimes.get(position);
@@ -307,5 +314,11 @@ public class FragmentoListas extends Fragment {
         } else {
             Toast.makeText(getActivity(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        CargarDatos(usuario, db, nombrePerfil);
     }
 }
