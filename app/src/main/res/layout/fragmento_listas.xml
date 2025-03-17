@@ -28,7 +28,7 @@
         <ImageButton
             android:id="@+id/imgBtnAgregarLista"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="47dp"
             android:layout_weight="0.5"
             android:src="@drawable/plus"
             android:scaleType="fitXY"
@@ -68,6 +68,7 @@
             android:layout_margin="20px"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#380350"
             />
 
     </LinearLayout>
