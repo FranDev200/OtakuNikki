@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/moradoOscuroIcono">
+    android:background="#332349">
 
     <GridView
         android:id="@+id/gvBusquedaAnime"

@@ -34,7 +34,7 @@
             android:id="@+id/btnCancelarLista"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
+            android:layout_marginLeft="18dp"
             android:text="Cancelar"/>
     </LinearLayout>
 
