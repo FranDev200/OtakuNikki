@@ -1,5 +1,4 @@
-Pestaña de Inicio: 
-- Mejorar la interfaz de los animes que te muestra cuando buscas por nombre. (Tamaños de letras, alineamiento)
+Pestaña de Inicio:
 
 Pestaña de Foro:
 - Hacerlo todo.
@@ -7,12 +6,10 @@ Pestaña de Foro:
 Pestaña de Explorar: 
 
 Pestaña de Mis Listas: 
-- Al añadir una lista, cambiar un poco el alertDialog, del nombre de la lista. (Separacion de botones, colores...)
 - Cambiar la fecha de ultima edición de la lista. (Si se complica lo quitamos y podemos añadir otra cosa)
 
 Pestaña de la info del Usuario: 
 - Editar la interfaz. (Por ejemplo, al clickar en el editText del nombre del usuario, se ve cortado con el teclado abierto)
-- Dar funcionalidad al botón de guardar cambios.
 
 Vista detalle anime: 
 - Ordenar por mas antiguo o reciente.
