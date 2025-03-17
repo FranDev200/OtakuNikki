@@ -56,7 +56,7 @@ public class AdaptadorListaAnimeDetalle extends BaseAdapter {
         ImageButton imgFavorito = view.findViewById(R.id.imgFavoritoDetalle);
 
         tvTituloAnime.setText(listaAnimes.get(position).getTitulo());
-        tvNumEpisodios.setText(listaAnimes.get(position).getListaEpisodios().size()+"");
+        tvNumEpisodios.setText(listaAnimes.get(position).getNroEpisodios()+"");
 
         Picasso.get().load(listaAnimes.get(position).getImagenGrande()).into(imgPortada);
         if(listaAnimes.get(position).isEnEmision()){
