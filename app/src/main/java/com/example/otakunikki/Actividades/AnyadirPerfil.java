@@ -36,7 +36,7 @@ public class AnyadirPerfil extends AppCompatActivity {
 
     private final String TAG = "Añadir Perfil";
     private EditText etNombrePerfil;
-    private Button btnConfirmarPerfil;
+    private Button btnConfirmarPerfil, btnCancelarPerfil;
 
     private ImageView imgAgregarFoto;
     @Override
@@ -46,6 +46,7 @@ public class AnyadirPerfil extends AppCompatActivity {
 
         etNombrePerfil = findViewById(R.id.etNombrePerfil);
         btnConfirmarPerfil = findViewById(R.id.btnConfirmarPerfil);
+        btnCancelarPerfil = findViewById(R.id.btnCancelarPerfil);
         imgAgregarFoto = findViewById(R.id.imgAgregarFoto);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -80,7 +81,12 @@ public class AnyadirPerfil extends AppCompatActivity {
             popupWindow.showAtLocation(imgAgregarFoto, Gravity.CENTER, 0, 0);
         });
 
-
+        btnCancelarPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         btnConfirmarPerfil.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -65,6 +65,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         tvNroAnimesLista = findViewById(R.id.nroAnimesLista);
         lvAnimesLista = findViewById(R.id.lvAnimesGuardadosLista);
         imgRetroceso = findViewById(R.id.imgRetroceso);
+        imgAniadirAnime = findViewById(R.id.imgAniadirAnime);
 
         etTituloLista.setText(listaSeleccionada.getNombreLista());
         tvNroAnimesLista.setText(listaSeleccionada.getListaAnimes().size() + " animes");
@@ -129,6 +130,14 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
             }
         });
 
+        imgAniadirAnime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Explorar.class);
+                startActivityForResult(intent, 1); // El 1 es para ponerle un id a la actividad
+                //Utilizo startActivityForResult para que detecte cuando se cierra la actividad y cambie el estado del navegador
+            }
+        });
 
         imgRetroceso.setOnClickListener(new View.OnClickListener() {
             @Override
