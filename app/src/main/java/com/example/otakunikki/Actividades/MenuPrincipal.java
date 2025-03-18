@@ -87,22 +87,19 @@ public class MenuPrincipal extends AppCompatActivity {
 
     }
     public void traducirBottomNavigationView(BottomNavigationView bottomNavigationView, String idiomaDestino) {
-        // Acceder a los ítems del BottomNavigationView
+
         Menu menu = bottomNavigationView.getMenu();
 
-        // Suponiendo que tienes 3 ítems en el BottomNavigationView
         for (int i = 0; i < menu.size(); i++) {
-            // Obtener el ítem del menú
+
             MenuItem menuItem = menu.getItem(i);
 
-            // Obtener el texto actual del ítem
-            String textoOriginal = menuItem.getTitle().toString();
+           String textoOriginal = menuItem.getTitle().toString();
 
-            // Traducir el texto del ítem
             Traductor.traducirTexto(textoOriginal, "es", idiomaDestino, new Traductor.TraduccionCallback() {
                 @Override
                 public void onTextoTraducido(String textoTraducido) {
-                    // Actualizar el texto del ítem con la traducción
+
                     menuItem.setTitle(textoTraducido);
                 }
             });

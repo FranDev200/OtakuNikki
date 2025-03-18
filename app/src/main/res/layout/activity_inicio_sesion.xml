@@ -16,6 +16,16 @@
         android:orientation="vertical"
         android:gravity="center"
     >
+        <ImageButton
+            android:id="@+id/btnSeleccionIdioma"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/languages"
+            android:background="@null"
+            android:contentDescription="Seleccionar idioma"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="20dp"/>
 
         <EditText
             android:id="@+id/etEmailInicioSesion"
@@ -79,10 +89,12 @@
 
 
     <LinearLayout
+        android:id="@+id/registroUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
         <TextView
+            android:id="@+id/tvRegistro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
