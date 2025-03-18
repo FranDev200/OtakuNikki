@@ -39,7 +39,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/fondoazul" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/imgAgregarFoto"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
