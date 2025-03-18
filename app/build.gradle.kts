@@ -49,6 +49,8 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.0.0")
 
+    //Idioma
+    implementation ("com.google.mlkit:language-id:17.0.4")
     //FireBase
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.firebase:firebase-analytics")

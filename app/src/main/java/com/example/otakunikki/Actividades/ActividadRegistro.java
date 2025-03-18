@@ -2,6 +2,7 @@ package com.example.otakunikki.Actividades;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -56,7 +57,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ActividadRegistro extends AppCompatActivity {
-    private String[] paises = {"--Seleccion un idioma--", "Español (España)", "Inglés", "Japonés"};
+    private String[] paises = {"Español (España)", "Inglés", "Japonés"};
     private Spinner spnRegion;
     private TextView tvPaisSeleccionado;
     private Button btnConfirmar, btnCancelar;
@@ -95,18 +96,25 @@ public class ActividadRegistro extends AppCompatActivity {
         spnRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (paises[position].contentEquals("--Seleccion un pais--")) {
-                    tvPaisSeleccionado.setText(paises[position]);
-                }
+
+                String idioma = "es"; // utilizamos este por defecto
                 if (paises[position].contentEquals("Español (España)")) {
                     tvPaisSeleccionado.setText((paises[position]));
+                    idioma = "es";
                 }
                 if (paises[position].contentEquals("Inglés")) {
                     tvPaisSeleccionado.setText((paises[position]));
+                    idioma = "en";
                 }
                 if (paises[position].contentEquals("Japonés")) {
                     tvPaisSeleccionado.setText((paises[position]));
+                    idioma = "ja";
                 }
+
+                SharedPreferences preferences = getApplicationContext().getSharedPreferences("Idiomas", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("idioma", idioma);
+                editor.apply();
             }
 
             @Override
@@ -152,6 +160,12 @@ public class ActividadRegistro extends AppCompatActivity {
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                /*Antes de guardar el usuario almaceno el idioma que guardé con shared preferences*/
+
+                String idioma = getApplicationContext().getSharedPreferences("Idiomas", MODE_PRIVATE).getString("idioma", "es");
+
+                /***************************************************************/
                 String email = etEmail.getText().toString();
                 String nombreCompleto = etNombreCompleto.getText().toString();
                 String nombreUsuario = etNombreUsuario.getText().toString();
@@ -191,17 +205,23 @@ public class ActividadRegistro extends AppCompatActivity {
                                     /**ID QUE GENERA FIREBASE**/
                                     String userId = firebaseUser.getUid();
                                     List<Perfil> userProfiles = new ArrayList<>();
-                                    int imagen = (int) imgIconoUser.getTag();
-                                    userProfiles.add(new Perfil(nombreUsuario + "_Perfil1", imagen));
+
+                                    if (imgIconoUser.getTag()==null) {
+                                        userProfiles.add(new Perfil(nombreUsuario + "_Perfil1", R.drawable.luffychibi));
+                                    } else {
+                                        int imagen = (int) imgIconoUser.getTag();
+                                        userProfiles.add(new Perfil(nombreUsuario + "_Perfil1", imagen));
+                                    }
 
                                     // Crear el objeto de usuario
-                                    Usuario newUser = new Usuario(userId, nombreCompleto, nombreUsuario, email, tvPaisSeleccionado.getText().toString(), userProfiles);
+                                    Usuario newUser = new Usuario(userId, nombreCompleto, nombreUsuario, email, idioma, userProfiles);
 
                                     // Guardar el usuario en Firestore
                                     baseDatos.collection("Usuarios").document(userId)
                                             .set(newUser)
                                             .addOnSuccessListener(aVoid -> {
                                                 Log.d("Firebase", "Usuario creado correctamente");
+                                                Log.d("Firebase", "Usuario creado con idioma: " + idioma);
                                                 abrirSeleccion(newUser); // Abrir la siguiente actividad después de guardar el usuario
                                             })
                                             .addOnFailureListener(e -> {
