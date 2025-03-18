@@ -181,7 +181,7 @@ public class FragmentInfoUsuario extends Fragment {
                 builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(requireContext(), "Perfil: " + nombrePerfil + " eliminado.", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(requireContext(), "Perfil: " + nombrePerfil + " eliminado.", Toast.LENGTH_LONG).show();
                         EliminarPerfil(nombrePerfil);
                     }
                 });
@@ -260,7 +260,7 @@ public class FragmentInfoUsuario extends Fragment {
                     db.collection("Usuarios").document(userId)
                             .update("listaPerfiles", usuario.getListaPerfiles())
                             .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(requireContext(), "Perfil eliminado correctamente", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(requireContext(), "Perfil eliminado correctamente", Toast.LENGTH_SHORT).show();
                                 // Redirigir a SeleccionPerfil
                                 CambioPerfil();
                             })

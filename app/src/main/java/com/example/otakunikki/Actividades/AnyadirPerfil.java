@@ -38,7 +38,7 @@ public class AnyadirPerfil extends AppCompatActivity {
     private EditText etNombrePerfil;
     private Button btnConfirmarPerfil, btnCancelarPerfil;
 
-    private ImageView imgAgregarFoto;
+    private ImageButton imgAgregarFoto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +93,14 @@ public class AnyadirPerfil extends AppCompatActivity {
             public void onClick(View v) {
                 if (usuario != null) {
                     String userId = usuario.getUid();
-                    int fotoPerfil = (int) imgAgregarFoto.getTag();
+                    Log.i("INFORMACION TAG FOTO", imgAgregarFoto.getTag().toString());
+                    int fotoPerfil =0;
+                    if (imgAgregarFoto.getTag().toString().equalsIgnoreCase("res/drawable/user.png")) {
+                        fotoPerfil = R.drawable.luffychibi;
+                    }else {
+                        fotoPerfil = (int) imgAgregarFoto.getTag();
+                    }
                     Perfil nuevoPerfil = new Perfil(etNombrePerfil.getText().toString(), fotoPerfil);
-
                     db.collection("Usuarios").document(userId)
                             .update("listaPerfiles", FieldValue.arrayUnion(nuevoPerfil))
                             .addOnSuccessListener(aVoid -> {
