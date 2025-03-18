@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:background="@color/moradoOscuroIcono"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tvSeleccionaUnIdioma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selecciona un idioma"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/blancoIcono"
+        android:paddingBottom="5dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/btnEspanol"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bandera_espanya"
+            android:contentDescription="Español"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:padding="4dp"/>
+
+        <ImageButton
+            android:id="@+id/btnIngles"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bandera_uk"
+            android:contentDescription="English"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:padding="8dp"/>
+
+        <ImageButton
+            android:id="@+id/btnJapones"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bandera_jp"
+            android:contentDescription="日本語"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:padding="4dp"/>
+    </LinearLayout>
+</LinearLayout>

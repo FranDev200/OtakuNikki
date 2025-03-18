@@ -6,14 +6,18 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,18 +29,19 @@ import java.util.Locale;
 public class InicioSesion extends AppCompatActivity {
 
     private EditText etEmail, etContrasenya;
+    private TextView tvRegistro;
     private Button btnInicioSesion;
     private CheckBox chkMantenerSesion;
     private FirebaseAuth mAuthInicioSesion;
-    private ImageButton imgBtnRegistro;
+    private ImageButton imgBtnRegistro, btnSeleccionIdi;
     private SharedPreferences estadoSesion;
     private static final String TAG = "InicioSesion";
-
+    private String idioma;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         SharedPreferences preferences = getSharedPreferences("Idiomas", MODE_PRIVATE);
-        String idioma = preferences.getString("idioma", "es");
+        idioma = preferences.getString("idioma", "es");
         setLocale(idioma); // Aplica el idioma al inicio
 
         super.onCreate(savedInstanceState);
@@ -44,10 +49,55 @@ public class InicioSesion extends AppCompatActivity {
 
         // Inicializar componentes de UI
         etEmail = findViewById(R.id.etEmailInicioSesion);
+        tvRegistro = findViewById(R.id.tvRegistro);
         etContrasenya = findViewById(R.id.etPwdInicioSesion);
         btnInicioSesion = findViewById(R.id.BtnInicioSesion);
         chkMantenerSesion = findViewById(R.id.chkMantenerSesion);
         imgBtnRegistro = findViewById(R.id.imgBtnRegistro);
+        btnSeleccionIdi = findViewById(R.id.btnSeleccionIdioma);
+
+        btnSeleccionIdi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarSelectorIdioma();
+
+                /**Traducimos los controloes**/
+                Traductor.traducirTexto(etEmail.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                    @Override
+                    public void onTextoTraducido(String textoTraducido) {
+                        etEmail.setHint(textoTraducido);
+                    }
+                });
+
+                Traductor.traducirTexto(etContrasenya.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                    @Override
+                    public void onTextoTraducido(String textoTraducido) {
+                        etContrasenya.setHint(textoTraducido);
+                    }
+                });
+
+                Traductor.traducirTexto(chkMantenerSesion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                    @Override
+                    public void onTextoTraducido(String textoTraducido) {
+                        chkMantenerSesion.setText(textoTraducido);
+                    }
+                });
+
+                Traductor.traducirTexto(btnInicioSesion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                    @Override
+                    public void onTextoTraducido(String textoTraducido) {
+                        btnInicioSesion.setText(textoTraducido);
+                    }
+                });
+
+                Traductor.traducirTexto(tvRegistro.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                    @Override
+                    public void onTextoTraducido(String textoTraducido) {
+                        tvRegistro.setText(textoTraducido);
+                    }
+                });
+            }
+        });
 
         // Inicializar Firebase Auth
         mAuthInicioSesion = FirebaseAuth.getInstance();
@@ -81,6 +131,55 @@ public class InicioSesion extends AppCompatActivity {
         getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
     }
 
+    private void mostrarSelectorIdioma() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.alert_dialog_seleccion_idioma, null);
+        builder.setView(view);
+
+        AlertDialog dialog = builder.create();
+
+        TextView tvSelecciona;
+        ImageButton btnEspanol, btnIngles, btnJapones;
+
+        tvSelecciona = view.findViewById(R.id.tvSeleccionaUnIdioma);
+        btnEspanol = view.findViewById(R.id.btnEspanol);
+        btnIngles = view.findViewById(R.id.btnIngles);
+        btnJapones = view.findViewById(R.id.btnJapones);
+
+        btnEspanol.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarIdiomaApp("es");
+                dialog.dismiss();
+            }
+        });
+
+        btnIngles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarIdiomaApp("en");
+                dialog.dismiss();
+            }
+        });
+
+        btnJapones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarIdiomaApp("ja");
+                dialog.dismiss();
+            }
+        });
+
+        Traductor.traducirTexto(tvSelecciona.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvSelecciona.setText(textoTraducido);
+            }
+        });
+
+        dialog.show();
+    }
 
 
     private void iniciarSesion() {
@@ -162,11 +261,9 @@ public class InicioSesion extends AppCompatActivity {
         editor.putString("idioma", idioma);
         editor.apply();
 
-        // Reiniciar la actividad para aplicar cambios
-        //Intent intent = new Intent(getApplicationContext(), InicioSesion.class);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        //finish();
-        //startActivity(intent);
+        /*esta mal pero es lo más cerca que está de estar bien*/
+        recreate();
+
     }
 
 
@@ -176,4 +273,5 @@ public class InicioSesion extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 }

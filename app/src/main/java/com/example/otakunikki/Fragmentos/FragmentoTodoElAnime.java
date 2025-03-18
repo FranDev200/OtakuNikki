@@ -45,8 +45,8 @@ public class FragmentoTodoElAnime extends Fragment {
     private Anime anime;
     private String idioma;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         SharedPreferences infoIdioma = requireContext().getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
         idioma = infoIdioma.getString("idioma", "es");
         View vista = inflater.inflate(R.layout.fragmento_todo_el_anime, container, false);
