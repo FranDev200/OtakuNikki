@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,19 +14,19 @@ public class Usuario  implements Parcelable{
     private String nombreCompleto;
     private String userName;
     private String email;
-    private String region;
+    private String idioma;
     private List<Perfil> listaPerfiles;
 
     public Usuario(){
 
     }
 
-    public Usuario(String idUsuario, String nombreCompleto, String userName, String email, String region, List<Perfil> listaPerfiles) {
+    public Usuario(String idUsuario, String nombreCompleto, String userName, String email, String idioma, List<Perfil> listaPerfiles) {
         this.idUsuario = idUsuario;
         this.nombreCompleto = nombreCompleto;
         this.userName = userName;
         this.email = email;
-        this.region = region;
+        this.idioma = idioma;
         this.listaPerfiles = listaPerfiles;
     }
 
@@ -37,7 +36,7 @@ public class Usuario  implements Parcelable{
         nombreCompleto = in.readString();
         userName = in.readString();
         email = in.readString();
-        region = in.readString();
+        idioma = in.readString();
         listaPerfiles = in.createTypedArrayList(Perfil.CREATOR);
     }
 
@@ -85,12 +84,12 @@ public class Usuario  implements Parcelable{
         this.email = email;
     }
 
-    public String getRegion() {
-        return region;
+    public String getIdioma() {
+        return idioma;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
     }
 
     public List<Perfil> getListaPerfiles() {
@@ -125,7 +124,7 @@ public class Usuario  implements Parcelable{
         dest.writeString(nombreCompleto);
         dest.writeString(userName);
         dest.writeString(email);
-        dest.writeString(region);
+        dest.writeString(idioma);
         dest.writeTypedList(listaPerfiles);
     }
 }

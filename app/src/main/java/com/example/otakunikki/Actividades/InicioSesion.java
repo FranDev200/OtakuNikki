@@ -2,20 +2,25 @@ package com.example.otakunikki.Actividades;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Locale;
 
 public class InicioSesion extends AppCompatActivity {
 
@@ -29,6 +34,11 @@ public class InicioSesion extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SharedPreferences preferences = getSharedPreferences("Idiomas", MODE_PRIVATE);
+        String idioma = preferences.getString("idioma", "es");
+        setLocale(idioma); // Aplica el idioma al inicio
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
 
@@ -60,6 +70,17 @@ public class InicioSesion extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    private void setLocale(String idioma) {
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration configuration = new Configuration();
+        configuration.setLocale(locale);
+
+        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+    }
+
 
 
     private void iniciarSesion() {
@@ -110,8 +131,15 @@ public class InicioSesion extends AppCompatActivity {
                             return;
                         }
 
+                        if (usuario != null && usuario.getIdioma() != null) {
+                            String idioma = usuario.getIdioma();
+                            cambiarIdiomaApp(idioma);
+                        }
+
                         Log.d(TAG, "Usuario recuperado con éxito: " + usuario.getUserName());
                         abrirSeleccionPerfil(usuario);
+
+
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -119,6 +147,28 @@ public class InicioSesion extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Error obteniendo datos", Toast.LENGTH_SHORT).show();
                 });
     }
+
+    private void cambiarIdiomaApp(String idioma) {
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration configuration = new Configuration();
+        configuration.setLocale(locale);
+
+        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+        // Guardar el idioma en SharedPreferences para persistencia
+        SharedPreferences.Editor editor = getSharedPreferences("Idiomas", MODE_PRIVATE).edit();
+        editor.putString("idioma", idioma);
+        editor.apply();
+
+        // Reiniciar la actividad para aplicar cambios
+        Intent intent = new Intent(getApplicationContext(), InicioSesion.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        finish();
+        startActivity(intent);
+    }
+
 
     private void abrirSeleccionPerfil(Usuario usuario) {
         Intent intent = new Intent(getApplicationContext(), SeleccionPerfil.class);
