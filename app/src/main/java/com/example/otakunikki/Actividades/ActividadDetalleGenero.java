@@ -1,6 +1,7 @@
 package com.example.otakunikki.Actividades;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,16 +36,18 @@ public class ActividadDetalleGenero extends AppCompatActivity {
     private AdaptadorAnimesGV adaptadorAnimes;
     private List<Anime> listaAnimes;
     private int idGenero;
+    private String idioma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actividad_detalle_genero);
-
+        SharedPreferences infoIdioma = getSharedPreferences("Idiomas", MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
         imgRetroceso = findViewById(R.id.imgRetroceso);
         gvAnimes = findViewById(R.id.gvGeneros);
         listaAnimes = new ArrayList<>();
-        adaptadorAnimes = new AdaptadorAnimesGV(this, listaAnimes);
+        adaptadorAnimes = new AdaptadorAnimesGV(this, listaAnimes, idioma);
         gvAnimes.setAdapter(adaptadorAnimes);
 
         // Obtener el ID del género desde el intent

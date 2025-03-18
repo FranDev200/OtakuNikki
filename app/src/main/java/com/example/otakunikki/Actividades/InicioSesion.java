@@ -163,10 +163,10 @@ public class InicioSesion extends AppCompatActivity {
         editor.apply();
 
         // Reiniciar la actividad para aplicar cambios
-        Intent intent = new Intent(getApplicationContext(), InicioSesion.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        finish();
-        startActivity(intent);
+        //Intent intent = new Intent(getApplicationContext(), InicioSesion.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //finish();
+        //startActivity(intent);
     }
 
 

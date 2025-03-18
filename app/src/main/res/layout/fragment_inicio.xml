@@ -78,6 +78,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/tvFragmentInicioSinopsis"
                     android:layout_marginTop="30px"
                     android:paddingLeft="15dp"
                     android:textSize="20dp"
@@ -108,6 +109,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tvFragmentInicioRecomendados"
             android:layout_marginTop="30px"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,6 +127,7 @@
             android:orientation="horizontal"/>
 
         <TextView
+            android:id="@+id/tvFragmentInicioTemporada"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30px"

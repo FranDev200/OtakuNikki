@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.otakunikki.Clases.Genero;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
@@ -18,10 +19,12 @@ public class AdaptadorGeneroGV extends BaseAdapter {
 
     private Context context;
     private List<Genero> listaGeneros;
+    private String idioma;
 
-    public AdaptadorGeneroGV(Context context, List<Genero> generos) {
+    public AdaptadorGeneroGV(Context context, List<Genero> generos, String idioma) {
         this.context = context;
         this.listaGeneros = generos;
+        this.idioma = idioma;
     }
 
     @Override
@@ -55,7 +58,12 @@ public class AdaptadorGeneroGV extends BaseAdapter {
                 .resize(900, 750)
                 .into(imgGenero);
 
-        tvGenero.setText(listaGeneros.get(position).getNombreGenero().toString());
+        Traductor.traducirTexto(listaGeneros.get(position).getNombreGenero().toString(), "en", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvGenero.setText(textoTraducido);
+            }
+        });
 
 
         return convertView;

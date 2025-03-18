@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.otakunikki.Clases.Anime;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
@@ -19,10 +20,12 @@ public class AdaptadorAnimesGV  extends BaseAdapter {
 
     private List<Anime> listaAnimes;
     private Context context;
+    private String idioma;
 
-    public AdaptadorAnimesGV(Context context, List<Anime> listaAnimes) {
+    public AdaptadorAnimesGV(Context context, List<Anime> listaAnimes, String idioma) {
         this.context = context;
         this.listaAnimes = listaAnimes;
+        this.idioma = idioma;
     }
 
     @Override
@@ -52,7 +55,12 @@ public class AdaptadorAnimesGV  extends BaseAdapter {
         Picasso.get()
                 .load(listaAnimes.get(position).getImagenGrande())
                 .into(img);
-        tvImg.setText(listaAnimes.get(position).getTitulo().toString());
+        Traductor.traducirTexto(listaAnimes.get(position).getTitulo(), "en", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvImg.setText(textoTraducido);
+            }
+        });
 
         return view;
     }

@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.storage)
+    implementation(libs.translate)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -51,6 +52,7 @@ dependencies {
 
     //Idioma
     implementation ("com.google.mlkit:language-id:17.0.4")
+
     //FireBase
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.firebase:firebase-analytics")

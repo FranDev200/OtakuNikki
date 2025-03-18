@@ -72,7 +72,8 @@
                             />
 
                             <TextView
-                                android:text="Puntuación"
+                                android:id="@+id/tvPuntuacionAnimeDetalle"
+                                android:text="Valoración"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="25dp"
@@ -109,6 +110,7 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/tvAnimeEpisodios"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Episodios"
@@ -166,6 +168,7 @@
 
 
                             <TextView
+                                android:id="@+id/tvAnimeFavorito"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Favorito: "
@@ -264,6 +267,7 @@
                         android:id="@+id/btnAnyadirAnime"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginRight="30dp"
                         android:text="+ Añadir a la lista"
                         android:textStyle="bold"
                         android:textSize="18dp"
@@ -272,7 +276,7 @@
 
                     <TextView
                         android:id="@+id/tvSeleccionSpinner"
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15px"
                         android:textSize="20dp"
@@ -284,7 +288,7 @@
 
                     <Spinner
                         android:id="@+id/spFiltro"
-                        android:layout_width="match_parent"
+                        android:layout_width="50dp"
                         android:layout_height="match_parent"
                         android:backgroundTint="@color/white"
                         android:textColorHint="@color/white"

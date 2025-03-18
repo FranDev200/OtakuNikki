@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.otakunikki.Clases.Episodio;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
@@ -20,12 +21,14 @@ public class AdaptadorVistaDetalleLV extends RecyclerView.Adapter<AdaptadorVista
 
     private List<Episodio> listaEpisodios;
     private Context context;
+    private String idioma;
 
     private View.OnClickListener listener;
 
-    public AdaptadorVistaDetalleLV(Context context, List<Episodio> listaEpisodios) {
+    public AdaptadorVistaDetalleLV(Context context, List<Episodio> listaEpisodios, String idioma) {
         this.context = context;
         this.listaEpisodios = listaEpisodios;
+        this.idioma = idioma;
     }
 
     @NonNull
@@ -41,7 +44,12 @@ public class AdaptadorVistaDetalleLV extends RecyclerView.Adapter<AdaptadorVista
         Episodio episodio = listaEpisodios.get(position);
 
         holder.tvNumEp.setText(episodio.getIdEpisodio() + "");
-        holder.tvTitCap.setText(episodio.getTitulo());
+        Traductor.traducirTexto(episodio.getTitulo(), "en", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                holder.tvTitCap.setText(textoTraducido);
+            }
+        });
         holder.tvFecha.setText(episodio.getFecha());
         if(episodio.isEstaVisto()){
             holder.imgVisto.setImageResource(R.drawable.ojo_visto);
