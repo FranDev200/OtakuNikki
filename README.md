@@ -1,8 +1,6 @@
 Pestaña de Foro:
 - Hacerlo todo.
 
-Vista detalle anime: 
-
 Pestaña de Mis Listas: 
 - Cambiar la fecha de ultima edición de la lista. (Si se complica lo quitamos y podemos añadir otra cosa)
 
