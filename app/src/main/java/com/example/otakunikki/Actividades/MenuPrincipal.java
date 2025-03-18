@@ -1,13 +1,16 @@
 package com.example.otakunikki.Actividades;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.Fragmentos.FragmentInfoUsuario;
 import com.example.otakunikki.Fragmentos.FragmentInicio;
 import com.example.otakunikki.Fragmentos.FragmentoListas;
@@ -17,15 +20,18 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MenuPrincipal extends AppCompatActivity {
     private BottomNavigationView menu_navegador;
-
-
+    private String idioma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_principal);
+        SharedPreferences infoIdioma = getSharedPreferences("Idiomas", MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
 
         menu_navegador = findViewById(R.id.menu_navegador);
+        traducirBottomNavigationView(menu_navegador, idioma);
+
         cargarFragment(new FragmentInicio());
         menu_navegador.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -79,6 +85,28 @@ public class MenuPrincipal extends AppCompatActivity {
         }
 
 
+    }
+    public void traducirBottomNavigationView(BottomNavigationView bottomNavigationView, String idiomaDestino) {
+        // Acceder a los ítems del BottomNavigationView
+        Menu menu = bottomNavigationView.getMenu();
+
+        // Suponiendo que tienes 3 ítems en el BottomNavigationView
+        for (int i = 0; i < menu.size(); i++) {
+            // Obtener el ítem del menú
+            MenuItem menuItem = menu.getItem(i);
+
+            // Obtener el texto actual del ítem
+            String textoOriginal = menuItem.getTitle().toString();
+
+            // Traducir el texto del ítem
+            Traductor.traducirTexto(textoOriginal, "es", idiomaDestino, new Traductor.TraduccionCallback() {
+                @Override
+                public void onTextoTraducido(String textoTraducido) {
+                    // Actualizar el texto del ítem con la traducción
+                    menuItem.setTitle(textoTraducido);
+                }
+            });
+        }
     }
 
 }

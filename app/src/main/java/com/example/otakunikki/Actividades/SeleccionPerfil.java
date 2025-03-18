@@ -8,11 +8,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.otakunikki.Adaptadores.AdaptadorPerfilesGridView;
 import com.example.otakunikki.Clases.Perfil;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 
@@ -24,13 +26,33 @@ public class SeleccionPerfil extends AppCompatActivity {
     private GridView miGridView;
     private AdaptadorPerfilesGridView miAdaptadorPerfilesGridView;
     private List<Perfil> listaperfiles;
+    private String idioma;
+    private TextView tvEscogePerfil, tvAgregarPerfil;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seleccion_perfil);
 
+        SharedPreferences infoIdioma = getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
         btnAnyadir = findViewById(R.id.btnAnyadir);
         miGridView = findViewById(R.id.gvListaUsuarios);
+        tvEscogePerfil = findViewById(R.id.tvEscogePerfil);
+        tvAgregarPerfil = findViewById(R.id.tvAgregarPerfil);
+
+        Traductor.traducirTexto(tvEscogePerfil.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvEscogePerfil.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(tvAgregarPerfil.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvAgregarPerfil.setText(textoTraducido);
+            }
+        });
 
         miGridView.setAdapter(miAdaptadorPerfilesGridView);
         listaperfiles = new ArrayList<Perfil>();

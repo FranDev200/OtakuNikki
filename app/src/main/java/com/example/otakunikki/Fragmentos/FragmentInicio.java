@@ -1,6 +1,8 @@
 package com.example.otakunikki.Fragmentos;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -28,6 +30,7 @@ import com.example.otakunikki.Actividades.ActividadVistaDetalleAnime;
 import com.example.otakunikki.Adaptadores.AdaptadorLVHorAnimeMenuPrincipal;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Episodio;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.ControlDeslizante.BusquedaAnimeFragDeslizante;
 import com.example.otakunikki.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -59,9 +62,11 @@ public class FragmentInicio extends Fragment {
     private RequestQueue rqAnimesTemporada;
     private StringRequest mrqAnimesTemporada;
     private String urlAnimeTemporada = "https://api.jikan.moe/v4/seasons/now";
-    private int pagina = 0;
-
+    private int idAnime;
+    private String idioma;
     private TextView tvTituloInicio, tvSinopsisInicio;
+    private TextView tvFragmentoInicioSinopsis, tvFragmentoInicioRecomendados, tvFragmentoInicioTemporada;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -71,6 +76,42 @@ public class FragmentInicio extends Fragment {
         imgMostrarTexto = vista.findViewById(R.id.imgMostrarTexto);
         etNombreAnimeBusqueda = vista.findViewById(R.id.etNombreAnimeBusqueda);
         ibNombreAnimeBusqueda = vista.findViewById(R.id.ibNombreAnimeBusqueda);
+
+        tvFragmentoInicioSinopsis = vista.findViewById(R.id.tvFragmentInicioSinopsis);
+        tvFragmentoInicioTemporada = vista.findViewById(R.id.tvFragmentInicioTemporada);
+        tvFragmentoInicioRecomendados = vista.findViewById(R.id.tvFragmentInicioRecomendados);
+
+        SharedPreferences infoIdioma = requireContext().getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
+
+        /**TRADUCIR CONTROLES YA DEFINIDOS**/
+        Traductor.traducirTexto(etNombreAnimeBusqueda.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                etNombreAnimeBusqueda.setHint(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvFragmentoInicioSinopsis.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvFragmentoInicioSinopsis.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvFragmentoInicioTemporada.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvFragmentoInicioTemporada.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvFragmentoInicioRecomendados.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvFragmentoInicioRecomendados.setText(textoTraducido);
+            }
+        });
 
         /**METODO PARA BUSCAR ANIME Y DESPLEGAR EL FRAGMENTO DESLIZANTE**/
         ibNombreAnimeBusqueda.setOnClickListener(new View.OnClickListener() {
@@ -86,13 +127,14 @@ public class FragmentInicio extends Fragment {
         /**METODO PARA EXPANDIR EL TEXT VIEW DE SINOPSIS PARA QUE PODAMOS CONTRAER Y EXPANDIR EL CONTROL**/
         tvSinopsisInicio.setOnClickListener(new View.OnClickListener() {
             boolean flag = false;
+
             @Override
             public void onClick(View v) {
-                if(flag){
+                if (flag) {
                     tvSinopsisInicio.setMaxLines(4);
                     flag = false;
                     imgMostrarTexto.setImageResource(R.drawable.flecha_abajo);
-                }else{
+                } else {
                     tvSinopsisInicio.setMaxLines(Integer.MAX_VALUE);
                     flag = true;
                     imgMostrarTexto.setImageResource(R.drawable.flecha_arriba);
@@ -106,14 +148,14 @@ public class FragmentInicio extends Fragment {
         lvhAnimeRecomendaciones = vista.findViewById(R.id.lvRecomendaciones);
         lvhAnimeRecomendaciones.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         listaAnimesRecomendados = new ArrayList<Anime>();
-        adpatdorAnimeRecomendado = new AdaptadorLVHorAnimeMenuPrincipal(getActivity(), listaAnimesRecomendados);
+        adpatdorAnimeRecomendado = new AdaptadorLVHorAnimeMenuPrincipal(getActivity(), listaAnimesRecomendados, idioma);
         lvhAnimeRecomendaciones.setAdapter(adpatdorAnimeRecomendado);
 
         /**ADAPTADOR Y LISTVIEW PARA TEMPORADA**/
         lvhAnimesTemporada = vista.findViewById(R.id.lvAnimesTemporada);
         lvhAnimesTemporada.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         listaAnimeTemporada = new ArrayList<Anime>();
-        adaptadorAnimeTemporada = new AdaptadorLVHorAnimeMenuPrincipal(getActivity(), listaAnimeTemporada);
+        adaptadorAnimeTemporada = new AdaptadorLVHorAnimeMenuPrincipal(getActivity(), listaAnimeTemporada, idioma);
         lvhAnimesTemporada.setAdapter(adaptadorAnimeTemporada);
 
         /**METODO PARA ABRIR EL DETALLE DEL ANIME  DE ARRIBA**/
@@ -122,7 +164,7 @@ public class FragmentInicio extends Fragment {
             public void onClick(View v) {
                 Anime animeEnviar = null;
                 for (Anime anime : listaAnimeTemporada) {
-                    if (anime.getTitulo().equals(tvTituloInicio.getText().toString())){
+                    if (anime.getId() == idAnime) {
                         animeEnviar = anime;
                         break;
                     }
@@ -139,7 +181,7 @@ public class FragmentInicio extends Fragment {
                 int position = lvhAnimeRecomendaciones.getChildAdapterPosition(v);  // Obtén la posición del ítem clickeado
                 Anime animeSeleccionado = listaAnimesRecomendados.get(position); // Obtén el anime en esa posición
                 EnvioInformacionVistaDetalle(animeSeleccionado);
-                Log.i("ANIME ID PRUEBA", animeSeleccionado.getId()+"");
+                Log.i("ANIME ID PRUEBA", animeSeleccionado.getId() + "");
             }
         });
 
@@ -176,7 +218,7 @@ public class FragmentInicio extends Fragment {
         return vista;
     }
 
-    private void EnvioInformacionVistaDetalle(Anime anime){
+    private void EnvioInformacionVistaDetalle(Anime anime) {
         Intent intent = new Intent(getActivity().getApplicationContext(), ActividadVistaDetalleAnime.class);
         intent.putExtra("Anime", anime);
         startActivity(intent);
@@ -226,10 +268,19 @@ public class FragmentInicio extends Fragment {
                                 }
 
                                 int id = animeObject.getInt("mal_id");
-                                String titulo = animeObject.optString("title", "Título no disponible");
+
+                                // Obtener el título en japonés o en inglés
+                                String tituloO = animeObject.optString("title", "Título no disponible");  // Título original (en japonés)
+                                String titulo = animeObject.optString("title_english", null);  // Intentamos obtener el título en inglés
+
+                                // Si title_english no está presente o está vacío, usar el título japonés
+                                if (titulo.equals("null") || titulo.isEmpty()) {
+                                    titulo = tituloO;
+                                }
                                 String synopsis = animeObject.optString("synopsis", "Sinopsis no disponible");
                                 String imagenGrande = animeObject.getJSONObject("images").getJSONObject("jpg").optString("large_image_url", "Foto no disponible");
                                 String imagenMediana = animeObject.getJSONObject("images").getJSONObject("jpg").optString("image_url", "Foto no disponible");
+
 
                                 Anime anime = new Anime(id, titulo, synopsis, 0, "", imagenGrande, imagenMediana, "", null, null, false, 0, "");
 
@@ -241,9 +292,24 @@ public class FragmentInicio extends Fragment {
                             // Si ya hay 10 animes en la lista, mostrar uno aleatorio en la UI
                             if (listaAnimeTemporada.size() >= 10) {
                                 int nroAleatorio = (int) (Math.random() * 10);
+                                idAnime = listaAnimeTemporada.get(nroAleatorio).getId();
                                 Picasso.get().load(listaAnimeTemporada.get(nroAleatorio).getImagenMediana()).into(imgFotoPrincipal);
-                                tvTituloInicio.setText(listaAnimeTemporada.get(nroAleatorio).getTitulo());
-                                tvSinopsisInicio.setText(listaAnimeTemporada.get(nroAleatorio).getSynopsis());
+                                if (!idioma.equals("es")) {
+                                    Traductor.traducirTexto(listaAnimeTemporada.get(nroAleatorio).getTitulo(), "en", idioma, new Traductor.TraduccionCallback() {
+                                        @Override
+                                        public void onTextoTraducido(String textoTraducido) {
+                                            tvTituloInicio.setText(textoTraducido);
+                                        }
+                                    });
+                                }else{
+                                    tvTituloInicio.setText(listaAnimeTemporada.get(nroAleatorio).getTitulo());
+                                }
+                                Traductor.traducirTexto(listaAnimeTemporada.get(nroAleatorio).getSynopsis(), "en", idioma, new Traductor.TraduccionCallback() {
+                                    @Override
+                                    public void onTextoTraducido(String textoTraducido) {
+                                        tvSinopsisInicio.setText(textoTraducido);
+                                    }
+                                });
                             }
 
                             // Notificar al adaptador después de agregar los datos

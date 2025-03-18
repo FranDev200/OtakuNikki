@@ -1,6 +1,8 @@
 package com.example.otakunikki.Fragmentos;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -42,19 +44,20 @@ public class FragmentoUltTendencias extends Fragment {
     private GridView miGridView;
     private AdaptadorAnimesGV miAdaptador;
     private List<Anime> listaAnimesTemporada;
-
+    private String idioma;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View vista = inflater.inflate(R.layout.fragmento_ult_tendencias, container, false);
-
+        SharedPreferences infoIdioma = requireContext().getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
         miGridView = vista.findViewById(R.id.gvUltTendencias);
 
         /*Adaptador y GridView para las últimas tendencias*/
         miGridView = vista.findViewById(R.id.gvUltTendencias);
         listaAnimesTemporada = new ArrayList<Anime>();
-        miAdaptador = new AdaptadorAnimesGV(getActivity(), listaAnimesTemporada);
+        miAdaptador = new AdaptadorAnimesGV(getActivity(), listaAnimesTemporada, idioma);
         miGridView.setAdapter(miAdaptador);
 
         cargarAnimesTendencia();

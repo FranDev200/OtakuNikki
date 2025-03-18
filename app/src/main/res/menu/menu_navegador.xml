@@ -23,5 +23,5 @@
         <item
             android:id="@+id/mnu_cuenta"
             android:icon="@drawable/user"
-            android:title="Cuenta"/>
+            android:title="Perfil"/>
     </menu>

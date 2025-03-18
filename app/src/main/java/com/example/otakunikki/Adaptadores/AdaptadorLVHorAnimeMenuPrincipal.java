@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.otakunikki.Clases.Anime;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
@@ -19,12 +20,13 @@ import java.util.List;
 public class AdaptadorLVHorAnimeMenuPrincipal extends RecyclerView.Adapter<AdaptadorLVHorAnimeMenuPrincipal.ViewHolder> implements View.OnClickListener {
     private Context context;
     private List<Anime> listaAnimes;
-
+    private String idioma;
     private View.OnClickListener listener;
     // Constructor
-    public AdaptadorLVHorAnimeMenuPrincipal(Context context, List<Anime> listaAnimes) {
+    public AdaptadorLVHorAnimeMenuPrincipal(Context context, List<Anime> listaAnimes, String idioma) {
         this.context = context;
         this.listaAnimes = listaAnimes;
+        this.idioma = idioma;
     }
     @NonNull
     @Override
@@ -40,7 +42,17 @@ public class AdaptadorLVHorAnimeMenuPrincipal extends RecyclerView.Adapter<Adapt
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Anime anime = listaAnimes.get(position);
         // Establecemos el nombre y la imagen del anime
-        holder.nombre.setText(anime.getTitulo());
+        if(!idioma.equals("es")){
+        Traductor.traducirTexto(anime.getTitulo(), "en", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                holder.nombre.setText(textoTraducido);
+            }
+        });
+        }else{
+            holder.nombre.setText(anime.getTitulo());
+        }
+
         Picasso.get().load(anime.getImagenGrande()).into(holder.imagen);
 
 

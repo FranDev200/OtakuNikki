@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.translation.Translator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,6 +35,7 @@ import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Episodio;
 import com.example.otakunikki.Clases.ListaAnime;
 import com.example.otakunikki.Clases.Perfil;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +43,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -57,6 +60,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class ActividadVistaDetalleAnime extends AppCompatActivity {
     private String[] filtros = {"Más antiguo", "Más reciente"};
     Spinner spFiltro;
@@ -65,7 +69,8 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
     ImageButton btnRetroceso, btnFavoritos;
     ImageView imgAnime, imgMostrarTexto;
     TextView tvTituloAnime, tvSinopsisAnime, tvEmision,
-            tvPuntuacion, tvGeneros, tvNumEpisodios, tvSeleccionSpinner, tvDuracion;
+            tvPuntuacion, tvGeneros, tvNumEpisodios, tvSeleccionSpinner, tvDuracion,
+            tvPuntuacionAnime, tvEpisodiosAnime, tvFavoritoAnime;
     Button btnAnyadirAnime;
     //-------------------------------------------------------------------------
     RecyclerView lvEpisodios;
@@ -82,11 +87,14 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
     private FirebaseUser usuario;
     private String nombrePerfil;
     private String nombreLista;
+    private String idioma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividad_vista_detalle_anime);
+        SharedPreferences infoIdioma = getSharedPreferences("Idiomas", MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
 
         /**********************************************************************************************************/
         mAuth = FirebaseAuth.getInstance();
@@ -114,6 +122,48 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         tvNumEpisodios = findViewById(R.id.tvNumEpisodios);
         tvSeleccionSpinner = findViewById(R.id.tvSeleccionSpinner);
         tvDuracion = findViewById(R.id.tvDuracionEp);
+        tvFavoritoAnime = findViewById(R.id.tvAnimeFavorito);
+        tvPuntuacionAnime = findViewById(R.id.tvPuntuacionAnimeDetalle);
+        tvEpisodiosAnime = findViewById(R.id.tvAnimeEpisodios);
+
+        /**TRADUCCION TEXTVIEW PUNTUACION, EPISODIOS, FAVORITOS, OPCIONES SPINNER Y BOTON AÑADIR LISTA**/
+        Traductor.traducirTexto(tvFavoritoAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvFavoritoAnime.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(tvPuntuacionAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvPuntuacionAnime.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(tvEpisodiosAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvEpisodiosAnime.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(filtros[0], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                filtros[0] = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(filtros[1], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                filtros[1] = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(btnAnyadirAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnAnyadirAnime.setText(textoTraducido);
+            }
+        });
+        /***************************************************************/
 
         lvEpisodios = findViewById(R.id.lvEpisodios);
         anime = getIntent().getParcelableExtra("Anime");
@@ -148,13 +198,24 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if (filtros[position].contentEquals("Más antiguo")) {
-                    tvSeleccionSpinner.setText("Más antiguo");
+                if (position == 0) {
+                    Traductor.traducirTexto(filtros[0], "es", idioma, new Traductor.TraduccionCallback() {
+                        @Override
+                        public void onTextoTraducido(String textoTraducido) {
+                            tvSeleccionSpinner.setText(textoTraducido);
+                        }
+                    });
+
                     Collections.reverse(listaEpisodios);
                     miAdaptadorEp.notifyDataSetChanged();
                 }
-                if (filtros[position].contentEquals("Más reciente")) {
-                    tvSeleccionSpinner.setText("Más reciente");
+                if (position == 1) {
+                    Traductor.traducirTexto(filtros[1], "es", idioma, new Traductor.TraduccionCallback() {
+                        @Override
+                        public void onTextoTraducido(String textoTraducido) {
+                            tvSeleccionSpinner.setText(textoTraducido);
+                        }
+                    });
                     Collections.reverse(listaEpisodios);
                     miAdaptadorEp.notifyDataSetChanged();
                 }
@@ -168,7 +229,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
         /**ADAPTADOR DE LA LISTA DE EPISODIOS**/
         lvEpisodios.setLayoutManager(new LinearLayoutManager(this));
-        miAdaptadorEp = new AdaptadorVistaDetalleLV(this, listaEpisodios);
+        miAdaptadorEp = new AdaptadorVistaDetalleLV(this, listaEpisodios, idioma);
         lvEpisodios.setAdapter(miAdaptadorEp);
         nombreLista = getIntent().getStringExtra("NombreLista");
 
@@ -263,7 +324,6 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                 listView.setAdapter(miAdaptadorAlertDialog);
 
 
-
                 RecuperarListas(usuario, nombrePerfil);
 
                 AlertDialog dialog = builder.create();
@@ -280,6 +340,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
 
     }
+
 
     private void AgregarListaEpisodios(Anime anime) {
         RequestQueue rqEpisodio = Volley.newRequestQueue(getApplicationContext());
@@ -342,6 +403,15 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                             JSONObject animeDetalles = animeDetallesResponse.getJSONObject("data");
 
                             String sinopsis = animeDetalles.optString("synopsis", "Sin sinopsis disponible");
+                            // Obtener el título en japonés o en inglés
+                            String tituloO = animeDetalles.optString("title", "Título no disponible");  // Título original (en japonés)
+                            String titulo = animeDetalles.optString("title_english", null);  // Intentamos obtener el título en inglés
+
+                            // Si title_english no está presente o está vacío, usar el título japonés
+                            if (titulo.equals("null") || titulo.isEmpty()) {
+                                titulo = tituloO;
+                            }
+
                             double puntuacion = animeDetalles.optDouble("score", 0.0);
                             String url = animeDetalles.getJSONObject("trailer").optString("url", "Trailer no disponible");
                             String videoId = extractYouTubeVideoId(url);
@@ -358,7 +428,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
                             // Obtención de la lista de géneros
                             JSONArray datosGeneros = animeDetalles.optJSONArray("genres");
-                            List<String> listaGeneros = new ArrayList<>(); // Reiniciar la lista de géneros en cada iteración
+                            List<String> listaGeneros = new ArrayList<>();
 
                             if (datosGeneros != null) {
                                 for (int l = 0; l < datosGeneros.length(); l++) {
@@ -375,19 +445,96 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                             youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
                                 @Override
                                 public void onReady(YouTubePlayer youTubePlayer) {
-
-
                                     if (videoId != null && !videoId.isEmpty()) {
                                         youTubePlayer.cueVideo(videoId, 0); // Carga el video pero no lo reproduce
                                     } else {
                                         Toast.makeText(ActividadVistaDetalleAnime.this, "No se ha proporcionado un video válido", Toast.LENGTH_SHORT).show();
                                     }
-
                                 }
                             });
 
-                            // Actualizar los campos del objeto Anime
-                            anime.setSynopsis(sinopsis);
+                            if(!idioma.equals("es")) {
+                                // Traducir título
+                                Traductor.traducirTexto(titulo, "en", idioma, new Traductor.TraduccionCallback() {
+                                    @Override
+                                    public void onTextoTraducido(String textoTraducido) {
+                                        anime.setTitulo(textoTraducido); // Actualiza el título traducido
+                                        tvTituloAnime.setText(textoTraducido); // Actualiza el UI con el título traducido
+                                    }
+                                });
+                            }
+                            // Traducir sinopsis
+                            Traductor.traducirTexto(sinopsis, "en", idioma, new Traductor.TraduccionCallback() {
+                                @Override
+                                public void onTextoTraducido(String textoTraducido) {
+                                    anime.setSynopsis(textoTraducido); // Actualiza la sinopsis traducida
+                                    tvSinopsisAnime.setText(textoTraducido); // Actualiza el UI con la sinopsis traducida
+                                }
+                            });
+
+                            if (status.equalsIgnoreCase("Finished Airing")) {
+                                anime.setEnEmision(false);
+                                // Traducir "Finalizado" y cambiar el color
+                                Traductor.traducirTexto("Finalizado", "es", idioma, new Traductor.TraduccionCallback() {
+                                    @Override
+                                    public void onTextoTraducido(String textoTraducido) {
+                                        tvEmision.setText(textoTraducido);
+                                        tvEmision.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.rojo)); // Usa ContextCompat
+                                    }
+                                });
+                            } else {
+                                anime.setEnEmision(true);
+                                // Traducir "En emisión ●" y cambiar el color
+                                Traductor.traducirTexto("En emisión ●", "es", idioma, new Traductor.TraduccionCallback() {
+                                    @Override
+                                    public void onTextoTraducido(String textoTraducido) {
+                                        tvEmision.setText(textoTraducido);
+                                        tvEmision.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.verde_claro)); // Usa ContextCompat
+                                    }
+                                });
+                            }
+
+
+                            if (status.equalsIgnoreCase("Finished Airing")) {
+                                anime.setEnEmision(false);
+                                // Traducir "Finalizado" y cambiar el color
+                                Traductor.traducirTexto("Finalizado", "es", idioma, new Traductor.TraduccionCallback() {
+                                    @Override
+                                    public void onTextoTraducido(String textoTraducido) {
+                                        tvEmision.setText(textoTraducido);
+                                        tvEmision.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.rojo)); // Usa ContextCompat
+                                    }
+                                });
+                            } else {
+                                anime.setEnEmision(true);
+                                // Traducir "En emisión ●" y cambiar el color
+                                Traductor.traducirTexto("En emisión ●", "es", idioma, new Traductor.TraduccionCallback() {
+                                    @Override
+                                    public void onTextoTraducido(String textoTraducido) {
+                                        tvEmision.setText(textoTraducido);
+                                        tvEmision.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.verde_claro)); // Usa ContextCompat
+                                    }
+                                });
+                            }
+
+
+                            // Traducir géneros
+                            List<String> listaGenerosTraducidos = new ArrayList<>();
+                            for (String genero : listaGeneros) {
+                                Traductor.traducirTexto(genero, "en", idioma, new Traductor.TraduccionCallback() {
+                                    @Override
+                                    public void onTextoTraducido(String textoTraducido) {
+                                        listaGenerosTraducidos.add(textoTraducido);
+                                        // Después de traducir todos los géneros, actualizar UI
+                                        if (listaGenerosTraducidos.size() == listaGeneros.size()) {
+                                            String generosText = String.join(" · ", listaGenerosTraducidos);
+                                            tvGeneros.setText(generosText);
+                                        }
+                                    }
+                                });
+                            }
+
+                            // Actualizar otros detalles del anime sin necesidad de traducir
                             anime.setPuntuacion(puntuacion);
                             anime.setTrailer(videoId);
                             anime.setImagenPequenia(imagenPequenia);
@@ -396,25 +543,8 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                             anime.setNroEpisodios(numEpisodios);
                             anime.setDuracionEp(duracionEp);
 
-                            if (status.contentEquals("Finished Airing")) {
-                                anime.setEnEmision(false);
-                            } else {
-                                anime.setEnEmision(true);
-                            }
-
-                            Log.i("INFO INICIO", "### " + anime.getPuntuacion() + " ### " + anime.getTitulo());
-
-                            // Cargar la información a la UI
-                            tvSinopsisAnime.setText(anime.getSynopsis());
+                            // Actualizar los campos de UI
                             tvPuntuacion.setText(String.valueOf(anime.getPuntuacion()));
-
-                            if (anime.isEnEmision()) {
-                                tvEmision.setText("En emisión ●");
-                                tvEmision.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.rojo)); // Usa ContextCompat
-                            } else {
-                                tvEmision.setText("Finalizado");
-                                tvEmision.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.moradoDifuminadoIcono)); // Usa ContextCompat
-                            }
 
                             if (anime.getNroEpisodios() == 0) {
                                 tvNumEpisodios.setText("? ep");
@@ -425,13 +555,6 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                             }
 
                             tvDuracion.setText(anime.getDuracionEp());
-
-                            String generosText = "";
-                            for (String genero : listaGeneros) {
-                                generosText += genero + " · ";
-                            }
-
-                            tvGeneros.setText(generosText);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -449,6 +572,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
         rqAnimes.add(mrqAnimes);
     }
+
 
     public String extractYouTubeVideoId(String youtubeUrl) {
         String videoId = null;

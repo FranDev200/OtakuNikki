@@ -1,6 +1,8 @@
 package com.example.otakunikki.ControlDeslizante;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,7 +42,7 @@ public class BusquedaAnimeFragDeslizante extends BottomSheetDialogFragment {
     private GridView gvBusquedaAnime;
     private RequestQueue rqAnimes;
     private StringRequest mrqAnimes;
-
+    private String idioma;
 
     public BusquedaAnimeFragDeslizante(String animeBuscado) {
         this.animeBuscado = animeBuscado;
@@ -50,9 +52,11 @@ public class BusquedaAnimeFragDeslizante extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.busqueda_filtro_anime, container, false);
+        SharedPreferences infoIdioma = requireContext().getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
         gvBusquedaAnime = vista.findViewById(R.id.gvBusquedaAnime);
         listaAnimes = new ArrayList<Anime>();
-        miAdaptador = new AdaptadorAnimesGV(getContext(),listaAnimes);
+        miAdaptador = new AdaptadorAnimesGV(getContext(), listaAnimes, idioma);
         gvBusquedaAnime.setAdapter(miAdaptador);
 
         CargarAnimesBusqueda();
@@ -65,7 +69,7 @@ public class BusquedaAnimeFragDeslizante extends BottomSheetDialogFragment {
                 startActivity(intent);
             }
         });
-        return  vista;
+        return vista;
     }
 
     private void CargarAnimesBusqueda() {
