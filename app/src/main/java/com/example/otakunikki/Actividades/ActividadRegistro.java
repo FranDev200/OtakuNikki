@@ -35,6 +35,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.GestionImagenes.AdaptadorFilasImagenes;
 import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.Clases.Usuario;
@@ -64,15 +65,17 @@ public class ActividadRegistro extends AppCompatActivity {
     private ImageButton imgIconoUser;
     private EditText etNombreCompleto, etNombreUsuario, etEmail, etPwd, etPwdConfirmacion;
     private CheckBox chkTerminos;
-    private String fotoSeleccionada;
-    private Uri uriImagen;
-    // Declarar un ActivityResultLauncher
-    private ActivityResultLauncher<Intent> pickImageLauncher;
+    private String idioma;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actividad_registro);
+
+        SharedPreferences infoIdioma = getSharedPreferences("Idiomas", MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
+
         /**ATRIBUTOS PARA EL REGISTRO DE USUARIO**/
         imgIconoUser = findViewById(R.id.imgIconoUser);
 
@@ -90,25 +93,36 @@ public class ActividadRegistro extends AppCompatActivity {
         btnConfirmar = findViewById(R.id.btnConfirmar);
         btnCancelar = findViewById(R.id.btnCancelar);
         tvPaisSeleccionado = findViewById(R.id.tvPaisSeleccionado);
+
+        Traductor.traducirTexto(tvPaisSeleccionado.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvPaisSeleccionado.setText(textoTraducido);
+            }
+        });
+
+        TraduccionControles();
+        TraducirSpinner();
+
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(getApplicationContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, paises);
         spnRegion.setAdapter(adapter);
+
         spnRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 String idioma = "es"; // utilizamos este por defecto
-                if (paises[position].contentEquals("Español (España)")) {
-                    tvPaisSeleccionado.setText((paises[position]));
+                if (position == 0) {
                     idioma = "es";
+                    tvPaisSeleccionado.setText(paises[0]);
                 }
-                if (paises[position].contentEquals("Inglés")) {
-                    tvPaisSeleccionado.setText((paises[position]));
+                if (position == 1) {
                     idioma = "en";
+                    tvPaisSeleccionado.setText(paises[1]);
                 }
-                if (paises[position].contentEquals("Japonés")) {
-                    tvPaisSeleccionado.setText((paises[position]));
+                if (position == 2) {
                     idioma = "ja";
+                    tvPaisSeleccionado.setText(paises[2]);
                 }
 
                 SharedPreferences preferences = getApplicationContext().getSharedPreferences("Idiomas", MODE_PRIVATE);
@@ -254,9 +268,86 @@ public class ActividadRegistro extends AppCompatActivity {
 
     }
 
+
     public void abrirSeleccion(Usuario user) {
         Intent intent = new Intent(getApplicationContext(), SeleccionPerfil.class);
         intent.putExtra("Usuario", user);
         startActivity(intent);
     }
+    public void TraducirSpinner(){
+        Traductor.traducirTexto(paises[0], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                paises[0] = textoTraducido;
+
+            }
+        });
+        Traductor.traducirTexto(paises[1], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                paises[1] = textoTraducido;
+
+            }
+        });
+        Traductor.traducirTexto(paises[2], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                paises[2] = textoTraducido;
+
+            }
+        });
+    }
+
+    private void TraduccionControles() {
+        Traductor.traducirTexto(etNombreCompleto.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                etNombreCompleto.setHint(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(etNombreUsuario.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                etNombreUsuario.setHint(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(etEmail.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                etEmail.setHint(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(etPwd.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                etPwd.setHint(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(etPwdConfirmacion.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                etPwdConfirmacion.setHint(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(chkTerminos.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                chkTerminos.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(btnConfirmar.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnConfirmar.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(btnCancelar.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnCancelar.setText(textoTraducido);
+            }
+        });
+
+    }
+
 }
