@@ -125,44 +125,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         tvPuntuacionAnime = findViewById(R.id.tvPuntuacionAnimeDetalle);
         tvEpisodiosAnime = findViewById(R.id.tvAnimeEpisodios);
 
-        /**TRADUCCION TEXTVIEW PUNTUACION, EPISODIOS, FAVORITOS, OPCIONES SPINNER Y BOTON AÑADIR LISTA**/
-        Traductor.traducirTexto(tvFavoritoAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                tvFavoritoAnime.setText(textoTraducido);
-            }
-        });
-        Traductor.traducirTexto(tvPuntuacionAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                tvPuntuacionAnime.setText(textoTraducido);
-            }
-        });
-        Traductor.traducirTexto(tvEpisodiosAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                tvEpisodiosAnime.setText(textoTraducido);
-            }
-        });
-        Traductor.traducirTexto(filtros[0], "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                filtros[0] = textoTraducido;
-            }
-        });
-        Traductor.traducirTexto(filtros[1], "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                filtros[1] = textoTraducido;
-            }
-        });
-        Traductor.traducirTexto(btnAnyadirAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                btnAnyadirAnime.setText(textoTraducido);
-            }
-        });
-        /***************************************************************/
+        TraduccionControles();
 
         lvEpisodios = findViewById(R.id.lvEpisodios);
         anime = getIntent().getParcelableExtra("Anime");
@@ -763,10 +726,10 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                                         db.collection("Usuarios").document(userId)
                                                 .update("listaPerfiles", listaPerfiles)
                                                 .addOnSuccessListener(aVoid ->
-                                                        Toast.makeText(getApplicationContext(), "Anime agregado a favoritos", Toast.LENGTH_SHORT).show()
+                                                        Log.i("INFO ANIME FAV", "Anime agregado a favoritos")
                                                 )
                                                 .addOnFailureListener(e ->
-                                                        Toast.makeText(getApplicationContext(), "Error al actualizar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                                        Log.i("ERROR FAV", "Error al actualizar lista: " + e.getMessage())
                                                 );
 
                                         return; // Salimos después de encontrar y modificar el perfil correcto
@@ -831,10 +794,10 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                                         db.collection("Usuarios").document(userId)
                                                 .update("listaPerfiles", listaPerfiles)
                                                 .addOnSuccessListener(aVoid ->
-                                                        Toast.makeText(getApplicationContext(), "Anime eliminado de favoritos", Toast.LENGTH_SHORT).show()
+                                                        Log.i("ANIME NO FAV", "Anime eliminado de favoritos")
                                                 )
                                                 .addOnFailureListener(e ->
-                                                        Toast.makeText(getApplicationContext(), "Error al actualizar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                                        Log.i("ERROR ANIME NO FAV", "Error al actualizar lista: " + e.getMessage())
                                                 );
 
                                         return; // Salimos después de encontrar y modificar el perfil correcto
@@ -1034,4 +997,44 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                 );
     }
 
+    private void TraduccionControles(){
+        /**TRADUCCION TEXTVIEW PUNTUACION, EPISODIOS, FAVORITOS, OPCIONES SPINNER Y BOTON AÑADIR LISTA**/
+        Traductor.traducirTexto(tvFavoritoAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvFavoritoAnime.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(tvPuntuacionAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvPuntuacionAnime.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(tvEpisodiosAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvEpisodiosAnime.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(filtros[0], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                filtros[0] = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(filtros[1], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                filtros[1] = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(btnAnyadirAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnAnyadirAnime.setText(textoTraducido);
+            }
+        });
+        /***************************************************************/
+    }
 }

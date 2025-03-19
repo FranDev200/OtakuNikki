@@ -214,22 +214,28 @@ public class InicioSesion extends AppCompatActivity {
     }
 
     private void cambiarIdiomaApp(String idioma) {
-        Locale locale = new Locale(idioma);
-        Locale.setDefault(locale);
+        SharedPreferences preferences = getSharedPreferences("Idiomas", MODE_PRIVATE);
+        String idiomaActual = preferences.getString("idioma", "es");
 
-        Configuration configuration = new Configuration();
-        configuration.setLocale(locale);
+        if (!idiomaActual.equals(idioma)) { // Solo reinicia si el idioma es diferente
+            Locale locale = new Locale(idioma);
+            Locale.setDefault(locale);
 
-        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            Configuration configuration = new Configuration();
+            configuration.setLocale(locale);
 
-        // Guardar el idioma en SharedPreferences para persistencia
-        SharedPreferences.Editor editor = getSharedPreferences("Idiomas", MODE_PRIVATE).edit();
-        editor.putString("idioma", idioma);
-        editor.apply();
-        // Reiniciar la actividad para aplicar los cambios
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
+            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+            // Guardar el nuevo idioma en SharedPreferences
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("idioma", idioma);
+            editor.apply();
+
+            // Reiniciar solo si el idioma ha cambiado
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
     }
 
 
@@ -278,5 +284,9 @@ public class InicioSesion extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
 
+    }
 }

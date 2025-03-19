@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#D5D5D5"
+    android:background="@drawable/fondo_agregar_perfil"
     tools:context=".Actividades.AnyadirPerfil">
 
     <LinearLayout
@@ -17,12 +17,13 @@
         tools:layout_editor_absoluteY="-44dp">
 
         <TextView
+            android:id="@+id/tvTituloNuevoPerfil"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_margin="20dp"
             android:gravity="center"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/blancoIcono"
             android:text="Nuevo perfil"
             android:textAlignment="center"
             android:textSize="30dp"
@@ -32,12 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="400dp">
 
-            <ImageView
-                android:id="@+id/imgImagenFondo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/fondoazul" />
+
 
             <ImageButton
                 android:id="@+id/imgAgregarFoto"
@@ -45,9 +41,9 @@
                 android:layout_height="120dp"
                 android:layout_centerInParent="true"
                 android:scaleType="centerCrop"
-                android:background="?android:selectableItemBackgroundBorderless"
-                android:tag="@drawable/user"
-                android:src="@drawable/user"/>
+                android:background="@android:color/transparent"
+                android:src="@drawable/user"
+                android:alpha="0.5"/>
 
         </RelativeLayout>
 
@@ -55,12 +51,14 @@
             android:id="@+id/etNombrePerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginTop="100px"
-            android:backgroundTint="@color/black"
+            android:backgroundTint="@color/white"
             android:hint="Nombre del perfil"
             android:textAlignment="textStart"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="20dp" />
 
         <LinearLayout
@@ -75,7 +73,7 @@
                 android:id="@+id/btnConfirmarPerfil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/gris"
+                android:backgroundTint="@color/moradoYAzulIcono"
                 android:focusedSearchResultHighlightColor="@color/gris_seleccionado"
                 android:text="Confirmar"
                 android:textSize="24dp"
@@ -86,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/gris"
+                android:backgroundTint="@color/moradoYAzulIcono"
                 android:focusedSearchResultHighlightColor="@color/gris_seleccionado"
                 android:layout_marginLeft="100px"
                 android:text="Cancelar"

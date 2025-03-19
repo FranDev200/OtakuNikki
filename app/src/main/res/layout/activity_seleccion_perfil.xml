@@ -59,7 +59,7 @@
             android:textSize="30dp"
             android:textStyle="bold"
             android:textColor="@color/moradoMuyClaroIcono"
-            android:text="Agregar nuevo perfil">
+            android:text="Agregar perfil">
         </TextView>
 
     </LinearLayout>
