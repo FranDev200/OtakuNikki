@@ -65,7 +65,7 @@
             android:textColor="@color/white"
             android:textSize="16dp"
             android:background="@color/negro_difuminado"
-            android:text="Mantener sesion iniciada."/>
+            android:text="Recuerdame."/>
 
         <Button
             android:id="@+id/BtnInicioSesion"

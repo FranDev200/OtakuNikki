@@ -40,12 +40,11 @@ public class InicioSesion extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_inicio_sesion);
         SharedPreferences preferences = getSharedPreferences("Idiomas", MODE_PRIVATE);
         idioma = preferences.getString("idioma", "es");
         setLocale(idioma); // Aplica el idioma al inicio
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inicio_sesion);
 
         // Inicializar componentes de UI
         etEmail = findViewById(R.id.etEmailInicioSesion);
@@ -61,43 +60,11 @@ public class InicioSesion extends AppCompatActivity {
             public void onClick(View v) {
                 mostrarSelectorIdioma();
 
-                /**Traducimos los controloes**/
-                Traductor.traducirTexto(etEmail.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-                    @Override
-                    public void onTextoTraducido(String textoTraducido) {
-                        etEmail.setHint(textoTraducido);
-                    }
-                });
 
-                Traductor.traducirTexto(etContrasenya.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-                    @Override
-                    public void onTextoTraducido(String textoTraducido) {
-                        etContrasenya.setHint(textoTraducido);
-                    }
-                });
-
-                Traductor.traducirTexto(chkMantenerSesion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-                    @Override
-                    public void onTextoTraducido(String textoTraducido) {
-                        chkMantenerSesion.setText(textoTraducido);
-                    }
-                });
-
-                Traductor.traducirTexto(btnInicioSesion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-                    @Override
-                    public void onTextoTraducido(String textoTraducido) {
-                        btnInicioSesion.setText(textoTraducido);
-                    }
-                });
-
-                Traductor.traducirTexto(tvRegistro.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-                    @Override
-                    public void onTextoTraducido(String textoTraducido) {
-                        tvRegistro.setText(textoTraducido);
-                    }
-                });
             }
         });
+        TraduccionControles();
+
 
         // Inicializar Firebase Auth
         mAuthInicioSesion = FirebaseAuth.getInstance();
@@ -128,7 +95,7 @@ public class InicioSesion extends AppCompatActivity {
         Configuration configuration = new Configuration();
         configuration.setLocale(locale);
 
-        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+        //getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
     }
 
     private void mostrarSelectorIdioma() {
@@ -260,10 +227,10 @@ public class InicioSesion extends AppCompatActivity {
         SharedPreferences.Editor editor = getSharedPreferences("Idiomas", MODE_PRIVATE).edit();
         editor.putString("idioma", idioma);
         editor.apply();
-
-        /*esta mal pero es lo más cerca que está de estar bien*/
-        recreate();
-
+        // Reiniciar la actividad para aplicar los cambios
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
 
@@ -273,5 +240,44 @@ public class InicioSesion extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private void TraduccionControles(){
+        /**Traducimos los controloes**/
+        Traductor.traducirTexto(etEmail.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                etEmail.setHint(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(etContrasenya.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                etContrasenya.setHint(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(chkMantenerSesion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                chkMantenerSesion.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(btnInicioSesion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnInicioSesion.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvRegistro.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvRegistro.setText(textoTraducido);
+            }
+        });
+    }
+
 
 }
