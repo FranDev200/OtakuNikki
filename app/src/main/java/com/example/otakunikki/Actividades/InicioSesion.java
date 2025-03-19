@@ -54,16 +54,15 @@ public class InicioSesion extends AppCompatActivity {
         chkMantenerSesion = findViewById(R.id.chkMantenerSesion);
         imgBtnRegistro = findViewById(R.id.imgBtnRegistro);
         btnSeleccionIdi = findViewById(R.id.btnSeleccionIdioma);
+        TraduccionControles();
 
         btnSeleccionIdi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mostrarSelectorIdioma();
-
-
             }
         });
-        TraduccionControles();
+
 
 
         // Inicializar Firebase Auth
