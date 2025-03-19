@@ -92,12 +92,12 @@ public class AdaptadorListas extends BaseAdapter {
         //tvFecha.setText(listadelistasAnimes.get(position).getFechaModificacion());
 
         /**TRADUCIR CONTROLES YA DEFINIDOS**/
-        Traductor.traducirTexto(tvTitulo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+        /*Traductor.traducirTexto(tvTitulo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
             @Override
             public void onTextoTraducido(String textoTraducido) {
                 tvTitulo.setText(textoTraducido);
             }
-        });
+        });*/
 
         Traductor.traducirTexto(tvNroAnimes.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
             @Override

@@ -74,7 +74,7 @@
                     android:backgroundTint="@color/moradoClaroIcono"
                     android:textColor="@color/blancoIcono"
                     android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
-                    android:text="Cambiar Perfil"
+                    android:text="Cambiar perfil"
                     android:textSize="17dp"
                     />
 
@@ -209,7 +209,7 @@
                     android:textColor="@color/blancoIcono"
                     android:backgroundTint="@color/moradoClaroIcono"
                     android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
-                    android:text="Desconectarse"
+                    android:text="Cerrar sesion"
                     android:textSize="17dp"
                     />
             </LinearLayout>
@@ -222,7 +222,7 @@
             android:textColor="@color/blancoIcono"
             android:backgroundTint="@color/moradoClaroIcono"
             android:focusedSearchResultHighlightColor="@color/moradoMuyClaroIcono"
-            android:text="Eliminar Perfil"
+            android:text="Borrar perfil"
             android:textSize="17dp"
             />
     </LinearLayout>

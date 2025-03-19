@@ -81,12 +81,7 @@ public class FragmentoListas extends Fragment {
             }
         });
 
-        Traductor.traducirTexto(tvNroListas.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                tvNroListas.setText(textoTraducido);
-            }
-        });
+        tvNroListas.setText("0/11");
 
         lista_de_listasAnimes = new ArrayList<>();
         miAdaptador = new AdaptadorListas(getActivity().getApplicationContext(), lista_de_listasAnimes, idioma);
@@ -114,7 +109,7 @@ public class FragmentoListas extends Fragment {
                 Traductor.traducirTexto(msg[0], "es", idioma, new Traductor.TraduccionCallback() {
                     @Override
                     public void onTextoTraducido(String textoTraducido) {
-                        msg[0] = textoTraducido; // Modificar el contenido del arreglo
+                        msg[0] = textoTraducido;
 
                         // Traducir el texto del botón "Cancelar"
                         Traductor.traducirTexto("Cancelar", "es", idioma, new Traductor.TraduccionCallback() {
@@ -131,7 +126,7 @@ public class FragmentoListas extends Fragment {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
                                                         dialogInterface.cancel();
-                                                        Toast.makeText(requireContext(), "Has elegido no borrar", Toast.LENGTH_SHORT).show();
+
                                                     }
                                                 })
                                                 .setPositiveButton(textoAceptarTraducido, new DialogInterface.OnClickListener() {
@@ -199,7 +194,13 @@ public class FragmentoListas extends Fragment {
 
                     dialog.dismiss();
                 } else {
-                    etNombreLista.setError("El nombre no puede estar vacío");
+                    Traductor.traducirTexto("El nombre no puede estar vacío", "es", idioma, new Traductor.TraduccionCallback() {
+                        @Override
+                        public void onTextoTraducido(String textoTraducido) {
+                            etNombreLista.setError(textoTraducido);
+                        }
+                    });
+
                 }
             });
             btnCancelarLista.setOnClickListener(v1 -> dialog.dismiss());
@@ -231,17 +232,22 @@ public class FragmentoListas extends Fragment {
                                             }
                                         }
 
-                                        if(listaAEliminar.getNombreLista().equalsIgnoreCase("Favoritos")){
-                                            Toast.makeText(getActivity().getApplicationContext(), "Esta lista no se puede eliminar", Toast.LENGTH_SHORT).show();
+                                        if (listaAEliminar.getNombreLista().equalsIgnoreCase("Favoritos")) {
+                                            Traductor.traducirTexto("Esta lista no se puede eliminar", "es", idioma, new Traductor.TraduccionCallback() {
+                                                @Override
+                                                public void onTextoTraducido(String textoTraducido) {
+                                                    Toast.makeText(getActivity().getApplicationContext(), textoTraducido, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+
                                             return;
-                                        }else{
+                                        } else {
                                             if (listaAEliminar != null) {
                                                 listasAnimes.remove(listaAEliminar); // Eliminar de Firestore
 
                                                 db.collection("Usuarios").document(userId)
                                                         .update("listaPerfiles", listaPerfiles)
                                                         .addOnSuccessListener(aVoid -> {
-                                                            Toast.makeText(getActivity(), "Lista eliminada correctamente", Toast.LENGTH_SHORT).show();
 
                                                             // Eliminar de la lista local
                                                             lista_de_listasAnimes.remove(listaAEliminar);
@@ -272,67 +278,99 @@ public class FragmentoListas extends Fragment {
     }
 
     private void AgregarListaAnime(String nombreLista, FirebaseUser usuario, String nombrePerfil) {
-        if (usuario != null) {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            String userId = usuario.getUid();
-
-            db.collection("Usuarios").document(userId).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
-                            if (usuarioActual != null) {
-                                // Buscar el perfil que coincida con el nombre seleccionado
-                                List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
-                                for (Perfil perfil : listaPerfiles) {
-                                    if (perfil.getNombrePerfil().equals(nombrePerfil)) {
-
-                                        // Verificar si ya existe una lista con el mismo nombre
-                                        boolean listaExiste = false;
-                                        for (ListaAnime lista : perfil.getListasAnimes()) {
-                                            if (lista.getNombreLista().equalsIgnoreCase(nombreLista)) {
-                                                listaExiste = true;
-                                                break; // No es necesario seguir buscando
-                                            }
-                                        }
-
-                                        if (listaExiste) {
-                                            Toast.makeText(getActivity(), "La lista ya existe", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            // Crear y agregar nueva lista
-                                            ListaAnime nuevaListaAnime = new ListaAnime(nombreLista);
-                                            perfil.getListasAnimes().add(nuevaListaAnime);
-
-                                            // Guardar cambios en Firestore
-                                            db.collection("Usuarios").document(userId)
-                                                    .update("listaPerfiles", listaPerfiles)
-                                                    .addOnSuccessListener(aVoid -> {
-                                                        Toast.makeText(getActivity(), "Lista agregada correctamente", Toast.LENGTH_SHORT).show();
-
-                                                        // Actualizar UI
-                                                        lista_de_listasAnimes.add(nuevaListaAnime);
-                                                        miAdaptador.notifyDataSetChanged();
-                                                        tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
-                                                    })
-                                                    .addOnFailureListener(e ->
-                                                            Toast.makeText(getActivity(), "Error al agregar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                                                    );
-                                        }
-
-                                        return; // Salimos del bucle tras encontrar el perfil
-                                    }
-                                }
-
-                                // Si no encontró el perfil
-                                Toast.makeText(getActivity(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    })
-                    .addOnFailureListener(e ->
-                            Toast.makeText(getActivity(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                    );
-        } else {
+        if (usuario == null) {
             Toast.makeText(getActivity(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = usuario.getUid();
+
+        db.collection("Usuarios").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (!documentSnapshot.exists()) {
+                        Toast.makeText(getActivity(), "Usuario no encontrado en la base de datos", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
+                    if (usuarioActual == null) {
+                        Toast.makeText(getActivity(), "Error al obtener datos del usuario", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // Buscar el perfil correspondiente
+                    List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
+                    Perfil perfilSeleccionado = null;
+
+                    for (Perfil perfil : listaPerfiles) {
+                        if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+                            perfilSeleccionado = perfil;
+                            break;
+                        }
+                    }
+
+                    if (perfilSeleccionado == null) {
+                        Toast.makeText(getActivity(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // Verificar el número máximo de listas antes de recorrerlas
+                    boolean nroMaximo = perfilSeleccionado.getListasAnimes().size() >= 11;
+                    if (nroMaximo) {
+                        Traductor.traducirTexto("Número máximo de listas alcanzado", "es", idioma, new Traductor.TraduccionCallback() {
+                            @Override
+                            public void onTextoTraducido(String textoTraducido) {
+                                getActivity().runOnUiThread(() ->
+                                        Toast.makeText(getActivity(), textoTraducido, Toast.LENGTH_SHORT).show()
+                                );
+                            }
+                        });
+                        return; // Salimos si ya hay 11 listas
+                    }
+
+                    // Verificar si ya existe una lista con el mismo nombre
+                    boolean listaExiste = false;
+                    for (ListaAnime lista : perfilSeleccionado.getListasAnimes()) {
+                        if (lista.getNombreLista().equalsIgnoreCase(nombreLista)) {
+                            listaExiste = true;
+                            break;
+                        }
+                    }
+
+                    if (listaExiste) {
+                        Traductor.traducirTexto("Lista ya existe", "es", idioma, new Traductor.TraduccionCallback() {
+                            @Override
+                            public void onTextoTraducido(String textoTraducido) {
+                                getActivity().runOnUiThread(() ->
+                                        Toast.makeText(getActivity(), textoTraducido, Toast.LENGTH_SHORT).show()
+                                );
+                            }
+                        });
+                        return; // Salimos si la lista ya existe
+                    }
+
+                    // Crear y agregar nueva lista
+                    ListaAnime nuevaListaAnime = new ListaAnime(nombreLista);
+                    perfilSeleccionado.getListasAnimes().add(nuevaListaAnime);
+
+                    // Guardar cambios en Firestore
+                    db.collection("Usuarios").document(userId)
+                            .update("listaPerfiles", listaPerfiles)
+                            .addOnSuccessListener(aVoid -> {
+                                // Actualizar UI
+                                lista_de_listasAnimes.add(nuevaListaAnime);
+                                miAdaptador.notifyDataSetChanged();
+                                tvNroListas.setText(lista_de_listasAnimes.size() + " / 11 listas");
+                            })
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(getActivity(), "Error al agregar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                            );
+
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getActivity(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
     }
 
     private void CargarDatos(FirebaseUser usuario, FirebaseFirestore db, String nombrePerfil) {
@@ -353,9 +391,15 @@ public class FragmentoListas extends Fragment {
                                             miAdaptador.notifyDataSetChanged();
                                         });
                                         if (lista_de_listasAnimes.isEmpty()) {
-                                            tvNroListas.setText("No tienes listas de animes.");
+                                            Traductor.traducirTexto("No tienes listas de animes.", "es", idioma, new Traductor.TraduccionCallback() {
+                                                @Override
+                                                public void onTextoTraducido(String textoTraducido) {
+                                                    tvNroListas.setText(textoTraducido);
+                                                }
+                                            });
+
                                         } else {
-                                            tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
+                                            tvNroListas.setText(lista_de_listasAnimes.size() + " /11");
                                         }
 
                                         miAdaptador.notifyDataSetChanged();

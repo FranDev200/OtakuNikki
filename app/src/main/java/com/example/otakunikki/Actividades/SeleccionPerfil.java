@@ -111,5 +111,4 @@ public class SeleccionPerfil extends AppCompatActivity {
         startActivity(intent);
     }
 
-
 }

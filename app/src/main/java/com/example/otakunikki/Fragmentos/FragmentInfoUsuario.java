@@ -2,7 +2,6 @@ package com.example.otakunikki.Fragmentos;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,12 +47,18 @@ import android.view.Gravity;
 public class FragmentInfoUsuario extends Fragment {
     private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil, btnGuardarCambios;
     private EditText etNombreUsuario;
-    TextView tvTitUser, tvTitCorreo,tvTitPerfil, tvRegion, tvNomPerfil, tvCorreoUsuario;
+    TextView tvTitUser, tvTitCorreo, tvTitPerfil, tvRegion, tvNomPerfil, tvCorreoUsuario;
     private Spinner spRegion;
-    private String[] regiones = {"España", "Estados Unidos", "Japón"};
+    private String[] regiones = {"Español (España)", "Inglés", "Japonés"};
+    private String[] idiomas = {"es", "en", "ja"};
     private ImageButton imgPerfil;
     private String TAG = "InfoUsuario";
     private String idioma;
+    private String tituloCierreSesion = "¿Estás seguro de desconectarte?\n";
+    private String btnCancelarCierreSesion = "Cancelar";
+    private String btnAceptarCierreSesion = "Aceptar";
+    private String cargandoPerfil = "Cargando perfiles...";
+    private String tituloBorrar = "¿Estás seguro de borrar el perfil?\n";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +68,7 @@ public class FragmentInfoUsuario extends Fragment {
         setLocale(idioma); // Aplica el idioma al inicio
 
         View vista = inflater.inflate(R.layout.fragment_info_usuario, container, false);
-
+        TraduccionVariablesAlert();
         btnEliminarPerfil = vista.findViewById(R.id.btnEliminarPerfil);
         btnDesconexion = vista.findViewById(R.id.btnDesconexion);
         btnCambioPerfil = vista.findViewById(R.id.btnCambioPerfil);
@@ -136,22 +140,20 @@ public class FragmentInfoUsuario extends Fragment {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
-                builder.setTitle("¿Estás seguro de desconectarte?\n")
+                builder.setTitle(tituloCierreSesion)
                         .setIcon(R.drawable.logout);
 
-
-                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(btnCancelarCierreSesion, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
-                        Toast.makeText(requireContext(), "Has elegido no salir", Toast.LENGTH_LONG).show();
+
                     }
                 });
 
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(btnAceptarCierreSesion, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(requireContext(), "Has cerrado sesión en: " + nombrePerfil, Toast.LENGTH_LONG).show();
 
                         FirebaseAuth.getInstance().signOut();
 
@@ -181,19 +183,18 @@ public class FragmentInfoUsuario extends Fragment {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
-                builder.setTitle("¿Estás seguro de borrar el perfil " + nombrePerfil + "?\n")
+                builder.setTitle(tituloBorrar)
                         .setIcon(R.drawable.eliminar);
 
 
-                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(btnCancelarCierreSesion, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
-                        Toast.makeText(requireContext(), "Has elegido no borrar", Toast.LENGTH_LONG).show();
                     }
                 });
 
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(btnAceptarCierreSesion, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //Toast.makeText(requireContext(), "Perfil: " + nombrePerfil + " eliminado.", Toast.LENGTH_LONG).show();
@@ -212,32 +213,36 @@ public class FragmentInfoUsuario extends Fragment {
                 ActualizarPerfil(nombrePerfil);
             }
         });
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, regiones);
-        spRegion.setAdapter(adapter);
 
-        // Buscar la posición de la región del usuario en el array de regiones
-        int posicionInicial = 0;
-        for (int i = 0; i < regiones.length; i++) {
-            if (regiones[i].equals(region)) {
-                posicionInicial = i;
+        int posicion = 0;
+        for (int i = 0; i < idiomas.length; i++) {
+            if (idiomas[i].equals(idioma)) {
+                posicion = i;
                 break;
             }
         }
 
-        // Establecer el Spinner en la posición de la región del usuario
-        spRegion.setSelection(posicionInicial);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, regiones);
+        spRegion.setAdapter(adapter);
+
+        if (posicion >= 0 && posicion < regiones.length) {
+            spRegion.setSelection(posicion);
+            tvRegion.setText(regiones[posicion]);
+            Traductor.traducirTexto(tvRegion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                @Override
+                public void onTextoTraducido(String textoTraducido) {
+                    tvRegion.setText(textoTraducido);
+                }
+            });
+
+        }
 
         spRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String seleccion = regiones[position]; // Obtiene la selección actual
-
-                if (position==0 || position==1 || position==2) {
-                    tvRegion.setText(seleccion);
-                } else {
-                    // Si la selección no está en la lista, mantener la región del usuario
-                    tvRegion.setText(region);
-                }
+                String seleccion = regiones[position];
+                tvRegion.setText(seleccion);
             }
 
             @Override
@@ -245,6 +250,7 @@ public class FragmentInfoUsuario extends Fragment {
 
             }
         });
+
 
         return vista;
     }
@@ -312,7 +318,7 @@ public class FragmentInfoUsuario extends Fragment {
         String userId = auth.getCurrentUser().getUid();
 
         // Mostrar un mensaje de carga para indicar que se está procesando la información
-        Toast.makeText(requireContext(), "Cargando perfiles...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), cargandoPerfil, Toast.LENGTH_SHORT).show();
 
         // Obtener la información del usuario desde Firestore
         db.collection("Usuarios").document(userId).get().addOnSuccessListener(documentSnapshot -> {
@@ -334,7 +340,7 @@ public class FragmentInfoUsuario extends Fragment {
         });
     }
 
-    private void ActualizarPerfil(String nombrePerfil){
+    private void ActualizarPerfil(String nombrePerfil) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -352,10 +358,13 @@ public class FragmentInfoUsuario extends Fragment {
                 Usuario usuario = documentSnapshot.toObject(Usuario.class);
                 if (usuario != null) {
                     // Filtrar la lista para actualizar el perfil seleccionado
-                    for(Perfil aux: usuario.getListaPerfiles()){
-                        if(aux.getNombrePerfil().equals(nombrePerfil)){
+                    for (Perfil aux : usuario.getListaPerfiles()) {
+                        if (aux.getNombrePerfil().equals(nombrePerfil)) {
                             aux.setNombrePerfil(etNombreUsuario.getText().toString());
-                            int imagen = (int) imgPerfil.getTag();
+                            int imagen = aux.getImagenPerfil(); // Imagen por defecto
+                            if (imgPerfil.getTag() != null && (int) imgPerfil.getTag() != aux.getImagenPerfil()) {
+                                imagen = (int) imgPerfil.getTag();
+                            }
                             aux.setImagenPerfil(imagen);
                         }
 
@@ -365,7 +374,6 @@ public class FragmentInfoUsuario extends Fragment {
                     db.collection("Usuarios").document(userId)
                             .update("listaPerfiles", usuario.getListaPerfiles())
                             .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(requireContext(), "Perfil actualizado correctamente", Toast.LENGTH_SHORT).show();
                                 // Redirigir a SeleccionPerfil
                                 CambioPerfil();
                             })
@@ -379,14 +387,8 @@ public class FragmentInfoUsuario extends Fragment {
         });
     }
 
-    public void TraducirPantalla(){
+    public void TraducirPantalla() {
         /**Traducimos los controles**/
-        Traductor.traducirTexto(tvNomPerfil.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                tvNomPerfil.setText(textoTraducido);
-            }
-        });
 
         Traductor.traducirTexto(btnCambioPerfil.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
             @Override
@@ -402,12 +404,6 @@ public class FragmentInfoUsuario extends Fragment {
             }
         });
 
-        Traductor.traducirTexto(tvRegion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                tvRegion.setText(textoTraducido);
-            }
-        });
 
         Traductor.traducirTexto(tvTitCorreo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
             @Override
@@ -444,7 +440,8 @@ public class FragmentInfoUsuario extends Fragment {
             }
         });
     }
-    public void TraducirSpinner(){
+
+    public void TraducirSpinner() {
 
         Traductor.traducirTexto(regiones[0], "es", idioma, new Traductor.TraduccionCallback() {
             @Override
@@ -467,5 +464,38 @@ public class FragmentInfoUsuario extends Fragment {
             }
         });
 
+    }
+
+    public void TraduccionVariablesAlert() {
+        Traductor.traducirTexto(tituloCierreSesion, "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tituloCierreSesion = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(btnCancelarCierreSesion, "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnCancelarCierreSesion = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(btnAceptarCierreSesion, "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnAceptarCierreSesion = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(cargandoPerfil, "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                cargandoPerfil = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(tituloBorrar, "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tituloBorrar = textoTraducido;
+            }
+        });
     }
 }

@@ -45,6 +45,10 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseUser usuario;
     String idioma;
+    private String borrarAnime = "¿Estás seguro de borrar el anime";
+    private String botonCancelar = "Cancelar";
+    private String botonAceptar = "Aceptar";
+    private String eliminado = "eliminado...";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         SharedPreferences infoIdioma = getApplicationContext().getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
         idioma = infoIdioma.getString("idioma", "es");
         /**********************************************************************************************************/
-
+        TraducirString();
         listaSeleccionada = getIntent().getParcelableExtra("ListaAnimeSeleccionada");
 
         etTituloLista = findViewById(R.id.etTituloListaDetalle);
@@ -118,22 +122,23 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
                 String nombreAnime = anime.getTitulo();
                 AlertDialog.Builder builder = new AlertDialog.Builder(ActividadVistaDetalleListaAnime.this);
 
-                builder.setTitle("¿Estás seguro de borrar el anime " + nombreAnime + "?\n")
+
+                builder.setTitle(borrarAnime + " " + nombreAnime + "?\n")
                         .setIcon(R.drawable.eliminar);
 
 
-                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(botonCancelar, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
-                        Toast.makeText(getApplicationContext(), "Has elegido no borrar", Toast.LENGTH_LONG).show();
+
                     }
                 });
 
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(botonAceptar, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getApplicationContext(), nombreAnime  + " eliminado.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), nombreAnime + " " + eliminado, Toast.LENGTH_LONG).show();
                         listaAnime.remove(anime);
 
                         // Notificar al adaptador que la lista ha cambiado
@@ -211,10 +216,10 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
                                         db.collection("Usuarios").document(userId)
                                                 .update("listaPerfiles", listaPerfiles)
                                                 .addOnSuccessListener(aVoid ->
-                                                        Toast.makeText(getApplicationContext(), "Anime eliminado", Toast.LENGTH_SHORT).show()
+                                                        Log.i("BORRADO ANIME", "Anime eliminado")
                                                 )
                                                 .addOnFailureListener(e ->
-                                                        Toast.makeText(getApplicationContext(), "Error al eliminar: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                                                Log.i("BORRADO ANIME", "Error al eliminar: " + e.getMessage())
                                                 );
 
                                         return; // Salimos después de encontrar y modificar el perfil correcto
@@ -222,7 +227,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
                                 }
 
                                 // Si no encontró el perfil
-                                Toast.makeText(getApplicationContext(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
                             }
                         }
                     })
@@ -243,9 +248,34 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
             intent.putExtra("NombreLista", nombreLista);
             startActivity(intent);
         } else {
-            Toast.makeText(this, "Error al abrir el anime", Toast.LENGTH_SHORT).show();
+            Log.i("FALLO ABRIR", "Error al abrir el anime");
         }
     }
 
-
+    private void TraducirString(){
+        Traductor.traducirTexto(borrarAnime, "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                borrarAnime = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(botonCancelar, "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                botonCancelar = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(botonAceptar, "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                botonAceptar = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto(eliminado, "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                eliminado = textoTraducido;
+            }
+        });
+    }
 }
