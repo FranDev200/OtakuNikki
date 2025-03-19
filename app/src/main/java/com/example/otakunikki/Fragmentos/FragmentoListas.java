@@ -8,9 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.otakunikki.Actividades.ActividadVistaDetalleListaAnime;
-import com.example.otakunikki.Actividades.SeleccionPerfil;
 import com.example.otakunikki.Adaptadores.AdaptadorListas;
-import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.ListaAnime;
 import com.example.otakunikki.Clases.Perfil;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -45,15 +41,22 @@ public class FragmentoListas extends Fragment {
     AdaptadorListas miAdaptador;
     ListaAnime listaSeleccionada;
     private ListView miListView;
-    private TextView tvNroListas;
+    private TextView tvNroListas, tvMisListas;
     private ImageButton imgBtnAgregarLista;
     private ListaAnime listaAEliminar = null;
     private FirebaseUser usuario;
     private String nombrePerfil;
     private FirebaseFirestore db;
+    private String idioma;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.fragmento_listas, container, false);
+
+        tvMisListas = vista.findViewById(R.id.tvMisListas);
+        tvNroListas = vista.findViewById(R.id.tvNroListas);
+        miListView = vista.findViewById(R.id.lvListasAnimes);
+        imgBtnAgregarLista = vista.findViewById(R.id.imgBtnAgregarLista);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -65,18 +68,29 @@ public class FragmentoListas extends Fragment {
         SharedPreferences preferences = requireContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
         nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
 
+        SharedPreferences infoIdioma = requireContext().getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
 
         CargarDatos(usuario, db, nombrePerfil);
 
-        tvNroListas = vista.findViewById(R.id.tvNroListas);
-        miListView = vista.findViewById(R.id.lvListasAnimes);
-        imgBtnAgregarLista = vista.findViewById(R.id.imgBtnAgregarLista);
+        /**TRADUCIR CONTROLES YA DEFINIDOS**/
+        Traductor.traducirTexto(tvMisListas.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvMisListas.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvNroListas.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvNroListas.setText(textoTraducido);
+            }
+        });
 
         lista_de_listasAnimes = new ArrayList<>();
-        miAdaptador = new AdaptadorListas(getActivity().getApplicationContext(), lista_de_listasAnimes);
+        miAdaptador = new AdaptadorListas(getActivity().getApplicationContext(), lista_de_listasAnimes, idioma);
         miListView.setAdapter(miAdaptador);
-
-
 
         miListView.setOnItemClickListener((parent, view, position, id) -> {
             listaSeleccionada = lista_de_listasAnimes.get(position);
@@ -91,27 +105,51 @@ public class FragmentoListas extends Fragment {
                 androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
                 listaSeleccionada = lista_de_listasAnimes.get(position);
                 String nombreLista = listaSeleccionada.getNombreLista();
-                builder.setTitle("¿Estás seguro de borrar la lista " +  nombreLista + "?\n")
-                        .setIcon(R.drawable.eliminar);
 
+                // Usar un arreglo para almacenar el mensaje
+                final String[] msg = new String[1];
+                msg[0] = "¿Estás seguro de borrar la lista " + nombreLista;
 
-                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                // Traducir el mensaje principal
+                Traductor.traducirTexto(msg[0], "es", idioma, new Traductor.TraduccionCallback() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                        Toast.makeText(requireContext(), "Has elegido no borrar", Toast.LENGTH_SHORT).show();
+                    public void onTextoTraducido(String textoTraducido) {
+                        msg[0] = textoTraducido; // Modificar el contenido del arreglo
+
+                        // Traducir el texto del botón "Cancelar"
+                        Traductor.traducirTexto("Cancelar", "es", idioma, new Traductor.TraduccionCallback() {
+                            @Override
+                            public void onTextoTraducido(String textoCancelarTraducido) {
+                                // Traducir el texto del botón "Aceptar"
+                                Traductor.traducirTexto("Aceptar", "es", idioma, new Traductor.TraduccionCallback() {
+                                    @Override
+                                    public void onTextoTraducido(String textoAceptarTraducido) {
+                                        // Configurar el diálogo con los textos traducidos
+                                        builder.setTitle(msg[0] + " ?\n")
+                                                .setIcon(R.drawable.eliminar)
+                                                .setNegativeButton(textoCancelarTraducido, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        dialogInterface.cancel();
+                                                        Toast.makeText(requireContext(), "Has elegido no borrar", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                })
+                                                .setPositiveButton(textoAceptarTraducido, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        EliminarLista(nombreLista, usuario, nombrePerfil);
+                                                    }
+                                                });
+
+                                        // Mostrar el diálogo
+                                        builder.show();
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
 
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        EliminarLista(nombreLista, usuario, nombrePerfil);
-                    }
-                });
-
-                builder.create();
-                builder.show();
                 return true;
             }
         });
@@ -124,6 +162,28 @@ public class FragmentoListas extends Fragment {
             EditText etNombreLista = view.findViewById(R.id.etNombreLista);
             Button btnAceptarLista = view.findViewById(R.id.btnAceptarLista);
             Button btnCancelarLista = view.findViewById(R.id.btnCancelarLista);
+
+            /**TRADUCIR CONTROLES YA DEFINIDOS**/
+            Traductor.traducirTexto(etNombreLista.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                @Override
+                public void onTextoTraducido(String textoTraducido) {
+                    etNombreLista.setHint(textoTraducido);
+                }
+            });
+
+            Traductor.traducirTexto(btnAceptarLista.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                @Override
+                public void onTextoTraducido(String textoTraducido) {
+                    btnAceptarLista.setText(textoTraducido);
+                }
+            });
+
+            Traductor.traducirTexto(btnCancelarLista.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                @Override
+                public void onTextoTraducido(String textoTraducido) {
+                    btnCancelarLista.setText(textoTraducido);
+                }
+            });
 
             // Crear el AlertDialog
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

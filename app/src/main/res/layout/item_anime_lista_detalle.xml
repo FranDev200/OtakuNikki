@@ -28,7 +28,9 @@
             android:layout_height="wrap_content"
             android:text="Blue Lock"
             android:textColor="@color/blancoIcono"
-            android:textSize="20sp"
+            android:textSize="20dp"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textStyle="bold"/>
 
         <TextView
@@ -45,6 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"
+
+            android:layout_marginTop="20px"
             android:orientation="horizontal">
 
             <TextView

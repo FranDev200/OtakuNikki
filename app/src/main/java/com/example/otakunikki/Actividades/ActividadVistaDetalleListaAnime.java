@@ -22,6 +22,7 @@ import com.example.otakunikki.Adaptadores.AdaptadorListaAnimeDetalle;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.ListaAnime;
 import com.example.otakunikki.Clases.Perfil;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +44,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser usuario;
+    String idioma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         // Recuperar el nombre del perfil desde SharedPreferences
         SharedPreferences preferences = getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
         String nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
+
+        SharedPreferences infoIdioma = getApplicationContext().getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
         /**********************************************************************************************************/
 
         listaSeleccionada = getIntent().getParcelableExtra("ListaAnimeSeleccionada");
@@ -75,8 +80,22 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
             Log.i("ANIMES", aux.getId() + "@@@@@@@" + aux.getTitulo());
         }
 
+        /**TRADUCIR CONTROLES YA DEFINIDOS**/
+        Traductor.traducirTexto(etTituloLista.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                etTituloLista.setText(textoTraducido);
+            }
+        });
 
-        miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(), listaAnime);
+        Traductor.traducirTexto(tvNroAnimesLista.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvNroAnimesLista.setText(textoTraducido);
+            }
+        });
+
+        miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(), listaAnime, idioma);
         lvAnimesLista.setAdapter(miAdaptador);
 
         miAdaptador.notifyDataSetChanged();
