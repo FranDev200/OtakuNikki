@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.otakunikki.Actividades.ActividadVistaDetalleListaAnime;
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.Episodio;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
@@ -22,11 +23,12 @@ public class AdaptadorListaAnimeDetalle extends BaseAdapter {
     private List<Anime> listaAnimes;
     private Context context;
     List<Episodio> listaEpisodios;
+    private String idioma;
 
-    public AdaptadorListaAnimeDetalle(Context context, List<Anime> listaAnimes) {
+    public AdaptadorListaAnimeDetalle(Context context, List<Anime> listaAnimes, String idioma) {
         this.context = context;
         this.listaAnimes = listaAnimes;
-
+        this.idioma = idioma;
     }
 
     @Override
@@ -74,6 +76,29 @@ public class AdaptadorListaAnimeDetalle extends BaseAdapter {
         } else {
             tvEnEmision.setText("Finalizado ●");
         }
+
+        /**TRADUCIR CONTROLES YA DEFINIDOS**/
+        Traductor.traducirTexto(tvTituloAnime.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvTituloAnime.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvNumEpisodios.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvNumEpisodios.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvEnEmision.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvEnEmision.setText(textoTraducido);
+            }
+        });
+
         return convertView;
     }
 

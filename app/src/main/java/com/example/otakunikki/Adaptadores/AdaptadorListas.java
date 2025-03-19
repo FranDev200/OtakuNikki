@@ -1,6 +1,7 @@
 package com.example.otakunikki.Adaptadores;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.otakunikki.Clases.ListaAnime;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.R;
 import com.squareup.picasso.Picasso;
 
@@ -19,11 +21,12 @@ public class AdaptadorListas extends BaseAdapter {
 
     private List<ListaAnime> listadelistasAnimes;
     private Context context;
+    private String idioma;
 
-    public AdaptadorListas(Context context, List<ListaAnime> listadelistasAnimes) {
+    public AdaptadorListas(Context context, List<ListaAnime> listadelistasAnimes, String idioma) {
         this.context = context;
         this.listadelistasAnimes = listadelistasAnimes;
-
+        this.idioma = idioma;
     }
 
     @Override
@@ -54,8 +57,6 @@ public class AdaptadorListas extends BaseAdapter {
         ImageView imgAnime1 = view.findViewById(R.id.imgAnime1);
         ImageView imgAnime2 = view.findViewById(R.id.imgAnime2);
         ImageView imgAnime3 = view.findViewById(R.id.imgAnime3);
-
-
 
         for (int i = 0; i < listadelistasAnimes.get(position).getListaAnimes().size(); i++){
             if(listadelistasAnimes.get(position).getListaAnimes().size() != 0){
@@ -89,6 +90,28 @@ public class AdaptadorListas extends BaseAdapter {
         tvTitulo.setText(listadelistasAnimes.get(position).getNombreLista());
         tvNroAnimes.setText(listadelistasAnimes.get(position).getListaAnimes().size() + " animes");
         //tvFecha.setText(listadelistasAnimes.get(position).getFechaModificacion());
+
+        /**TRADUCIR CONTROLES YA DEFINIDOS**/
+        Traductor.traducirTexto(tvTitulo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvTitulo.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvNroAnimes.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvNroAnimes.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvFecha.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvFecha.setText(textoTraducido);
+            }
+        });
 
         return view;
     }
