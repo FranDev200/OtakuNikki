@@ -13,4 +13,8 @@
     <string name="animes_recomendados"><u>Animes Recomendados:</u></string>
     <string name="animes_temporada"><u>Ultimos añadidos:</u></string>
 
+    <string name="region_es">España</string>
+    <string name="region_us">Estados Unidos</string>
+    <string name="region_jp">Japón</string>
+
 </resources>

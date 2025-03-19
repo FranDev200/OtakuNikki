@@ -1,9 +1,12 @@
 package com.example.otakunikki.Fragmentos;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -26,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.otakunikki.Actividades.InicioSesion;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.GestionImagenes.AdaptadorFilasImagenes;
 import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.Clases.Usuario;
@@ -37,6 +41,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import android.view.Gravity;
@@ -44,37 +49,47 @@ import android.view.Gravity;
 public class FragmentInfoUsuario extends Fragment {
     private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil, btnGuardarCambios;
     private EditText etNombreUsuario;
-    TextView tvRegion, tvNomPerfil, tvCorreoUsuario;
+    TextView tvTitUser, tvTitCorreo,tvTitPerfil, tvRegion, tvNomPerfil, tvCorreoUsuario;
     private Spinner spRegion;
     private String[] regiones = {"España", "Estados Unidos", "Japón"};
     private ImageButton imgPerfil;
     private String TAG = "InfoUsuario";
+    private String idioma;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View vista = inflater.inflate(R.layout.fragment_info_usuario, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        SharedPreferences preferencesIdi = getActivity().getSharedPreferences("Idiomas", MODE_PRIVATE);
+        idioma = preferencesIdi.getString("idioma", "es");
+        setLocale(idioma); // Aplica el idioma al inicio
+
+        View vista = inflater.inflate(R.layout.fragment_info_usuario, container, false);
 
         btnEliminarPerfil = vista.findViewById(R.id.btnEliminarPerfil);
         btnDesconexion = vista.findViewById(R.id.btnDesconexion);
         btnCambioPerfil = vista.findViewById(R.id.btnCambioPerfil);
         btnGuardarCambios = vista.findViewById(R.id.btnGuardarCambios);
         etNombreUsuario = vista.findViewById(R.id.etNombreUsuario);
+        tvTitUser = vista.findViewById(R.id.tvTitUser);
+        tvTitCorreo = vista.findViewById(R.id.tvTitCorreo);
+        tvTitPerfil = vista.findViewById(R.id.tvTitPerfil);
         tvCorreoUsuario = vista.findViewById(R.id.tvCorreoUsuario);
         spRegion = vista.findViewById(R.id.spRegion);
         imgPerfil = vista.findViewById(R.id.imgPerfil);
         tvRegion = vista.findViewById(R.id.tvRegionSeleccionada);
         tvNomPerfil = vista.findViewById(R.id.tvNomPerfil);
 
-        SharedPreferences pref = requireActivity().getSharedPreferences("DatosUsuario", Context.MODE_PRIVATE);
+        TraducirPantalla();
+        TraducirSpinner();
+
+        SharedPreferences pref = requireActivity().getSharedPreferences("DatosUsuario", MODE_PRIVATE);
         String email = pref.getString("email", "Sin email"); // Valor por defecto
         String region = pref.getString("region", "No disponible");
         tvCorreoUsuario.setText(email);
 
 
         // Recuperar el nombre del perfil desde SharedPreferences
-        SharedPreferences preferences = requireContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
+        SharedPreferences preferences = requireContext().getSharedPreferences("NombrePerfil", MODE_PRIVATE);
         String nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
         int imagenPerfil = preferences.getInt("ImagenPerfil", R.drawable.fernchibi);
 
@@ -141,7 +156,7 @@ public class FragmentInfoUsuario extends Fragment {
                         FirebaseAuth.getInstance().signOut();
 
                         // Eliminar la preferencia de recordar sesión
-                        SharedPreferences.Editor editor = requireContext().getSharedPreferences("PreferenciaSesion", Context.MODE_PRIVATE).edit();
+                        SharedPreferences.Editor editor = requireContext().getSharedPreferences("PreferenciaSesion", MODE_PRIVATE).edit();
                         editor.putBoolean("rememberMe", false);
                         editor.remove("userId"); // Eliminar UID
                         editor.apply();
@@ -217,7 +232,7 @@ public class FragmentInfoUsuario extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String seleccion = regiones[position]; // Obtiene la selección actual
 
-                if (seleccion.equals("España") || seleccion.equals("Estados Unidos") || seleccion.equals("Japón")) {
+                if (position==0 || position==1 || position==2) {
                     tvRegion.setText(seleccion);
                 } else {
                     // Si la selección no está en la lista, mantener la región del usuario
@@ -227,12 +242,23 @@ public class FragmentInfoUsuario extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Si no se selecciona nada, mantener la región actual
-                tvRegion.setText(region);
+
             }
         });
 
         return vista;
+    }
+
+    private void setLocale(String idioma) {
+
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration configuration = new Configuration();
+        configuration.setLocale(locale);
+
+        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
     }
 
     private void EliminarPerfil(String nombrePerfil) {
@@ -351,5 +377,95 @@ public class FragmentInfoUsuario extends Fragment {
         }).addOnFailureListener(e -> {
             Toast.makeText(requireContext(), "Error al obtener usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
+    }
+
+    public void TraducirPantalla(){
+        /**Traducimos los controles**/
+        Traductor.traducirTexto(tvNomPerfil.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvNomPerfil.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(btnCambioPerfil.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnCambioPerfil.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvTitUser.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvTitUser.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvRegion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvRegion.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvTitCorreo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvTitCorreo.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(tvTitPerfil.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvTitPerfil.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(btnGuardarCambios.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnGuardarCambios.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(btnDesconexion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnDesconexion.setText(textoTraducido);
+            }
+        });
+
+        Traductor.traducirTexto(btnEliminarPerfil.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnEliminarPerfil.setText(textoTraducido);
+            }
+        });
+    }
+    public void TraducirSpinner(){
+
+        Traductor.traducirTexto(regiones[0], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                regiones[0] = textoTraducido;
+            }
+        });
+
+        Traductor.traducirTexto(regiones[1], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                regiones[1] = textoTraducido;
+            }
+        });
+
+        Traductor.traducirTexto(regiones[2], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                regiones[2] = textoTraducido;
+            }
+        });
+
     }
 }
