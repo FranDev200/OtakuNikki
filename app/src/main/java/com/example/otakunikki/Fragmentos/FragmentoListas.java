@@ -31,7 +31,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -352,6 +354,11 @@ public class FragmentoListas extends Fragment {
 
                     // Crear y agregar nueva lista
                     ListaAnime nuevaListaAnime = new ListaAnime(nombreLista);
+                    long currentTimeInMillis = System. currentTimeMillis();
+                    Date currentDate = new Date(currentTimeInMillis);
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+                    String currentDateTime = sdf.format(currentDate);
+                    nuevaListaAnime.setFechaModificacion(currentDateTime);
                     perfilSeleccionado.getListasAnimes().add(nuevaListaAnime);
 
                     // Guardar cambios en Firestore

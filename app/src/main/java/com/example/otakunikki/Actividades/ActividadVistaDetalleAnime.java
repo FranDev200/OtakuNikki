@@ -52,8 +52,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -410,7 +412,12 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                                     if (videoId != null && !videoId.isEmpty()) {
                                         youTubePlayer.cueVideo(videoId, 0); // Carga el video pero no lo reproduce
                                     } else {
-                                        Toast.makeText(ActividadVistaDetalleAnime.this, "No se ha proporcionado un video válido", Toast.LENGTH_SHORT).show();
+                                        Traductor.traducirTexto("No se ha proporcionado un video válido", "es", idioma, new Traductor.TraduccionCallback() {
+                                            @Override
+                                            public void onTextoTraducido(String textoTraducido) {
+                                                Toast.makeText(ActividadVistaDetalleAnime.this, textoTraducido, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }
                                 }
                             });
@@ -655,12 +662,28 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         //  listaAnime.setListaAnimes(new ArrayList<>());
         //}
         if (listaAnime.getListaAnimes().contains(anime)) {
-            Toast.makeText(getApplicationContext(), "El anime ya esta en la lista", Toast.LENGTH_SHORT).show();
+            Traductor.traducirTexto("El anime ya esta en la lista", "es", idioma, new Traductor.TraduccionCallback() {
+                @Override
+                public void onTextoTraducido(String textoTraducido) {
+                    Toast.makeText(getApplicationContext(), textoTraducido, Toast.LENGTH_SHORT).show();
+                }
+            });
+
         } else {
             if (listaAnime.getNombreLista().equalsIgnoreCase("Favoritos")) {
                 anime.setFavorito(true);
             }
-            Toast.makeText(getApplicationContext(), "Anime agregado a la lista", Toast.LENGTH_SHORT).show();
+            Traductor.traducirTexto("Anime agregado a la lista", "es", idioma, new Traductor.TraduccionCallback() {
+                @Override
+                public void onTextoTraducido(String textoTraducido) {
+                    Toast.makeText(getApplicationContext(), textoTraducido, Toast.LENGTH_SHORT).show();
+                }
+            });
+            long currentTimeInMillis = System. currentTimeMillis();
+            Date currentDate = new Date(currentTimeInMillis);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+            String currentDateTime = sdf.format(currentDate);
+            listaAnime.setFechaModificacion(currentDateTime);
             listaAnime.getListaAnimes().add(anime); // Agregamos el anime a la lista
         }
         //Subir los cambios a Firestore de forma segura
@@ -707,6 +730,11 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
                                                 if (!animeExiste) {
                                                     anime.setFavorito(true);
+                                                    long currentTimeInMillis = System. currentTimeMillis();
+                                                    Date currentDate = new Date(currentTimeInMillis);
+                                                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+                                                    String currentDateTime = sdf.format(currentDate);
+                                                    lista.setFechaModificacion(currentDateTime);
                                                     lista.getListaAnimes().add(anime);
                                                 }
 
@@ -717,6 +745,11 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                                         // Si la lista no existe, crear una nueva y agregar el anime
                                         if (!listaExiste) {
                                             ListaAnime nuevaListaAnime = new ListaAnime(nombreLista);
+                                            long currentTimeInMillis = System. currentTimeMillis();
+                                            Date currentDate = new Date(currentTimeInMillis);
+                                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+                                            String currentDateTime = sdf.format(currentDate);
+                                            nuevaListaAnime.setFechaModificacion(currentDateTime);
                                             anime.setFavorito(true);
                                             nuevaListaAnime.getListaAnimes().add(anime);
                                             perfil.getListasAnimes().add(nuevaListaAnime);
@@ -782,6 +815,11 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
 
                                                 if (animeExiste) {
                                                     anime.setFavorito(false);
+                                                    long currentTimeInMillis = System. currentTimeMillis();
+                                                    Date currentDate = new Date(currentTimeInMillis);
+                                                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+                                                    String currentDateTime = sdf.format(currentDate);
+                                                    lista.setFechaModificacion(currentDateTime);
                                                     lista.getListaAnimes().remove(anime);
                                                 }
 
