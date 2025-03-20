@@ -29,7 +29,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
@@ -205,6 +207,11 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
                                                 }
 
                                                 if (animeExiste) {
+                                                    long currentTimeInMillis = System. currentTimeMillis();
+                                                    Date currentDate = new Date(currentTimeInMillis);
+                                                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+                                                    String currentDateTime = sdf.format(currentDate);
+                                                    lista.setFechaModificacion(currentDateTime);
                                                     lista.getListaAnimes().remove(anime);
                                                 }
 

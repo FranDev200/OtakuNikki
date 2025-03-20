@@ -89,7 +89,7 @@ public class AdaptadorListas extends BaseAdapter {
 
         tvTitulo.setText(listadelistasAnimes.get(position).getNombreLista());
         tvNroAnimes.setText(listadelistasAnimes.get(position).getListaAnimes().size() + " animes");
-        //tvFecha.setText(listadelistasAnimes.get(position).getFechaModificacion());
+        tvFecha.setText(listadelistasAnimes.get(position).getFechaModificacion());
 
         /**TRADUCIR CONTROLES YA DEFINIDOS**/
         /*Traductor.traducirTexto(tvTitulo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
