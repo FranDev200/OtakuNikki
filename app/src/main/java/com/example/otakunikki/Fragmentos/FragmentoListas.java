@@ -103,7 +103,7 @@ public class FragmentoListas extends Fragment {
                 listaSeleccionada = lista_de_listasAnimes.get(position);
                 String nombreLista = listaSeleccionada.getNombreLista();
 
-                // Usar un arreglo para almacenar el mensaje
+                // Usar un array para almacenar el mensaje
                 final String[] msg = new String[1];
                 msg[0] = "¿Estás seguro de borrar la lista " + nombreLista;
 

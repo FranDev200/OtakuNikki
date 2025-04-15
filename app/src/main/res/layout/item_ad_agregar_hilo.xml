@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/moradoYNegroIcono">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tema del hilo:"
+        android:textColor="@color/moradoMuyClaroIcono"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:paddingBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/etTituloHilo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Introduce el título del tema a debatir"
+        android:background="@color/moradoYAzulIcono"
+        android:textColor="@color/moradoMuyClaroIcono"
+        android:textColorHint="@color/white"
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mensaje para iniciar una conversación:"
+        android:textColor="@color/moradoMuyClaroIcono"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:paddingBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/etMensajeForo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Introduce el mensaje"
+        android:background="@color/moradoYAzulIcono"
+        android:textColor="@color/moradoMuyClaroIcono"
+        android:textColorHint="@color/white"
+        android:padding="10dp"
+        android:textSize="14sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPublicarHilo"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:text="Publicar">
+
+        </Button>
+        <Button
+            android:id="@+id/btnCancelarPublicacion"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:text="Cancelar">
+
+        </Button>
+
+    </LinearLayout>
+
+</LinearLayout>

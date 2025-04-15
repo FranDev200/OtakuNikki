@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.otakunikki.Clases.Traductor;
+import com.example.otakunikki.Foro.Foro;
 import com.example.otakunikki.Fragmentos.FragmentInfoUsuario;
 import com.example.otakunikki.Fragmentos.FragmentInicio;
 import com.example.otakunikki.Fragmentos.FragmentoListas;
@@ -41,7 +42,7 @@ public class MenuPrincipal extends AppCompatActivity {
                     cargarFragment(new FragmentInicio());
                 }
                 else if(item.getItemId() == R.id.mnu_foro){
-
+                    cargarFragment(new Foro());
                 }else if(item.getItemId() == R.id.mnu_explorar){
                     abrirExplorar();
                 }else if(item.getItemId() == R.id.mnu_listas){

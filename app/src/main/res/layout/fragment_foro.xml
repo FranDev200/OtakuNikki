@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragmentos.FragmentoListas"
+    android:background="@color/moradoYNegroIcono"
+    android:padding="5dp">
+
+    <!-- Título centrado arriba -->
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FORO DE COMUNIDAD"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/moradoMuyClaroIcono"
+        android:gravity="center"/>
+
+    <!-- ListView debajo del título, ocupando el resto de la pantalla -->
+    <ListView
+        android:id="@+id/lvForoComunidad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tvTitulo"
+        android:background="@color/moradoYAzulIcono"/>
+
+    <!-- Botón flotante por encima -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAgregarHilo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/plus"
+        app:backgroundTint="@color/moradoMuyClaroIcono"
+        app:fabSize="mini"/>
+
+</RelativeLayout>
