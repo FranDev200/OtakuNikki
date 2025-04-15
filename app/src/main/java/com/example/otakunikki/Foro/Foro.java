@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -75,6 +76,23 @@ public class Foro extends Fragment {
         //listaForo.add(hilo);
         adaptadorforo = new AdaptadorForo(listaForo, requireContext());
         lvForo.setAdapter(adaptadorforo);
+
+        lvForo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                DetalleHiloFragment detalleFragment = DetalleHiloFragment.nuevaInstancia(listaForo.get(position));
+
+                    requireActivity()
+                            .getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main, detalleFragment) // Asegúrate de usar el ID correcto
+                            .addToBackStack(null) // Para que al darle atrás vuelva al fragmento anterior
+                            .commit();
+
+
+            }
+        });
 
         /**METODO PARA CARGAR LOS HILOS DEL FORO**/
         CargarDatos();
