@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_margin="8dp"
+    android:elevation="2dp"
+    android:background="@color/moradoYAzulIcono">
+
+    <!-- TÍTULO DEL COMENTARIO -->
+    <TextView
+        android:id="@+id/tvTituloForo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título del hilo o comentario"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#4A148C"
+        android:layout_marginBottom="6dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tvUsuarioForo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Usuario123"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tvFechaForo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="12/04/2025"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:gravity="end" />
+    </LinearLayout>
+
+
+    <!-- Comentario -->
+    <TextView
+        android:id="@+id/tvComentarioForo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Este es un comentario de prueba del foro."
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="8dp" />
+
+    <!-- Botón responder (opcional)
+    <Button
+        android:id="@+id/btnResponderForo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Responder"
+        android:textSize="12sp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#E0E0E0"
+        android:textColor="#000" />-->
+</LinearLayout>
