@@ -2,6 +2,7 @@ package com.example.otakunikki.Foro;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.otakunikki.Actividades.ActividadVistaDetalleListaAnime;
 import com.example.otakunikki.Clases.HiloForo;
 import com.example.otakunikki.Clases.ListaAnime;
 import com.example.otakunikki.Clases.Perfil;
@@ -39,8 +41,9 @@ import java.util.Locale;
 
 public class Foro extends Fragment {
 
-    List<HiloForo> listaForo;
-    AdaptadorForo adaptadorforo;
+    private List<HiloForo> listaForo;
+    private HiloForo hilo;
+    private AdaptadorForo adaptadorforo;
     private ListView lvForo;
     private FloatingActionButton btnAgregarHilo;
     private FirebaseUser usuario;
@@ -72,24 +75,17 @@ public class Foro extends Fragment {
         lvForo = vista.findViewById(R.id.lvForoComunidad);
 
         listaForo = new ArrayList<>();
-        //HiloForo hilo = new HiloForo("Mario", "ONE PIECE", currentDateTime, "Opiniones sobre el ultimo capitulo de manga de one piece?");
-        //listaForo.add(hilo);
+
         adaptadorforo = new AdaptadorForo(listaForo, requireContext());
         lvForo.setAdapter(adaptadorforo);
 
         lvForo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                DetalleHiloFragment detalleFragment = DetalleHiloFragment.nuevaInstancia(listaForo.get(position));
-
-                    requireActivity()
-                            .getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.main, detalleFragment) // Asegúrate de usar el ID correcto
-                            .addToBackStack(null) // Para que al darle atrás vuelva al fragmento anterior
-                            .commit();
-
+                hilo = listaForo.get(position);
+                Intent intent = new Intent(getActivity(), ActividadDetalleHilo.class);
+                intent.putExtra("HiloForo", hilo);
+                startActivity(intent);
 
             }
         });
@@ -142,7 +138,6 @@ public class Foro extends Fragment {
                     String tituloHilo = etTituloHilo.getText().toString().toUpperCase();
                     String mensajeForo = etMensajeForo.getText().toString();
                     if (!tituloHilo.isEmpty() && !mensajeForo.isEmpty()) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Prueba Validacion", Toast.LENGTH_SHORT).show();
                         AgregarHiloForo(tituloHilo, mensajeForo, usuario,nombrePerfil);
                         dialog.dismiss();
                     } else {
@@ -165,21 +160,30 @@ public class Foro extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         HiloForo hilo = new HiloForo(nombrePerfil, tituloForo, Timestamp.now(), mensajeForo);
 
-        db.collection("hilos")
+        db.collection("Hilos")
                 .add(hilo)
                 .addOnSuccessListener(documentReference -> {
-                    Log.d("Firestore", "Hilo creado con ID: " + documentReference.getId());
-                    listaForo.add(hilo);
-                    adaptadorforo.notifyDataSetChanged();
+                    String idHilo = documentReference.getId();
+                    hilo.setIdHilo(idHilo); // en memoria
+
+                    // Actualizar el campo idHilo dentro del documento ya creado
+                    documentReference.update("idHilo", idHilo)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("Firestore", "idHilo actualizado correctamente");
+
+                                listaForo.add(hilo);
+                                adaptadorforo.notifyDataSetChanged();
+                            })
+                            .addOnFailureListener(e -> Log.w("Firestore", "Error actualizando idHilo", e));
                 })
                 .addOnFailureListener(e -> {
                     Log.w("Firestore", "Error al crear hilo", e);
                 });
-
     }
 
+
     private void CargarDatos() {
-        db.collection("hilos")
+        db.collection("Hilos")
                 .orderBy("fecha", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(hiloDocs -> {
@@ -192,36 +196,3 @@ public class Foro extends Fragment {
                 });
     }
 }
-/**ESTO ES PARA LEER LAS RESPUESTA EN OTRA ACTIVIDAD
- db.collection("hilos")
- .document(hiloId)
- .collection("respuestas")
- .orderBy("fecha", Query.Direction.ASCENDING)
- .get()
- .addOnSuccessListener(respDocs -> {
-
- for (DocumentSnapshot respDoc : respDocs) {
- HiloForo respuesta = respDoc.toObject(HiloForo.class);
-
- }
- adaptadorforo.notifyDataSetChanged();
- //hilo.setRespuestas(respuestas); // aquí usas tu clase sin tocarla
- //Log.d("Firestore", "Hilo con respuestas: " + hilo.getTitulo() + " tiene " + respuestas.size() + " respuestas");
- });**/
-
-/*
-        db.collection("foro")
-                .document(publicacionId)
-                .collection("comentarios")
-                .orderBy("fechaHora", Query.Direction.ASCENDING)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<HiloForo> listaComentarios = new ArrayList<>();
-                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        HiloForo comentario = doc.toObject(HiloForo.class);
-                        listaComentarios.add(comentario);
-                    }
-
-                    // Aquí actualizas tu RecyclerView o lista
-                });
-        */

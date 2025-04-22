@@ -13,6 +13,7 @@ import java.util.Objects;
 
 public class HiloForo implements Parcelable {
 
+    private String idHilo;
     private String usuario;
     private String titulo;
     private Timestamp fecha;
@@ -36,6 +37,7 @@ public class HiloForo implements Parcelable {
     }
 
     protected HiloForo(Parcel in) {
+        idHilo = in.readString();
         usuario = in.readString();
         titulo = in.readString();
         fecha = in.readParcelable(Timestamp.class.getClassLoader());
@@ -54,6 +56,14 @@ public class HiloForo implements Parcelable {
             return new HiloForo[size];
         }
     };
+
+    public String getIdHilo() {
+        return idHilo;
+    }
+
+    public void setIdHilo(String idHilo) {
+        this.idHilo = idHilo;
+    }
 
     public String getUsuario() {
         return usuario;
@@ -100,12 +110,12 @@ public class HiloForo implements Parcelable {
         if (this == o) return true;
         if (!(o instanceof HiloForo)) return false;
         HiloForo hiloForo = (HiloForo) o;
-        return Objects.equals(getUsuario(), hiloForo.getUsuario()) && Objects.equals(getTitulo(), hiloForo.getTitulo()) && Objects.equals(getFecha(), hiloForo.getFecha()) && Objects.equals(getComentario(), hiloForo.getComentario()) && Objects.equals(getRespuestas(), hiloForo.getRespuestas());
+        return Objects.equals(getIdHilo(), hiloForo.getIdHilo()) && Objects.equals(getUsuario(), hiloForo.getUsuario()) && Objects.equals(getTitulo(), hiloForo.getTitulo()) && Objects.equals(getFecha(), hiloForo.getFecha()) && Objects.equals(getComentario(), hiloForo.getComentario()) && Objects.equals(getRespuestas(), hiloForo.getRespuestas());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUsuario(), getTitulo(), getFecha(), getComentario(), getRespuestas());
+        return Objects.hash(getIdHilo(), getUsuario(), getTitulo(), getFecha(), getComentario(), getRespuestas());
     }
 
     @Override
@@ -115,6 +125,7 @@ public class HiloForo implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(idHilo);
         dest.writeString(usuario);
         dest.writeString(titulo);
         dest.writeParcelable(fecha, flags);
