@@ -74,10 +74,14 @@ public class AnyadirPerfil extends AppCompatActivity {
 
             // Creo la lista de imágenes para los diferentes animes
             Map<String, List<Integer>> secciones = new LinkedHashMap<>(); //Ordeno por orden de inserccion en el mapa para que sea más fácil de ver
-            secciones.put("One piece", Arrays.asList(R.drawable.luffychibi, R.drawable.zorochibi, R.drawable.namichibi));
-            secciones.put("Jujutsu Kaisen", Arrays.asList(R.drawable.itadorichibi, R.drawable.satoruchibi));
+            secciones.put("One piece", Arrays.asList(R.drawable.luffychibi, R.drawable.zorochibi, R.drawable.namichibi, R.drawable.chopper, R.drawable.robbinchibi, R.drawable.lawchibi, R.drawable.doflamingochibi, R.drawable.corazonchibi));
+            secciones.put("Jujutsu Kaisen", Arrays.asList(R.drawable.itadorichibi, R.drawable.nobarachibi, R.drawable.megumichibi, R.drawable.satoruchibi, R.drawable.tojichibi, R.drawable.kaisenchibi, R.drawable.sukunachibi, R.drawable.nanamichibi));
             secciones.put("Frieren", Arrays.asList(R.drawable.frierenchibi, R.drawable.fernchibi, R.drawable.himmelchibi));
             secciones.put("Haikyū", Arrays.asList(R.drawable.tobiochibi, R.drawable.shoyochibi));
+            secciones.put("Black Clover", Arrays.asList(R.drawable.tobiochibi, R.drawable.shoyochibi));
+            secciones.put("Kimetsu No Yaiba", Arrays.asList(R.drawable.tobiochibi, R.drawable.shoyochibi));
+            secciones.put("Naruto", Arrays.asList(R.drawable.tobiochibi, R.drawable.shoyochibi));
+            secciones.put("Dragon Ball Z", Arrays.asList(R.drawable.tobiochibi, R.drawable.shoyochibi));
 
             AdaptadorFilasImagenes seccionAdapter = new AdaptadorFilasImagenes(getApplicationContext(), secciones, imagenResId -> {
                 imgAgregarFoto.setImageResource(imagenResId);
