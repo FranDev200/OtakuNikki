@@ -35,6 +35,7 @@ public class ActividadDetalleHilo extends AppCompatActivity {
     private TextView tvTitulo, tvUsuario, tvFecha, tvComentario;
     private ListView rvRespuestas;
     private Button btnResponder;
+    private ImageButton btnFlechaAtras;
 
     private HiloForo hiloPrincipal;
     private FirebaseFirestore db;
@@ -57,6 +58,7 @@ public class ActividadDetalleHilo extends AppCompatActivity {
         imgRetroceso.setOnClickListener(v -> getSupportFragmentManager().popBackStack());
 
 
+        btnFlechaAtras = findViewById(R.id.imgRetroceso);
         tvTitulo = findViewById(R.id.tvTituloHiloDetalle);
         tvUsuario = findViewById(R.id.tvUsuarioHiloDetalle);
         tvFecha = findViewById(R.id.tvFechaHiloDetalle);
@@ -78,7 +80,12 @@ public class ActividadDetalleHilo extends AppCompatActivity {
 
         mostrarHiloPrincipal();
 
-        
+        btnFlechaAtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         btnResponder.setOnClickListener(new View.OnClickListener() {
