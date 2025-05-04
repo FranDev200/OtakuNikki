@@ -57,14 +57,4 @@
         android:textColor="@color/white"
         android:layout_marginTop="8dp" />
 
-    <!-- Botón responder (opcional)
-    <Button
-        android:id="@+id/btnResponderForo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Responder"
-        android:textSize="12sp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#E0E0E0"
-        android:textColor="#000" />-->
 </LinearLayout>
