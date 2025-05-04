@@ -43,7 +43,7 @@ public class ActividadDetalleHilo extends AppCompatActivity {
     private AdaptadorRespuestasHilo adaptador;
 
     private String nombrePerfil;
-
+    private String idioma;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +53,9 @@ public class ActividadDetalleHilo extends AppCompatActivity {
         // Recuperar el nombre del perfil desde SharedPreferences
         SharedPreferences preferences = getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
         nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
+
+        SharedPreferences infoIdioma = getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
+        idioma = infoIdioma.getString("idioma", "es");
 
         ImageButton imgRetroceso = findViewById(R.id.imgRetroceso);
         imgRetroceso.setOnClickListener(v -> getSupportFragmentManager().popBackStack());
@@ -143,7 +146,7 @@ public class ActividadDetalleHilo extends AppCompatActivity {
                 HiloForo hilos = documentSnapshot.toObject(HiloForo.class);
                 if (hilos != null) {
 
-                    listaRespuestas.add(new HiloForo(nombrePerfil, null, Timestamp.now(), comentario));
+                    listaRespuestas.add(new HiloForo(nombrePerfil, null, Timestamp.now(), comentario, idioma));
 
                     // Actualizar en Firestore
                     db.collection("Hilos").document(hiloPrincipal.getIdHilo())

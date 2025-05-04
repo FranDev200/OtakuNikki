@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.otakunikki.Clases.Anime;
 import com.example.otakunikki.Clases.HiloForo;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.R;
 import com.google.firebase.Timestamp;
 
@@ -22,10 +23,12 @@ import java.util.Locale;
 public class AdaptadorForo extends BaseAdapter {
     private List<HiloForo> listaForo;
     private Context context;
+    private String idioma;
 
-    public AdaptadorForo(List<HiloForo> listaForo, Context context) {
+    public AdaptadorForo(List<HiloForo> listaForo, Context context, String idioma) {
         this.listaForo = listaForo;
         this.context = context;
+        this.idioma = idioma;
     }
 
     @Override
@@ -55,10 +58,20 @@ public class AdaptadorForo extends BaseAdapter {
 
         HiloForo hilo = listaForo.get(position);
 
-        tvTituloForo.setText(hilo.getTitulo());
+        Traductor.traducirTexto(hilo.getTitulo(), hilo.getIdioma(), idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvTituloForo.setText(textoTraducido);
+            }
+        });
         tvUsuarioForo.setText(hilo.getUsuario());
         tvFechaForo.setText(convertirTimestampAFecha(hilo.getFecha()));
-        tvComentarioForo.setText(hilo.getComentario());
+        Traductor.traducirTexto(hilo.getComentario(), hilo.getIdioma(), idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvComentarioForo.setText(textoTraducido);
+            }
+        });
         return convertView;
     }
     public String convertirTimestampAFecha(Timestamp timestamp) {

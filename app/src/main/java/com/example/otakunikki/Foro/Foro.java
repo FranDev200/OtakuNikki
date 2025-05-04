@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.otakunikki.Actividades.ActividadVistaDetalleListaAnime;
@@ -50,7 +51,7 @@ public class Foro extends Fragment {
     private String nombrePerfil;
     private FirebaseFirestore db;
     private String idioma;
-
+    private TextView tvForo;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,13 +71,19 @@ public class Foro extends Fragment {
         SharedPreferences infoIdioma = requireContext().getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
         idioma = infoIdioma.getString("idioma", "es");
 
-
+        tvForo = vista.findViewById(R.id.tvTitulo);
+        Traductor.traducirTexto(tvForo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvForo.setText(textoTraducido);
+            }
+        });
         btnAgregarHilo = vista.findViewById(R.id.btnAgregarHilo);
         lvForo = vista.findViewById(R.id.lvForoComunidad);
 
         listaForo = new ArrayList<>();
 
-        adaptadorforo = new AdaptadorForo(listaForo, requireContext());
+        adaptadorforo = new AdaptadorForo(listaForo, requireContext(), idioma);
         lvForo.setAdapter(adaptadorforo);
 
         lvForo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -102,30 +109,49 @@ public class Foro extends Fragment {
 
                 EditText etTituloHilo = view.findViewById(R.id.etTituloHilo);
                 EditText etMensajeForo = view.findViewById(R.id.etMensajeForo);
+                TextView tvTituloHilo = view.findViewById(R.id.tvTituloHilo);
+                TextView tvComentarioHilo = view.findViewById(R.id.tvInfoParaMensaje);
                 Button btnPublicarHilo = view.findViewById(R.id.btnPublicarHilo);
                 Button btnCancelarPublicacion = view.findViewById(R.id.btnCancelarPublicacion);
 
-                /**TRADUCIR CONTROLES YA DEFINIDOS
-                Traductor.traducirTexto(etNombreLista.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                //TRADUCIR CONTROLES YA DEFINIDOS
+                Traductor.traducirTexto(etTituloHilo.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
                     @Override
                     public void onTextoTraducido(String textoTraducido) {
-                        etNombreLista.setHint(textoTraducido);
+                        etTituloHilo.setHint(textoTraducido);
+                    }
+                });
+                Traductor.traducirTexto(etMensajeForo.getHint().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                    @Override
+                    public void onTextoTraducido(String textoTraducido) {
+                        etMensajeForo.setHint(textoTraducido);
+                    }
+                });
+                Traductor.traducirTexto(tvTituloHilo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                    @Override
+                    public void onTextoTraducido(String textoTraducido) {
+                        tvTituloHilo.setText(textoTraducido);
+                    }
+                });
+                Traductor.traducirTexto(tvComentarioHilo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                    @Override
+                    public void onTextoTraducido(String textoTraducido) {
+                        tvComentarioHilo.setText(textoTraducido);
+                    }
+                });
+                Traductor.traducirTexto(btnPublicarHilo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                    @Override
+                    public void onTextoTraducido(String textoTraducido) {
+                        btnPublicarHilo.setText(textoTraducido);
                     }
                 });
 
-                Traductor.traducirTexto(btnAceptarLista.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+                Traductor.traducirTexto(btnCancelarPublicacion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
                     @Override
                     public void onTextoTraducido(String textoTraducido) {
-                        btnAceptarLista.setText(textoTraducido);
+                        btnCancelarPublicacion.setText(textoTraducido);
                     }
                 });
-
-                Traductor.traducirTexto(btnCancelarLista.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-                    @Override
-                    public void onTextoTraducido(String textoTraducido) {
-                        btnCancelarLista.setText(textoTraducido);
-                    }
-                });**/
 
                 // Crear el AlertDialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -158,7 +184,7 @@ public class Foro extends Fragment {
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        HiloForo hilo = new HiloForo(nombrePerfil, tituloForo, Timestamp.now(), mensajeForo);
+        HiloForo hilo = new HiloForo(nombrePerfil, tituloForo, Timestamp.now(), mensajeForo, idioma);
 
         db.collection("Hilos")
                 .add(hilo)
