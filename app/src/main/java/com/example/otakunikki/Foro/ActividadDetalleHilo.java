@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.otakunikki.Clases.HiloForo;
+import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.Timestamp;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActividadDetalleHilo extends AppCompatActivity {
-    private TextView tvTitulo, tvUsuario, tvFecha, tvComentario;
+    private TextView tvTitulo, tvUsuario, tvFecha, tvComentario, tvComentarioTitulo;
     private ListView rvRespuestas;
     private Button btnResponder;
     private ImageButton btnFlechaAtras;
@@ -65,6 +66,7 @@ public class ActividadDetalleHilo extends AppCompatActivity {
         tvTitulo = findViewById(R.id.tvTituloHiloDetalle);
         tvUsuario = findViewById(R.id.tvUsuarioHiloDetalle);
         tvFecha = findViewById(R.id.tvFechaHiloDetalle);
+        tvComentarioTitulo = findViewById(R.id.tvComentarioTitulo);
         tvComentario = findViewById(R.id.tvComentarioHiloDetalle);
         rvRespuestas = findViewById(R.id.rvRespuestas);
         btnResponder = findViewById(R.id.btnResponder);
@@ -77,7 +79,7 @@ public class ActividadDetalleHilo extends AppCompatActivity {
 
             listaRespuestas.addAll(hiloPrincipal.getRespuestas());
         }
-        adaptador = new AdaptadorRespuestasHilo(listaRespuestas, this);
+        adaptador = new AdaptadorRespuestasHilo(listaRespuestas, this, idioma);
         rvRespuestas.setAdapter(adaptador);
 
 
@@ -101,10 +103,32 @@ public class ActividadDetalleHilo extends AppCompatActivity {
 
 
     private void mostrarHiloPrincipal() {
-        tvTitulo.setText(hiloPrincipal.getTitulo());
+        Traductor.traducirTexto(tvComentarioTitulo.getText().toString(), hiloPrincipal.getIdioma(), idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvComentarioTitulo.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(btnResponder.getText().toString(), hiloPrincipal.getIdioma(), idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                btnResponder.setText(textoTraducido);
+            }
+        });
+        Traductor.traducirTexto(hiloPrincipal.getTitulo(), hiloPrincipal.getIdioma(), idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvTitulo.setText(textoTraducido);
+            }
+        });
         tvUsuario.setText(hiloPrincipal.getUsuario());
         tvFecha.setText(convertirTimestampAFecha(hiloPrincipal.getFecha()));
-        tvComentario.setText(hiloPrincipal.getComentario());
+        Traductor.traducirTexto(hiloPrincipal.getComentario(), hiloPrincipal.getIdioma(), idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvComentario.setText(textoTraducido);
+            }
+        });
     }
     
     private void MostrarDialogoRespuesta() {
