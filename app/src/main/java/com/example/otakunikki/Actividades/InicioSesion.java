@@ -106,12 +106,15 @@ public class InicioSesion extends AppCompatActivity {
         AlertDialog dialog = builder.create();
 
         TextView tvSelecciona;
-        ImageButton btnEspanol, btnIngles, btnJapones;
+        ImageButton btnEspanol, btnIngles, btnJapones, btnFrances, btnItaliano, btnAleman;
 
         tvSelecciona = view.findViewById(R.id.tvSeleccionaUnIdioma);
         btnEspanol = view.findViewById(R.id.btnEspanol);
         btnIngles = view.findViewById(R.id.btnIngles);
         btnJapones = view.findViewById(R.id.btnJapones);
+        btnFrances = view.findViewById(R.id.btnFrances);
+        btnItaliano = view.findViewById(R.id.btnItaliano);
+        btnAleman = view.findViewById(R.id.btnAleman);
 
         btnEspanol.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +136,30 @@ public class InicioSesion extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cambiarIdiomaApp("ja");
+                dialog.dismiss();
+            }
+        });
+
+        btnFrances.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarIdiomaApp("fr");
+                dialog.dismiss();
+            }
+        });
+
+        btnItaliano.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarIdiomaApp("it");
+                dialog.dismiss();
+            }
+        });
+
+        btnAleman.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarIdiomaApp("de");
                 dialog.dismiss();
             }
         });
