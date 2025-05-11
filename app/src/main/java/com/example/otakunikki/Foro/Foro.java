@@ -32,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
 import java.text.SimpleDateFormat;
@@ -52,6 +53,9 @@ public class Foro extends Fragment {
     private FirebaseFirestore db;
     private String idioma;
     private TextView tvForo;
+
+    private ListenerRegistration refrescoForo;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,6 +103,7 @@ public class Foro extends Fragment {
 
         /**METODO PARA CARGAR LOS HILOS DEL FORO**/
         CargarDatos();
+        HiloTiempoReal();
 
         btnAgregarHilo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,5 +225,41 @@ public class Foro extends Fragment {
                     }
                     adaptadorforo.notifyDataSetChanged();
                 });
+    }
+
+    private void HiloTiempoReal() {
+        refrescoForo = db.collection("Hilos")
+                .document(hilo.getIdHilo())
+                .addSnapshotListener((documentSnapshot, e) -> {
+                    if (e != null) {
+                        Log.w("Firestore", "Error al escuchar cambios.", e);
+                        return;
+                    }
+
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        HiloForo hiloActualizado = documentSnapshot.toObject(HiloForo.class);
+                        if (hiloActualizado != null) {
+                            listaForo.clear();
+                            listaForo.addAll(hiloActualizado.getRespuestas());
+                            adaptadorforo.notifyDataSetChanged();
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (refrescoForo != null) {
+            refrescoForo.remove();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (refrescoForo != null) {
+            refrescoForo.remove();
+        }
     }
 }
