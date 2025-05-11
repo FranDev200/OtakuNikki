@@ -103,10 +103,8 @@ public class Foro extends Fragment {
 
         /**METODO PARA CARGAR LOS HILOS DEL FORO**/
         CargarDatos();
-        if(hilo != null)
-        {
-            HiloTiempoReal();
-        }
+        HiloTiempoReal();
+
 
         btnAgregarHilo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,21 +229,32 @@ public class Foro extends Fragment {
     }
 
     private void HiloTiempoReal() {
+        if (hilo == null || hilo.getIdHilo() == null) {
+            Log.e("Firestore", "El hilo es null o no tiene ID. No se puede escuchar.");
+            return;
+        }
         refrescoForo = db.collection("Hilos")
                 .document(hilo.getIdHilo())
                 .addSnapshotListener((documentSnapshot, e) -> {
                     if (e != null) {
                         Log.w("Firestore", "Error al escuchar cambios.", e);
-                        //return;
+                        return;
                     }
 
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         HiloForo hiloActualizado = documentSnapshot.toObject(HiloForo.class);
                         if (hiloActualizado != null) {
+                            List<HiloForo> respuestas = hiloActualizado.getRespuestas();
                             listaForo.clear();
-                            listaForo.addAll(hiloActualizado.getRespuestas());
+                            if (respuestas != null) {
+                                listaForo.addAll(respuestas);
+                            }
                             adaptadorforo.notifyDataSetChanged();
                         }
+                    } else {
+                        Log.d("Firestore", "Documento no existe o es null");
+                        listaForo.clear();
+                        adaptadorforo.notifyDataSetChanged();
                     }
                 });
     }
