@@ -80,12 +80,10 @@ public class ActividadDetalleHilo extends AppCompatActivity {
         hiloPrincipal = getIntent().getParcelableExtra("HiloForo");
         if (hiloPrincipal.getRespuestas() != null)
         {
-
             listaRespuestas.addAll(hiloPrincipal.getRespuestas());
         }
         adaptador = new AdaptadorRespuestasHilo(listaRespuestas, this, idioma);
         rvRespuestas.setAdapter(adaptador);
-
 
         mostrarHiloPrincipal();
         escucharRespuestasTiempoReal();
@@ -207,8 +205,11 @@ public class ActividadDetalleHilo extends AppCompatActivity {
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         HiloForo hiloActualizado = documentSnapshot.toObject(HiloForo.class);
                         if (hiloActualizado != null) {
+                            List<HiloForo> nuevasRespuestas = hiloActualizado.getRespuestas();
                             listaRespuestas.clear();
-                            listaRespuestas.addAll(hiloActualizado.getRespuestas());
+                            if (nuevasRespuestas != null) {
+                                listaRespuestas.addAll(nuevasRespuestas);
+                            }
                             adaptador.notifyDataSetChanged();
                         }
                     }

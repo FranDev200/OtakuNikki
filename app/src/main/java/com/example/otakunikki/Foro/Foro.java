@@ -103,7 +103,10 @@ public class Foro extends Fragment {
 
         /**METODO PARA CARGAR LOS HILOS DEL FORO**/
         CargarDatos();
-        HiloTiempoReal();
+        if(hilo != null)
+        {
+            HiloTiempoReal();
+        }
 
         btnAgregarHilo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,7 +236,7 @@ public class Foro extends Fragment {
                 .addSnapshotListener((documentSnapshot, e) -> {
                     if (e != null) {
                         Log.w("Firestore", "Error al escuchar cambios.", e);
-                        return;
+                        //return;
                     }
 
                     if (documentSnapshot != null && documentSnapshot.exists()) {
