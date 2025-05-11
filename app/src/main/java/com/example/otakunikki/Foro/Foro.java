@@ -102,7 +102,7 @@ public class Foro extends Fragment {
         });
 
         /**METODO PARA CARGAR LOS HILOS DEL FORO**/
-        CargarDatos();
+        //CargarDatos();
         HiloTiempoReal();
 
 
@@ -203,8 +203,8 @@ public class Foro extends Fragment {
                             .addOnSuccessListener(aVoid -> {
                                 Log.d("Firestore", "idHilo actualizado correctamente");
 
-                                listaForo.add(hilo);
-                                adaptadorforo.notifyDataSetChanged();
+                                //listaForo.add(hilo);
+                                //adaptadorforo.notifyDataSetChanged();
                             })
                             .addOnFailureListener(e -> Log.w("Firestore", "Error actualizando idHilo", e));
                 })
@@ -229,31 +229,26 @@ public class Foro extends Fragment {
     }
 
     private void HiloTiempoReal() {
-        if (hilo == null || hilo.getIdHilo() == null) {
-            Log.e("Firestore", "El hilo es null o no tiene ID. No se puede escuchar.");
-            return;
-        }
         refrescoForo = db.collection("Hilos")
-                .document(hilo.getIdHilo())
-                .addSnapshotListener((documentSnapshot, e) -> {
+                .orderBy("fecha", Query.Direction.DESCENDING)
+                .addSnapshotListener((querySnapshot, e) -> {
                     if (e != null) {
-                        Log.w("Firestore", "Error al escuchar cambios.", e);
+                        Log.w("Firestore", "Error al escuchar colección.", e);
                         return;
                     }
 
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
-                        HiloForo hiloActualizado = documentSnapshot.toObject(HiloForo.class);
-                        if (hiloActualizado != null) {
-                            List<HiloForo> respuestas = hiloActualizado.getRespuestas();
-                            listaForo.clear();
-                            if (respuestas != null) {
-                                listaForo.addAll(respuestas);
-                            }
-                            adaptadorforo.notifyDataSetChanged();
-                        }
-                    } else {
-                        Log.d("Firestore", "Documento no existe o es null");
+                    if (querySnapshot != null) {
                         listaForo.clear();
+                        for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                            HiloForo hiloAux = doc.toObject(HiloForo.class);
+                            if (hiloAux != null) {
+                                if(hiloAux.getIdHilo() == null)
+                                {
+                                    hiloAux.setIdHilo(doc.getId());
+                                }
+                                listaForo.add(hiloAux);
+                            }
+                        }
                         adaptadorforo.notifyDataSetChanged();
                     }
                 });
