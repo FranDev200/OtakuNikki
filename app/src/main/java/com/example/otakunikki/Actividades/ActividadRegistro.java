@@ -58,7 +58,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ActividadRegistro extends AppCompatActivity {
-    private String[] paises = {"Español (España)", "Inglés", "Japonés"};
+    private String[] paises = {"Español (España)", "Inglés", "Japonés", "Francés", "Italiano", "Alemán"};
     private Spinner spnRegion;
     private TextView tvPaisSeleccionado;
     private Button btnConfirmar, btnCancelar;
@@ -124,6 +124,19 @@ public class ActividadRegistro extends AppCompatActivity {
                     idioma = "ja";
                     tvPaisSeleccionado.setText(paises[2]);
                 }
+                if (position == 3) {
+                    idioma = "fr";
+                    tvPaisSeleccionado.setText(paises[3]);
+                }
+                if (position == 4) {
+                    idioma = "it";
+                    tvPaisSeleccionado.setText(paises[4]);
+                }
+                if (position == 5) {
+                    idioma = "de";
+                    tvPaisSeleccionado.setText(paises[5]);
+                }
+
 
                 SharedPreferences preferences = getApplicationContext().getSharedPreferences("Idiomas", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
@@ -297,6 +310,27 @@ public class ActividadRegistro extends AppCompatActivity {
             @Override
             public void onTextoTraducido(String textoTraducido) {
                 paises[2] = textoTraducido;
+
+            }
+        });
+        Traductor.traducirTexto(paises[3], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                paises[3] = textoTraducido;
+
+            }
+        });
+        Traductor.traducirTexto(paises[4], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                paises[4] = textoTraducido;
+
+            }
+        });
+        Traductor.traducirTexto(paises[5], "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                paises[5] = textoTraducido;
 
             }
         });
