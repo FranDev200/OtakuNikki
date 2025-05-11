@@ -3,6 +3,7 @@ package com.example.otakunikki.Foro;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
@@ -45,6 +47,8 @@ public class ActividadDetalleHilo extends AppCompatActivity {
 
     private String nombrePerfil;
     private String idioma;
+
+    private ListenerRegistration refrescoForo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +88,7 @@ public class ActividadDetalleHilo extends AppCompatActivity {
 
 
         mostrarHiloPrincipal();
+        escucharRespuestasTiempoReal();
 
         btnFlechaAtras.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +104,9 @@ public class ActividadDetalleHilo extends AppCompatActivity {
                 MostrarDialogoRespuesta();
             }
         });
-    }
 
+
+    }
 
     private void mostrarHiloPrincipal() {
         Traductor.traducirTexto(tvComentarioTitulo.getText().toString(), hiloPrincipal.getIdioma(), idioma, new Traductor.TraduccionCallback() {
@@ -189,8 +195,44 @@ public class ActividadDetalleHilo extends AppCompatActivity {
         });
     }
 
+    private void escucharRespuestasTiempoReal() {
+        refrescoForo = db.collection("Hilos")
+                .document(hiloPrincipal.getIdHilo())
+                .addSnapshotListener((documentSnapshot, e) -> {
+                    if (e != null) {
+                        Log.w("Firestore", "Error al escuchar cambios.", e);
+                        return;
+                    }
+
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        HiloForo hiloActualizado = documentSnapshot.toObject(HiloForo.class);
+                        if (hiloActualizado != null) {
+                            listaRespuestas.clear();
+                            listaRespuestas.addAll(hiloActualizado.getRespuestas());
+                            adaptador.notifyDataSetChanged();
+                        }
+                    }
+                });
+    }
+
     private String convertirTimestampAFecha(com.google.firebase.Timestamp timestamp) {
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm");
         return sdf.format(timestamp.toDate());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (refrescoForo != null) {
+            refrescoForo.remove();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (refrescoForo != null) {
+            refrescoForo.remove();
+        }
     }
 }
