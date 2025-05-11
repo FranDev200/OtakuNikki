@@ -2,6 +2,7 @@ package com.example.otakunikki.Foro;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,10 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.otakunikki.Actividades.ActividadVistaDetalleListaAnime;
 import com.example.otakunikki.Clases.HiloForo;
-import com.example.otakunikki.Clases.ListaAnime;
-import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.Clases.Traductor;
 import com.example.otakunikki.Clases.Usuario;
 import com.example.otakunikki.R;
@@ -35,11 +33,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class Foro extends Fragment {
 
@@ -90,6 +85,7 @@ public class Foro extends Fragment {
         adaptadorforo = new AdaptadorForo(listaForo, requireContext(), idioma);
         lvForo.setAdapter(adaptadorforo);
 
+        /**Para poder abrir el hilo hacer click corto**/
         lvForo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -101,10 +97,18 @@ public class Foro extends Fragment {
             }
         });
 
+        /**Para poder eliminar el hilo hacer click largo**/
+        lvForo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                eliminar(position);
+                return true;
+            }
+        });
+
         /**METODO PARA CARGAR LOS HILOS DEL FORO**/
         //CargarDatos();
         HiloTiempoReal();
-
 
         btnAgregarHilo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +185,63 @@ public class Foro extends Fragment {
         });
 
         return vista;
+    }
+
+    private void eliminar(int posicion) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Borrar el foro de: " + listaForo.get(posicion).getTitulo() + " en la posición: " + posicion)
+                .setIcon(R.drawable.eliminar);
+
+
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+                Toast.makeText(getActivity().getApplicationContext(),"Has elegido no borrar", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(getActivity().getApplicationContext(),"Foro [" + listaForo.get(posicion).getTitulo() + "] eliminado.", Toast.LENGTH_LONG).show();
+
+                EliminarFBForo(listaForo.get(posicion).getIdHilo());
+                adaptadorforo.notifyDataSetChanged();
+
+            }
+        });
+
+        builder.create();
+        builder.show();
+    }
+
+    private void EliminarFBForo(String idHilo) {
+        db.collection("Hilos").document(idHilo).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        HiloForo hiloborrar = documentSnapshot.toObject(HiloForo.class);
+                        if (hiloborrar != null) {
+                            // Eliminar de lista local si es necesario
+                            listaForo.removeIf(hilo -> hilo.getIdHilo().equals(hiloborrar.getIdHilo()));
+
+                            // Eliminar el documento de Firestore
+                            db.collection("Hilos").document(idHilo)
+                                    .delete()
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(requireContext(), "Foro eliminado correctamente", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(requireContext(), "Error al eliminar el foro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Error al obtener foro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void AgregarHiloForo(String tituloForo, String mensajeForo ,FirebaseUser usuario, String nombrePerfil) {
