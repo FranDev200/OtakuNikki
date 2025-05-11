@@ -8,6 +8,6 @@
         android:id="@+id/imgItem"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:background="@drawable/popup_background"/>
 </LinearLayout>
