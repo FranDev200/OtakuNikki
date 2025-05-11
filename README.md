@@ -1,22 +1,23 @@
 Pestaña de Foro:
-- Hilos del Foro
-- Detalle Foro (He añadido que se pueda responder pero hay que comprobar que se actualice bien en firebase).
-- Además los he hecho simple para ver si funcionaba, habrá que recoger todo y cambiar el alert dialog que sale, etc...
+- Falta implementar el borrado de las respuestas del foro
 
 Pestaña de Mis Listas: 
 - Cambiar la fecha de ultima edición de la lista. (Si se complica lo quitamos y podemos añadir otra cosa)
+- Actualizar en tiempo real en listas y en lista detalle
 
-General: 
-- Lo del idioma (Ya casi está)
-  
 Idioma
-- Hay algunos errores (creo que era en usuario)
-- Falta lo del foro
+- Toast y Alert dialog de borrar del foro
+
+Info Usuario
+- Quitar spinner y poner el idioma
+
+Fotos
+-Falta Dragon Ball Z
 
 --- APARTADOS FINALIZADOS ---
 Pestaña de Explorar ✓
 Pestaña de Inicio ✓
-Pestaña de la info del Usuario ✓
+Pestaña de la info del Usuario 
 Vista detalle lista ✓
 Vista detalle anime ✓
 Vista de añadir perfil ✓
