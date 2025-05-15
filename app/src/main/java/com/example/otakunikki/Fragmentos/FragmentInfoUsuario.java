@@ -78,7 +78,7 @@ public class FragmentInfoUsuario extends Fragment {
         tvTitCorreo = vista.findViewById(R.id.tvTitCorreo);
         tvTitPerfil = vista.findViewById(R.id.tvTitPerfil);
         tvCorreoUsuario = vista.findViewById(R.id.tvCorreoUsuario);
-        spRegion = vista.findViewById(R.id.spRegion);
+
         imgPerfil = vista.findViewById(R.id.imgPerfil);
         tvRegion = vista.findViewById(R.id.tvRegionSeleccionada);
         tvNomPerfil = vista.findViewById(R.id.tvNomPerfil);
@@ -226,12 +226,10 @@ public class FragmentInfoUsuario extends Fragment {
             }
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, regiones);
-        spRegion.setAdapter(adapter);
+
 
         if (posicion >= 0 && posicion < regiones.length) {
-            spRegion.setSelection(posicion);
+
             tvRegion.setText(regiones[posicion]);
             Traductor.traducirTexto(tvRegion.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
                 @Override
@@ -242,18 +240,7 @@ public class FragmentInfoUsuario extends Fragment {
 
         }
 
-        spRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String seleccion = regiones[position];
-                tvRegion.setText(seleccion);
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
 
         return vista;

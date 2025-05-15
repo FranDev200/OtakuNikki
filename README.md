@@ -9,7 +9,7 @@ Idioma
 - Toast y Alert dialog de borrar del foro
 
 Info Usuario
-- Quitar spinner y poner el idioma
+
 
 Fotos
 -Falta Dragon Ball Z
@@ -21,7 +21,8 @@ Pestaña de la info del Usuario
 Vista detalle lista ✓
 Vista detalle anime ✓
 Vista de añadir perfil ✓
-Vista de crear usuario ✓
+Vista de crear usuario ✓ 
+Quitar spinner y poner el idioma ✓
 
 --- COSAS QUE NO HE PODIDO COMPROBAR --- 
 - Si se guardan los episodios vistos de los animes (Si se guardan lo dejo por si acaso te quieres acordar)

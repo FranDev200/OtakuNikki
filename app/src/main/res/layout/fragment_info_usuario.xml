@@ -117,25 +117,29 @@
             android:layout_marginBottom="12dp">
 
             <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1.3"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/blancoIcono"
+                android:textColor="@color/moradoDifuminadoIcono"
+                android:text="Idioma: "
+                android:textSize="30dp"
+                android:textStyle="bold|italic"
+                />
+
+            <TextView
                 android:id="@+id/tvRegionSeleccionada"
                 android:layout_width="0dp"
                 android:layout_weight="3"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
+                android:padding="15dp"
                 android:textColorHint="@color/blancoIcono"
                 android:textColor="@color/blancoIcono"
-                android:textSize="16sp"
+                android:textSize="23dp"
                 android:text="@string/pais_seleccionado"
                 android:textStyle=""/>
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spRegion"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/blancoIcono"
-                android:backgroundTint="@color/moradoClaroIcono"
-                android:textColor="@color/blancoIcono"/>
+
         </LinearLayout>
 
         <LinearLayout
