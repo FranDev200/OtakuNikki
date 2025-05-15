@@ -406,7 +406,7 @@ public class FragmentoListas extends Fragment {
                                             });
 
                                         } else {
-                                            tvNroListas.setText(lista_de_listasAnimes.size() + " /11");
+                                            tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
                                         }
 
                                         miAdaptador.notifyDataSetChanged();
