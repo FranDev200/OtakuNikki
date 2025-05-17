@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.otakunikki.Adaptadores.AdaptadorListaAnimeDetalle;
 import com.example.otakunikki.Clases.Anime;
+import com.example.otakunikki.Clases.HiloForo;
 import com.example.otakunikki.Clases.ListaAnime;
 import com.example.otakunikki.Clases.Perfil;
 import com.example.otakunikki.Clases.Traductor;
@@ -28,6 +29,7 @@ import com.example.otakunikki.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
     private String botonCancelar = "Cancelar";
     private String botonAceptar = "Aceptar";
     private String eliminado = "eliminado...";
+    private ListenerRegistration refrescoListas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,8 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         etTituloLista.setText(listaSeleccionada.getNombreLista());
         tvNroAnimesLista.setText(listaSeleccionada.getListaAnimes().size() + " animes");
         listaAnime = new ArrayList<>();
-        listaAnime.addAll(listaSeleccionada.getListaAnimes());
+        escucharCambiosListaAnimes(nombrePerfil);
+        //listaAnime.addAll(listaSeleccionada.getListaAnimes());
         for (Anime aux : listaAnime) {
             Log.i("ANIMES", aux.getId() + "@@@@@@@" + aux.getTitulo());
         }
@@ -284,5 +288,38 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
                 eliminado = textoTraducido;
             }
         });
+    }
+
+    private void escucharCambiosListaAnimes(String nombrePerfil) {
+        refrescoListas = db.collection("Usuarios")
+                .document(usuario.getUid())
+                .addSnapshotListener((documentSnapshot, e) -> {
+                    if (e != null) {
+                        Log.w("Firestore", "Error al escuchar cambios.", e);
+                        return;
+                    }
+
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
+                        if (usuarioActual != null && usuarioActual.getListaPerfiles() != null) {
+                            List<Perfil> perfiles = usuarioActual.getListaPerfiles();
+                            // Buscar el perfil que coincida con el nombre seleccionado
+                            List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
+                            for (Perfil perfil : listaPerfiles) {
+                                if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+
+                                    List<ListaAnime> listasAnimes = perfil.getListasAnimes();
+                                    if (listasAnimes != null) {
+                                        listaAnime.clear(); // tu lista local de animes
+                                        for (ListaAnime lista : listasAnimes) {
+                                            listaAnime.addAll(lista.getListaAnimes());
+                                        }
+                                        miAdaptador.notifyDataSetChanged(); // actualizar la UI
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
     }
 }
