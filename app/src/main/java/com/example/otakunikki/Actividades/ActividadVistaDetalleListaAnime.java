@@ -84,7 +84,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         etTituloLista.setText(listaSeleccionada.getNombreLista());
         tvNroAnimesLista.setText(listaSeleccionada.getListaAnimes().size() + " animes");
         listaAnime = new ArrayList<>();
-        escucharCambiosListaAnimes(nombrePerfil);
+        escucharCambiosListaAnimes(nombrePerfil,listaSeleccionada.getNombreLista());
         //listaAnime.addAll(listaSeleccionada.getListaAnimes());
         for (Anime aux : listaAnime) {
             Log.i("ANIMES", aux.getId() + "@@@@@@@" + aux.getTitulo());
@@ -108,7 +108,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(), listaAnime, idioma);
         lvAnimesLista.setAdapter(miAdaptador);
 
-        miAdaptador.notifyDataSetChanged();
+        //miAdaptador.notifyDataSetChanged();
 
 
         lvAnimesLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -290,7 +290,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         });
     }
 
-    private void escucharCambiosListaAnimes(String nombrePerfil) {
+    private void escucharCambiosListaAnimes(String nombrePerfil, String nombreLista) {
         refrescoListas = db.collection("Usuarios")
                 .document(usuario.getUid())
                 .addSnapshotListener((documentSnapshot, e) -> {
@@ -302,24 +302,34 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
                         if (usuarioActual != null && usuarioActual.getListaPerfiles() != null) {
-                            List<Perfil> perfiles = usuarioActual.getListaPerfiles();
-                            // Buscar el perfil que coincida con el nombre seleccionado
                             List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
                             for (Perfil perfil : listaPerfiles) {
                                 if (perfil.getNombrePerfil().equals(nombrePerfil)) {
 
                                     List<ListaAnime> listasAnimes = perfil.getListasAnimes();
                                     if (listasAnimes != null) {
-                                        listaAnime.clear(); // tu lista local de animes
+                                        listaAnime.clear(); // Limpiamos la lista local antes de agregar los nuevos datos
+
                                         for (ListaAnime lista : listasAnimes) {
-                                            listaAnime.addAll(lista.getListaAnimes());
+                                            listaAnime.clear(); // Limpiamos la lista local antes de agregar los nuevos datos
+                                            if (lista.getNombreLista().equals(nombreLista))
+                                            {
+                                                if (lista.getListaAnimes() != null)
+                                                {
+                                                    listaAnime.addAll(lista.getListaAnimes());
+                                                }
+                                                    break; // Ya encontramos la lista, no seguimos iterando
+                                            }
                                         }
-                                        miAdaptador.notifyDataSetChanged(); // actualizar la UI
                                     }
+                                miAdaptador.notifyDataSetChanged(); // Actualizar la UI con los datos nuevos
                                 }
+                                break; // Ya encontramos el perfil, no seguimos buscando
                             }
                         }
                     }
+
                 });
     }
+
 }
