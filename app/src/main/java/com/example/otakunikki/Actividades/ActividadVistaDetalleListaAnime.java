@@ -85,10 +85,8 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         tvNroAnimesLista.setText(listaSeleccionada.getListaAnimes().size() + " animes");
         listaAnime = new ArrayList<>();
         escucharCambiosListaAnimes(nombrePerfil,listaSeleccionada.getNombreLista());
-        //listaAnime.addAll(listaSeleccionada.getListaAnimes());
-        for (Anime aux : listaAnime) {
-            Log.i("ANIMES", aux.getId() + "@@@@@@@" + aux.getTitulo());
-        }
+        listaAnime.addAll(listaSeleccionada.getListaAnimes());
+
 
         /**TRADUCIR CONTROLES YA DEFINIDOS**/
         Traductor.traducirTexto(etTituloLista.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
@@ -108,7 +106,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
         miAdaptador = new AdaptadorListaAnimeDetalle(getApplicationContext(), listaAnime, idioma);
         lvAnimesLista.setAdapter(miAdaptador);
 
-        //miAdaptador.notifyDataSetChanged();
+        miAdaptador.notifyDataSetChanged();
 
 
         lvAnimesLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
