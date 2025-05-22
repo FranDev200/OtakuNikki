@@ -215,6 +215,7 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
                                                     String currentDateTime = sdf.format(currentDate);
                                                     lista.setFechaModificacion(currentDateTime);
                                                     lista.getListaAnimes().remove(anime);
+                                                    tvNroAnimesLista.setText(listaAnime.size() + " animes");
                                                 }
 
                                                 break;
@@ -315,12 +316,15 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
                                                 if (lista.getListaAnimes() != null)
                                                 {
                                                     listaAnime.addAll(lista.getListaAnimes());
+                                                    tvNroAnimesLista.setText(listaAnime.size() + " animes");
                                                 }
                                                     break; // Ya encontramos la lista, no seguimos iterando
                                             }
                                         }
                                     }
+
                                 miAdaptador.notifyDataSetChanged(); // Actualizar la UI con los datos nuevos
+
                                 }
                                 break; // Ya encontramos el perfil, no seguimos buscando
                             }
