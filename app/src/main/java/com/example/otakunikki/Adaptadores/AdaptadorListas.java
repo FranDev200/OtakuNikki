@@ -41,79 +41,76 @@ public class AdaptadorListas extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
+    }
+
+    static class ViewHolder {
+        TextView tvTitulo, tvNroAnimes, tvFecha;
+        ImageView imgAnime0, imgAnime1, imgAnime2, imgAnime3;
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
 
-        LayoutInflater li = LayoutInflater.from(context);
-        view = li.inflate(R.layout.item_lista_animes, null);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_lista_animes, parent, false);
+            holder = new ViewHolder();
 
-        TextView tvTitulo = view.findViewById(R.id.tvTituloLista);
-        TextView tvNroAnimes = view.findViewById(R.id.tvNroAnimesGuardados);
-        TextView tvFecha = view.findViewById(R.id.tvFechaModificacion);
-        ImageView imgAnime0 = view.findViewById(R.id.imgAnime0);
-        ImageView imgAnime1 = view.findViewById(R.id.imgAnime1);
-        ImageView imgAnime2 = view.findViewById(R.id.imgAnime2);
-        ImageView imgAnime3 = view.findViewById(R.id.imgAnime3);
+            holder.tvTitulo = convertView.findViewById(R.id.tvTituloLista);
+            holder.tvNroAnimes = convertView.findViewById(R.id.tvNroAnimesGuardados);
+            holder.tvFecha = convertView.findViewById(R.id.tvFechaModificacion);
+            holder.imgAnime0 = convertView.findViewById(R.id.imgAnime0);
+            holder.imgAnime1 = convertView.findViewById(R.id.imgAnime1);
+            holder.imgAnime2 = convertView.findViewById(R.id.imgAnime2);
+            holder.imgAnime3 = convertView.findViewById(R.id.imgAnime3);
 
-        for (int i = 0; i < listadelistasAnimes.get(position).getListaAnimes().size(); i++){
-            if(listadelistasAnimes.get(position).getListaAnimes().size() != 0){
-                switch (i){
-                    case 0:
-                        Picasso.get()
-                                .load(listadelistasAnimes.get(position).getListaAnimes().get(i).getImagenGrande())
-                                .into(imgAnime0);
-                        break;
-                    case 1:
-                        Picasso.get()
-                                .load(listadelistasAnimes.get(position).getListaAnimes().get(i).getImagenGrande())
-                                .into(imgAnime1);
-                        break;
-                    case 2:
-                        Picasso.get()
-                                .load(listadelistasAnimes.get(position).getListaAnimes().get(i).getImagenGrande())
-                                .into(imgAnime2);
-                        break;
-                    case 3:
-                        Picasso.get()
-                                .load(R.drawable.flecha_derecha)
-                                .resize(50, 50)
-                                .centerCrop()
-                                .into(imgAnime3);
-                        break;
-                }
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        ListaAnime lista = listadelistasAnimes.get(position);
+
+        // Título, cantidad, fecha
+        holder.tvTitulo.setText(lista.getNombreLista());
+        holder.tvNroAnimes.setText(lista.getListaAnimes().size() + " animes");
+        holder.tvFecha.setText(lista.getFechaModificacion());
+
+        // Limpiar imágenes antes de cargar nuevas
+        holder.imgAnime0.setImageDrawable(null);
+        holder.imgAnime1.setImageDrawable(null);
+        holder.imgAnime2.setImageDrawable(null);
+        holder.imgAnime3.setImageDrawable(null);
+
+        for (int i = 0; i < lista.getListaAnimes().size(); i++) {
+            if (lista.getListaAnimes().get(i).getImagenGrande() == null) continue;
+
+            switch (i) {
+                case 0:
+                    Picasso.get().load(lista.getListaAnimes().get(i).getImagenGrande()).into(holder.imgAnime0);
+                    break;
+                case 1:
+                    Picasso.get().load(lista.getListaAnimes().get(i).getImagenGrande()).into(holder.imgAnime1);
+                    break;
+                case 2:
+                    Picasso.get().load(lista.getListaAnimes().get(i).getImagenGrande()).into(holder.imgAnime2);
+                    break;
+                case 3:
+                    Picasso.get().load(R.drawable.flecha_derecha)
+                            .resize(50, 50)
+                            .centerCrop()
+                            .into(holder.imgAnime3);
+                    break;
             }
         }
 
-        tvTitulo.setText(listadelistasAnimes.get(position).getNombreLista());
-        tvNroAnimes.setText(listadelistasAnimes.get(position).getListaAnimes().size() + " animes");
-        tvFecha.setText(listadelistasAnimes.get(position).getFechaModificacion());
+        // Traducción (opcional, ya lo hacías)
+        Traductor.traducirTexto(holder.tvNroAnimes.getText().toString(), "es", idioma, textoTraducido -> holder.tvNroAnimes.setText(textoTraducido));
+        Traductor.traducirTexto(holder.tvFecha.getText().toString(), "es", idioma, textoTraducido -> holder.tvFecha.setText(textoTraducido));
 
-        /**TRADUCIR CONTROLES YA DEFINIDOS**/
-        /*Traductor.traducirTexto(tvTitulo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                tvTitulo.setText(textoTraducido);
-            }
-        });*/
-
-        Traductor.traducirTexto(tvNroAnimes.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                tvNroAnimes.setText(textoTraducido);
-            }
-        });
-
-        Traductor.traducirTexto(tvFecha.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
-            @Override
-            public void onTextoTraducido(String textoTraducido) {
-                tvFecha.setText(textoTraducido);
-            }
-        });
-
-        return view;
+        return convertView;
     }
-
 }
+
+

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.example.otakunikki.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ public class FragmentoListas extends Fragment {
     private String nombrePerfil;
     private FirebaseFirestore db;
     private String idioma;
+    private ListenerRegistration refrescoListas;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +76,7 @@ public class FragmentoListas extends Fragment {
         SharedPreferences infoIdioma = requireContext().getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
         idioma = infoIdioma.getString("idioma", "es");
 
-        CargarDatos(usuario, db, nombrePerfil);
+        CargarDatosTiempoReal(usuario, db, nombrePerfil);
 
         /**TRADUCIR CONTROLES YA DEFINIDOS**/
         Traductor.traducirTexto(tvMisListas.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
@@ -254,8 +257,6 @@ public class FragmentoListas extends Fragment {
                                                             // Eliminar de la lista local
                                                             lista_de_listasAnimes.remove(listaAEliminar);
 
-                                                            // Recargar datos desde Firebase para asegurar sincronización
-                                                            CargarDatos(usuario, db, nombrePerfil);
                                                         })
                                                         .addOnFailureListener(e -> {
                                                             Toast.makeText(getActivity(), "Error al eliminar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -365,10 +366,7 @@ public class FragmentoListas extends Fragment {
                     db.collection("Usuarios").document(userId)
                             .update("listaPerfiles", listaPerfiles)
                             .addOnSuccessListener(aVoid -> {
-                                // Actualizar UI
-                                lista_de_listasAnimes.add(nuevaListaAnime);
-                                miAdaptador.notifyDataSetChanged();
-                                tvNroListas.setText(lista_de_listasAnimes.size() + " / 11 listas");
+
                             })
                             .addOnFailureListener(e ->
                                     Toast.makeText(getActivity(), "Error al agregar lista: " + e.getMessage(), Toast.LENGTH_SHORT).show()
@@ -380,56 +378,72 @@ public class FragmentoListas extends Fragment {
                 );
     }
 
-    private void CargarDatos(FirebaseUser usuario, FirebaseFirestore db, String nombrePerfil) {
-        if (usuario != null) {
-            String userId = usuario.getUid();
-
-            db.collection("Usuarios").document(userId).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
-                            if (usuarioActual != null) {
-                                List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
-                                for (Perfil perfil : listaPerfiles) {
-                                    if (perfil.getNombrePerfil().equals(nombrePerfil)) {
-                                        lista_de_listasAnimes.clear();
-                                        lista_de_listasAnimes.addAll(perfil.getListasAnimes());
-                                        getActivity().runOnUiThread(() -> {
-                                            miAdaptador.notifyDataSetChanged();
-                                        });
-                                        if (lista_de_listasAnimes.isEmpty()) {
-                                            Traductor.traducirTexto("No tienes listas de animes.", "es", idioma, new Traductor.TraduccionCallback() {
-                                                @Override
-                                                public void onTextoTraducido(String textoTraducido) {
-                                                    tvNroListas.setText(textoTraducido);
-                                                }
-                                            });
-
-                                        } else {
-                                            tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
-                                        }
-
-                                        miAdaptador.notifyDataSetChanged();
-                                        return;
-                                    }
-                                }
-                                Toast.makeText(getActivity(), "Perfil no encontrado", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(getActivity(), "Error: No se encontró el usuario", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(getActivity(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
-        } else {
+    private void CargarDatosTiempoReal(FirebaseUser usuario, FirebaseFirestore db, String nombrePerfil) {
+        if (usuario == null) {
             Toast.makeText(getActivity(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        String userId = usuario.getUid();
+
+        refrescoListas = db.collection("Usuarios").document(userId)
+                .addSnapshotListener((documentSnapshot, error) -> {
+                    if (error != null) {
+                        Toast.makeText(getActivity(), "Error escuchando cambios: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
+                        if (usuarioActual != null && usuarioActual.getListaPerfiles() != null) {
+
+                            List<Perfil> listaPerfiles = usuarioActual.getListaPerfiles();
+                            Perfil perfilSeleccionado = null;
+
+                            for (Perfil perfil : listaPerfiles) {
+                                if (perfil.getNombrePerfil().equals(nombrePerfil)) {
+                                    perfilSeleccionado = perfil;
+                                    break;
+                                }
+                            }
+
+                            if (perfilSeleccionado != null && perfilSeleccionado.getListasAnimes() != null) {
+                                // Refrescar siempre desde cero
+                                lista_de_listasAnimes.clear();
+                                lista_de_listasAnimes.addAll(perfilSeleccionado.getListasAnimes());
+
+                                getActivity().runOnUiThread(() -> {
+                                    miAdaptador.notifyDataSetChanged();
+
+                                    if (lista_de_listasAnimes.isEmpty()) {
+                                        Traductor.traducirTexto("No tienes listas de animes.", "es", idioma, new Traductor.TraduccionCallback() {
+                                            @Override
+                                            public void onTextoTraducido(String textoTraducido) {
+                                                tvNroListas.setText(textoTraducido);
+                                            }
+                                        });
+                                    } else {
+                                        tvNroListas.setText(lista_de_listasAnimes.size() + " /11 listas");
+                                    }
+                                });
+
+                            } else {
+                                Toast.makeText(getActivity(), "No hay listas de animes en el perfil", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Toast.makeText(getActivity(), "Usuario o perfiles inválidos", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "No se encontró el documento del usuario", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        CargarDatos(usuario, db, nombrePerfil);
+    public void onDestroy() {
+        super.onDestroy();
+        if (refrescoListas != null) {
+            refrescoListas.remove();
+        }
     }
 }

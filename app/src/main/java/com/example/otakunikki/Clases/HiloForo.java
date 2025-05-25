@@ -20,24 +20,28 @@ public class HiloForo implements Parcelable {
     private String comentario;
     private List<HiloForo> respuestas;
     private String idioma;
+    private String userID;
 
     public HiloForo(){}
 
-    public HiloForo(String usuario, String titulo, Timestamp fecha, String comentario, List<HiloForo> respuestas, String idioma) {
+    public HiloForo(String usuario, String titulo, Timestamp fecha, String comentario, List<HiloForo> respuestas, String idioma, String userID) {
         this.usuario = usuario;
         this.titulo = titulo;
         this.fecha = fecha;
         this.comentario = comentario;
         this.respuestas = respuestas;
         this.idioma = idioma;
+        this.userID = userID;
     }
-    public HiloForo(String usuario, String titulo, Timestamp fecha, String comentario, String idioma) {
+    public HiloForo(String usuario, String titulo, Timestamp fecha, String comentario, String idioma, String userID) {
         this.usuario = usuario;
         this.titulo = titulo;
         this.fecha = fecha;
         this.comentario = comentario;
         this.idioma = idioma;
+        this.userID = userID;
     }
+
 
     protected HiloForo(Parcel in) {
         idHilo = in.readString();
@@ -47,6 +51,7 @@ public class HiloForo implements Parcelable {
         comentario = in.readString();
         respuestas = in.createTypedArrayList(HiloForo.CREATOR);
         idioma = in.readString();
+        userID = in.readString();
     }
 
     public static final Creator<HiloForo> CREATOR = new Creator<HiloForo>() {
@@ -117,17 +122,25 @@ public class HiloForo implements Parcelable {
         this.idioma = idioma;
     }
 
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof HiloForo)) return false;
         HiloForo hiloForo = (HiloForo) o;
-        return Objects.equals(getIdHilo(), hiloForo.getIdHilo()) && Objects.equals(getUsuario(), hiloForo.getUsuario()) && Objects.equals(getTitulo(), hiloForo.getTitulo()) && Objects.equals(getFecha(), hiloForo.getFecha()) && Objects.equals(getComentario(), hiloForo.getComentario()) && Objects.equals(getRespuestas(), hiloForo.getRespuestas()) && Objects.equals(getIdioma(), hiloForo.getIdioma());
+        return Objects.equals(getIdHilo(), hiloForo.getIdHilo()) && Objects.equals(getUsuario(), hiloForo.getUsuario()) && Objects.equals(getTitulo(), hiloForo.getTitulo()) && Objects.equals(getFecha(), hiloForo.getFecha()) && Objects.equals(getComentario(), hiloForo.getComentario()) && Objects.equals(getRespuestas(), hiloForo.getRespuestas()) && Objects.equals(getIdioma(), hiloForo.getIdioma()) && Objects.equals(getUserID(), hiloForo.getUserID());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIdHilo(), getUsuario(), getTitulo(), getFecha(), getComentario(), getRespuestas(), getIdioma());
+        return Objects.hash(getIdHilo(), getUsuario(), getTitulo(), getFecha(), getComentario(), getRespuestas(), getIdioma(), getUserID());
     }
 
     @Override
@@ -144,5 +157,6 @@ public class HiloForo implements Parcelable {
         dest.writeString(comentario);
         dest.writeTypedList(respuestas);
         dest.writeString(idioma);
+        dest.writeString(userID);
     }
 }

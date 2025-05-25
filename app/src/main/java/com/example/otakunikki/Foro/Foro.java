@@ -48,9 +48,11 @@ public class Foro extends Fragment {
     private FirebaseFirestore db;
     private String idioma;
     private TextView tvForo;
-
+    private String userID;
     private ListenerRegistration refrescoForo;
-
+    private String mensaje;
+    private String botonNegativo;
+    private String botonPositivo;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,12 +65,35 @@ public class Foro extends Fragment {
         // Obtener usuario actual
         usuario = mAuth.getCurrentUser();
 
+
         // Recuperar el nombre del perfil desde SharedPreferences
         SharedPreferences preferences = requireContext().getSharedPreferences("NombrePerfil", Context.MODE_PRIVATE);
         nombrePerfil = preferences.getString("PerfilSeleccionado", "Perfil no encontrado");
 
         SharedPreferences infoIdioma = requireContext().getSharedPreferences("Idiomas", Context.MODE_PRIVATE);
         idioma = infoIdioma.getString("idioma", "es");
+
+        SharedPreferences identificadorUsuario =requireContext().getSharedPreferences("IDUSUARIO", Context.MODE_PRIVATE);
+        userID = identificadorUsuario.getString("ID", "Perfil no encontrado");
+
+        Traductor.traducirTexto("Borrar el hilo:", "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                mensaje = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto("Cancelar", "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                botonNegativo = textoTraducido;
+            }
+        });
+        Traductor.traducirTexto("Aceptar", "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                botonPositivo = textoTraducido;
+            }
+        });
 
         tvForo = vista.findViewById(R.id.tvTitulo);
         Traductor.traducirTexto(tvForo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
@@ -191,23 +216,20 @@ public class Foro extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle("Borrar el foro de: " + listaForo.get(posicion).getTitulo() + " en la posición: " + posicion)
+
+        builder.setTitle(mensaje+ " " + listaForo.get(posicion).getTitulo())
                 .setIcon(R.drawable.eliminar);
 
-
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(botonNegativo, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
-                Toast.makeText(getActivity().getApplicationContext(),"Has elegido no borrar", Toast.LENGTH_LONG).show();
             }
         });
 
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(botonPositivo, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(getActivity().getApplicationContext(),"Foro [" + listaForo.get(posicion).getTitulo() + "] eliminado.", Toast.LENGTH_LONG).show();
-
                 EliminarFBForo(listaForo.get(posicion).getIdHilo());
                 adaptadorforo.notifyDataSetChanged();
 
@@ -225,17 +247,29 @@ public class Foro extends Fragment {
                         HiloForo hiloborrar = documentSnapshot.toObject(HiloForo.class);
                         if (hiloborrar != null) {
                             // Eliminar de lista local si es necesario
-                            listaForo.removeIf(hilo -> hilo.getIdHilo().equals(hiloborrar.getIdHilo()));
+                            if(hiloborrar.getUserID().equals(userID) && hiloborrar.getUsuario().equals(nombrePerfil))
+                            {
+                                listaForo.removeIf(hilo -> hilo.getIdHilo().equals(hiloborrar.getIdHilo()));
+                                // Eliminar el documento de Firestore
+                                db.collection("Hilos").document(idHilo)
+                                        .delete()
+                                        .addOnSuccessListener(aVoid -> {
+                                            Traductor.traducirTexto("Foro eliminado correctamente", "es", idioma, new Traductor.TraduccionCallback() {
+                                                @Override
+                                                public void onTextoTraducido(String textoTraducido) {
+                                                    Toast.makeText(requireContext(),textoTraducido , Toast.LENGTH_SHORT).show();
 
-                            // Eliminar el documento de Firestore
-                            db.collection("Hilos").document(idHilo)
-                                    .delete()
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(requireContext(), "Foro eliminado correctamente", Toast.LENGTH_SHORT).show();
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(requireContext(), "Error al eliminar el foro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    });
+                                                }
+                                            });
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(requireContext(), "Error al eliminar el foro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        });
+                            }
+                            else
+                            {
+                                Toast.makeText(requireContext(), "No puedes eliminar un comentario que no es tuyo", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 })
@@ -251,7 +285,7 @@ public class Foro extends Fragment {
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        HiloForo hilo = new HiloForo(nombrePerfil, tituloForo, Timestamp.now(), mensajeForo, idioma);
+        HiloForo hilo = new HiloForo(nombrePerfil, tituloForo, Timestamp.now(), mensajeForo, idioma, userID);
 
         db.collection("Hilos")
                 .add(hilo)
@@ -274,20 +308,6 @@ public class Foro extends Fragment {
                 });
     }
 
-
-    private void CargarDatos() {
-        db.collection("Hilos")
-                .orderBy("fecha", Query.Direction.DESCENDING)
-                .get()
-                .addOnSuccessListener(hiloDocs -> {
-                    listaForo.clear();
-                    for (DocumentSnapshot hiloDoc : hiloDocs) {
-                        HiloForo hilo = hiloDoc.toObject(HiloForo.class);
-                        listaForo.add(hilo);
-                    }
-                    adaptadorforo.notifyDataSetChanged();
-                });
-    }
 
     private void HiloTiempoReal() {
         refrescoForo = db.collection("Hilos")
@@ -323,11 +343,5 @@ public class Foro extends Fragment {
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (refrescoForo != null) {
-            refrescoForo.remove();
-        }
-    }
+
 }

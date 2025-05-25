@@ -1,5 +1,6 @@
 package com.example.otakunikki.Actividades;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -35,6 +36,7 @@ public class InicioSesion extends AppCompatActivity {
     private FirebaseAuth mAuthInicioSesion;
     private ImageButton imgBtnRegistro, btnSeleccionIdi;
     private SharedPreferences estadoSesion;
+    private SharedPreferences sharedPref;
     private static final String TAG = "InicioSesion";
     private String idioma;
     @Override
@@ -62,6 +64,7 @@ public class InicioSesion extends AppCompatActivity {
                 mostrarSelectorIdioma();
             }
         });
+        sharedPref = getSharedPreferences("IDUSUARIO", Context.MODE_PRIVATE);
 
 
 
@@ -227,7 +230,9 @@ public class InicioSesion extends AppCompatActivity {
                             String idioma = usuario.getIdioma();
                             cambiarIdiomaApp(idioma);
                         }
-
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("ID", usuario.getIdUsuario());
+                        editor.apply();
                         Log.d(TAG, "Usuario recuperado con éxito: " + usuario.getUserName());
                         abrirSeleccionPerfil(usuario);
 
