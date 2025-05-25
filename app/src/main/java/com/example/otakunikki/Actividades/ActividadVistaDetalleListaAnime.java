@@ -333,5 +333,20 @@ public class ActividadVistaDetalleListaAnime extends AppCompatActivity {
 
                 });
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (refrescoListas != null) {
+            refrescoListas.remove();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (refrescoListas != null) {
+            refrescoListas.remove();
+        }
+    }
 
 }
