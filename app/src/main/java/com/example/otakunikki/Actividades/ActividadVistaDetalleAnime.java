@@ -202,10 +202,10 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
             public void onClick(View v) {
                 int posicion = lvEpisodios.getChildAdapterPosition(v);
                 Episodio episodio = listaEpisodios.get(posicion);
-                if (!estadoVisto) {
-                    MarcarCapitulos(nombreLista, usuario, nombrePerfil, anime, posicion);
+                if (!episodio.isEstaVisto()) {
+                    MarcarCapitulos(nombreLista, usuario, nombrePerfil, anime, episodio, true);
                 } else {
-                    DesmarcarCapitulos(nombreLista, usuario, nombrePerfil, anime, posicion);
+                    MarcarCapitulos(nombreLista, usuario, nombrePerfil, anime, episodio, false);
                 }
                 // ACTUALIZAR EL ESTADO LOCALMENTE
                 episodio.setEstaVisto(!episodio.isEstaVisto());
@@ -896,7 +896,7 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
         }
     }
 
-    private void MarcarCapitulos(String nombreLista, FirebaseUser usuario, String nombrePerfil, Anime anime, int capitulo) {
+    private void MarcarCapitulos(String nombreLista, FirebaseUser usuario, String nombrePerfil, Anime anime, Episodio capitulo, boolean visto) {
         if (usuario == null) {
             Toast.makeText(getApplicationContext(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
             return;
@@ -923,56 +923,12 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                                         if (a.getId() == anime.getId()) {
 
                                             List<Episodio> listaEpisodios = a.getListaEpisodios();
-                                            if (listaEpisodios != null && capitulo < listaEpisodios.size()) {
-                                                listaEpisodios.get(capitulo).setEstaVisto(true);
-                                            }
-
-                                            db.collection("Usuarios").document(userId)
-                                                    .set(usuarioActual)
-                                                    .addOnSuccessListener(aVoid -> {
-
-                                                    })
-                                                    .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Error al actualizar episodio: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Error obteniendo usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-    }
-
-    private void DesmarcarCapitulos(String nombreLista, FirebaseUser usuario, String nombrePerfil, Anime anime, int capitulo) {
-        if (usuario == null) {
-            Toast.makeText(getApplicationContext(), "No hay usuario autenticado", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = usuario.getUid();
-
-        db.collection("Usuarios").document(userId).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (!documentSnapshot.exists()) {
-                        Toast.makeText(getApplicationContext(), "Usuario no encontrado", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    Usuario usuarioActual = documentSnapshot.toObject(Usuario.class);
-                    if (usuarioActual == null) return;
-
-                    for (Perfil perfil : usuarioActual.getListaPerfiles()) {
-                        if (perfil.getNombrePerfil().equals(nombrePerfil)) {
-                            for (ListaAnime lista : perfil.getListasAnimes()) {
-                                if (lista.getNombreLista().equals(nombreLista)) {
-                                    for (Anime a : lista.getListaAnimes()) {
-                                        if (a.getId() == anime.getId()) {
-
-                                            List<Episodio> listaEpisodios = a.getListaEpisodios();
-                                            if (listaEpisodios != null && capitulo < listaEpisodios.size()) {
-                                                listaEpisodios.get(capitulo).setEstaVisto(false);
+                                            for (int iEp = 0; iEp < listaEpisodios.size(); iEp++) {
+                                                Episodio ep = listaEpisodios.get(iEp);
+                                                if (ep.getIdEpisodio() == capitulo.getIdEpisodio()) {
+                                                    ep.setEstaVisto(visto);
+                                                    break;
+                                                }
                                             }
 
                                             db.collection("Usuarios").document(userId)
@@ -1020,7 +976,6 @@ public class ActividadVistaDetalleAnime extends AppCompatActivity {
                                             // ACTUALIZAMOS listaEpisodios CON LOS DATOS DE FIRESTORE
                                             listaEpisodios.clear();
                                             listaEpisodios.addAll(a.getListaEpisodios());
-
                                             return;
                                         }
                                     }
