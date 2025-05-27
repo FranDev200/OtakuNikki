@@ -48,9 +48,8 @@ public class FragmentInfoUsuario extends Fragment {
     private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil, btnGuardarCambios;
     private EditText etNombreUsuario;
     TextView tvTitUser, tvTitCorreo, tvTitPerfil, tvRegion, tvNomPerfil, tvCorreoUsuario;
-    private Spinner spRegion;
-    private String[] regiones = {"Español (España)", "Inglés", "Japonés"};
-    private String[] idiomas = {"es", "en", "ja"};
+    private String[] regiones = {"Español (España)", "Inglés", "Japonés", "Francés", "Italiano", "Alemán"};
+    private String[] idiomas = {"es", "en", "ja", "fr", "it","de" };
     private ImageButton imgPerfil;
     private String TAG = "InfoUsuario";
     private String idioma;
