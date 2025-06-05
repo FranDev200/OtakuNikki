@@ -17,18 +17,20 @@
         <TextView
             android:id="@+id/tvEscogePerfil"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textAlignment="center"
             android:padding="10dp"
             android:layout_margin="20dp"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:fontFamily="@font/fuente"
             android:textStyle="bold"
             android:textColor="@color/moradoMuyClaroIcono"
+            android:maxLines="3"
+            android:ellipsize="none"
             android:text="Escoge un perfil">
         </TextView>
+
         <GridView
             android:id="@+id/gvListaUsuarios"
             android:layout_width="match_parent"
