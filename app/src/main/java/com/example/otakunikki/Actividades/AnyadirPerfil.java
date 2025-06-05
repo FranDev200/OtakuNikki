@@ -81,7 +81,7 @@ public class AnyadirPerfil extends AppCompatActivity {
             secciones.put("Black Clover", Arrays.asList(R.drawable.astachibi, R.drawable.yunochibi, R.drawable.noellechibi, R.drawable.yamichibi, R.drawable.finralchibi, R.drawable.magnachibi, R.drawable.luckchibi, R.drawable.gauchechibi, R.drawable.vanessachibi, R.drawable.charmychibi, R.drawable.gordonchibi, R.drawable.greychibi));
             secciones.put("Kimetsu No Yaiba", Arrays.asList(R.drawable.tanjirochibi, R.drawable.nezukochibi, R.drawable.zenitsuchibi, R.drawable.inosukechibi, R.drawable.tomiokachibi, R.drawable.shionobuchibi, R.drawable.rengokuchibi, R.drawable.uzuichibi, R.drawable.tokitochibi, R.drawable.himejimachibi, R.drawable.igurochibi, R.drawable.sanemichibi));
             secciones.put("Naruto", Arrays.asList(R.drawable.narutochibi, R.drawable.sakurachibi, R.drawable.sasukechibi, R.drawable.shikamaruchibi, R.drawable.inochibi, R.drawable.akimichichibi, R.drawable.hyugachibi, R.drawable.aburamechibi, R.drawable.kibachibi, R.drawable.nejichibi, R.drawable.rockleechibi, R.drawable.tentenchibi));
-            secciones.put("Dragon Ball Z", Arrays.asList(R.drawable.narutochibi, R.drawable.sakurachibi));
+            secciones.put("Dragon Ball Z", Arrays.asList(R.drawable.gokuchibi, R.drawable.gohanchibi, R.drawable.trunkschibi, R.drawable.vegetachibi, R.drawable.yamchachibi, R.drawable.tenchibi, R.drawable.kamichibi, R.drawable.androidechibi, R.drawable.cellchibi, R.drawable.gerochibi ));
 
             AdaptadorFilasImagenes seccionAdapter = new AdaptadorFilasImagenes(getApplicationContext(), secciones, imagenResId -> {
                 imgAgregarFoto.setImageResource(imagenResId);
