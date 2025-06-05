@@ -1,6 +1,3 @@
-Pestaña de Foro:
-- Falta implementar el borrado de las respuestas del foro
-
 Pestaña de Mis Listas: 
 - Cambiar la fecha de ultima edición de la lista. (Si se complica lo quitamos y podemos añadir otra cosa)
 - Actualizar en tiempo real en listas y en lista detalle
@@ -8,16 +5,11 @@ Pestaña de Mis Listas:
 Idioma
 - Toast y Alert dialog de borrar del foro
 
-Info Usuario
-
-
-Fotos
--Falta Dragon Ball Z
-
 --- APARTADOS FINALIZADOS ---
 Pestaña de Explorar ✓
+Todas las secciones con fotos ✓
 Pestaña de Inicio ✓
-Pestaña de la info del Usuario 
+Pestaña de la info del Usuario ✓
 Vista detalle lista ✓
 Vista detalle anime ✓
 Vista de añadir perfil ✓
