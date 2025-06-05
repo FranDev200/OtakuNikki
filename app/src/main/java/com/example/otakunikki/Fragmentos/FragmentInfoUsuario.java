@@ -47,7 +47,7 @@ import android.view.Gravity;
 public class FragmentInfoUsuario extends Fragment {
     private Button btnEliminarPerfil, btnDesconexion, btnCambioPerfil, btnGuardarCambios;
     private EditText etNombreUsuario;
-    TextView tvTitUser, tvTitCorreo, tvTitPerfil, tvRegion, tvNomPerfil, tvCorreoUsuario;
+    TextView tvTitUser, tvTitCorreo, tvTitPerfil, tvRegion, tvNomPerfil, tvCorreoUsuario, tvTitIdioma;
     private String[] regiones = {"Español (España)", "Inglés", "Japonés", "Francés", "Italiano", "Alemán"};
     private String[] idiomas = {"es", "en", "ja", "fr", "it","de" };
     private ImageButton imgPerfil;
@@ -74,6 +74,7 @@ public class FragmentInfoUsuario extends Fragment {
         btnGuardarCambios = vista.findViewById(R.id.btnGuardarCambios);
         etNombreUsuario = vista.findViewById(R.id.etNombreUsuario);
         tvTitUser = vista.findViewById(R.id.tvTitUser);
+        tvTitIdioma = vista.findViewById(R.id.tvTitIdioma);
         tvTitCorreo = vista.findViewById(R.id.tvTitCorreo);
         tvTitPerfil = vista.findViewById(R.id.tvTitPerfil);
         tvCorreoUsuario = vista.findViewById(R.id.tvCorreoUsuario);
@@ -394,6 +395,12 @@ public class FragmentInfoUsuario extends Fragment {
             }
         });
 
+        Traductor.traducirTexto(tvTitIdioma.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
+            @Override
+            public void onTextoTraducido(String textoTraducido) {
+                tvTitIdioma.setText(textoTraducido);
+            }
+        });
 
         Traductor.traducirTexto(tvTitCorreo.getText().toString(), "es", idioma, new Traductor.TraduccionCallback() {
             @Override
