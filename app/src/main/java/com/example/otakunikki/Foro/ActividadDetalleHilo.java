@@ -167,7 +167,6 @@ public class ActividadDetalleHilo extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
-                //Toast.makeText(getActivity().getApplicationContext(),"Has elegido no borrar", Toast.LENGTH_LONG).show();
             }
         });
 

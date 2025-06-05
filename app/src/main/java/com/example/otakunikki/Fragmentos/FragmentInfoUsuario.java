@@ -495,4 +495,12 @@ public class FragmentInfoUsuario extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().getSupportFragmentManager().popBackStack();
+    }
+
+
 }
